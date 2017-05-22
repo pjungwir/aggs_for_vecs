@@ -7,11 +7,11 @@ that operate on **arrays** instead of scalars.
 It treats each array as a "vector" and handles each element independently.
 So suppose you have 3 rows each with a 4-element array like so:
 
-    | id |    vals    |
-    | -: | :--------- |
-    |  1 | {1,2,3,4}  |
-    |  2 | {5,0,-5,0} |
-    |  3 | {3,6,0,9}  |
+| id |    vals    |
+| -: | :--------- |
+|  1 | {1,2,3,4}  |
+|  2 | {5,0,-5,0} |
+|  3 | {3,6,0,9}  |
 
 Then `SELECT vec_to_min(vals)` will pick the minimum item in each array position,
 giving you `{1,0,-5,0}`.
