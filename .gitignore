@@ -1,0 +1,7 @@
+*.o
+*.so
+.*.swp
+.*.swo
+/bench-results.txt
+/bench-report.txt
+
