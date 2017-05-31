@@ -42,6 +42,7 @@ function assign() {
 # compare "SELECT NOW()" "SELECT NOW()" "SELECT NOW()" "SELECT NOW()"
 # echo
 
+source bench/bench_count.sh
 source bench/bench_min.sh
 source bench/bench_max.sh
 # source bench/bench_min_max.sh

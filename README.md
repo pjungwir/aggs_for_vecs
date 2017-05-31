@@ -72,6 +72,10 @@ they'll give you instructions how to make one.
 The functions
 -------------
 
+#### `vec_to_count(ANYARRAY) RETURNS BIGINT[]`
+
+Returns the count of non-nulls in each array position.
+
 #### `vec_to_min(ANYARRAY) RETURNS ANYARRAY`
 
 Returns the minimum in each array position.

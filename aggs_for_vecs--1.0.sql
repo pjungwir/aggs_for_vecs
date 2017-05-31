@@ -4,6 +4,27 @@
 \echo Use "CREATE EXTENSION aggs_for_vecs" to load this file. \quit
 
 CREATE OR REPLACE FUNCTION 
+vec_to_count_transfn(internal, anyarray)
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_to_count_transfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION 
+vec_to_count_finalfn(internal, anyarray)
+RETURNS bigint[]
+AS 'aggs_for_vecs', 'vec_to_count_finalfn'
+LANGUAGE c;
+
+CREATE AGGREGATE vec_to_count(anyarray) (
+  sfunc = vec_to_count_transfn,
+  stype = internal,
+  finalfunc = vec_to_count_finalfn,
+  finalfunc_extra
+);
+
+
+
+CREATE OR REPLACE FUNCTION 
 vec_to_mean_transfn(internal, anyarray)
 RETURNS internal
 AS 'aggs_for_vecs', 'vec_to_mean_transfn'
