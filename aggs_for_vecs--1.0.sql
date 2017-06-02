@@ -3,6 +3,16 @@
 -- complain if script is sourced in psql, rather than via CREATE EXTENSION
 \echo Use "CREATE EXTENSION aggs_for_vecs" to load this file. \quit
 
+
+
+CREATE OR REPLACE FUNCTION
+vec_without_outliers(anyarray, anyarray, anyarray)
+RETURNS anyarray
+AS 'aggs_for_vecs', 'vec_without_outliers'
+LANGUAGE c;
+
+
+
 CREATE OR REPLACE FUNCTION 
 vec_to_count_transfn(internal, anyarray)
 RETURNS internal

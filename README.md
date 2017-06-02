@@ -94,6 +94,19 @@ Returns the [sample variance](http://www.statisticshowto.com/how-to-find-the-sam
 The code is very similar to [the built-in `var_samp` function](https://www.postgresql.org/docs/current/static/functions-aggregate.html),
 so if it works there it should work here (or it's a bug).
 
+#### `vec_without_outliers(ANYARRAY, ANYARRAY, ANYARRAY) RETURNS ANYARRAY`
+
+This is not an aggregate function, but is useful to trim down the inputs to the other functions here.
+You pass it three arrays all of the same length and type.
+The first array has the actual values.
+The second array gives the minimum amount allowed in each position;
+the third array, the maximum.
+The function returns an array where each element is either the input value
+(if within the min/max)
+or `NULL` (if an outlier).
+You can include `NULL`s in the min/max arrays to indicate an unbounded limit there,
+or pass a simple `NULL` for either to indicate no bounds at all.
+
 
 
 Limitations/TODO
