@@ -42,7 +42,9 @@ initVecArrayResultWithNulls(Oid input_element_type, Oid state_element_type, Memo
 
   astate = (VecArrayBuildState *)MemoryContextAlloc(rcontext, sizeof(VecArrayBuildState));
   astate->state.mcontext = rcontext;
+#if PG_VERSION_NUM >= 90500
   astate->state.private_cxt = false;
+#endif
   astate->state.alen = arLen;
   astate->state.dvalues = (Datum *)
     MemoryContextAlloc(rcontext, astate->state.alen * sizeof(Datum));
@@ -80,7 +82,9 @@ initArrayResultWithNulls(Oid element_type, MemoryContext rcontext, int arLen) {
 
   astate = (ArrayBuildState *)MemoryContextAlloc(rcontext, sizeof(ArrayBuildState));
   astate->mcontext = rcontext;
+#if PG_VERSION_NUM >= 90500
   astate->private_cxt = false;
+#endif
   astate->alen = arLen;
   astate->dvalues = (Datum *)
     MemoryContextAlloc(rcontext, astate->alen * sizeof(Datum));

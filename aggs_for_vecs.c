@@ -5,7 +5,9 @@
 #include <utils/builtins.h>
 #include <utils/lsyscache.h>
 #include <utils/typcache.h>
+#if PG_VERSION_NUM >= 90500
 #include <utils/arrayaccess.h>
+#endif
 #include <math.h>
 
 PG_MODULE_MAGIC;
