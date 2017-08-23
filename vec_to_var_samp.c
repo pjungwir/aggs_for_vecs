@@ -144,7 +144,7 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
   if (state == NULL) PG_RETURN_NULL();
 
   // Convert from our pgnums to Datums:
-  for (i = 0; i <= state->state.nelems; i++) {
+  for (i = 0; i < state->state.nelems; i++) {
     // Sample variance is undefined if N is 0 *or* 1:
     if (state->veccounts[i] > 1) {
       state->state.dnulls[i] = false;

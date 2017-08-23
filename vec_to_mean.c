@@ -131,7 +131,7 @@ vec_to_mean_finalfn(PG_FUNCTION_ARGS)
     PG_RETURN_NULL();
 
   // Convert from our pgnums to Datums:
-  for (i = 0; i <= state->state.nelems; i++) {
+  for (i = 0; i < state->state.nelems; i++) {
     if (state->state.dnulls[i]) continue;
     state->state.dvalues[i] = Float8GetDatum(state->vecvalues[i].f8);
   }

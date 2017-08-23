@@ -105,7 +105,7 @@ vec_to_count_finalfn(PG_FUNCTION_ARGS)
     PG_RETURN_NULL();
 
   // Convert from our pgnums to Datums:
-  for (i = 0; i <= state->state.nelems; i++) {
+  for (i = 0; i < state->state.nelems; i++) {
     state->state.dvalues[i] = Int64GetDatum(state->vecvalues[i].i64);
   }
 
