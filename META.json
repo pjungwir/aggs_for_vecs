@@ -1,0 +1,35 @@
+{
+  "name": "aggs_for_vecs",
+  "abstract": "Aggregate functions for vectors (arrays) of numbers",
+  "version": "1.0.0",
+  "maintainer": "Paul A. Jungwirth <pj@illuminatedcomputing.com>",
+  "license": "mit",
+  "provides": {
+    "aggs_for_vecs": {
+      "abstract": "Aggregate functions for vectors (arrays) of numbers",
+      "file": "aggs_for_vecs--1.0.0.sql",
+      "docfile": "README.md",
+      "version": "1.0.0"
+    }
+  },
+  "resources": {
+    "repository": {
+      "url": "git://github.com/pjungwir/aggs_for_vecs.git",
+      "web": "https://github.com/pjungwir/aggs_for_vecs",
+      "type": "git"
+    }
+  },
+  "generated_by": "Paul A. Jungwirth",
+  "meta-spec": {
+    "version": "1.0.0",
+    "url": "http://pgxn.org/meta/spec.txt"
+  },
+  "tags": [
+    "math",
+    "arithmetic",
+    "arrays",
+    "vectors",
+    "aggregates",
+    "statistics"
+  ]
+}
