@@ -76,6 +76,10 @@ The functions
 
 Returns the count of non-nulls in each array position.
 
+#### `vec_to_sum(ANYARRAY) RETURNS ANYARRAY`
+
+Returns the sum of non-nulls in each array position.
+
 #### `vec_to_min(ANYARRAY) RETURNS ANYARRAY`
 
 Returns the minimum in each array position.
@@ -115,7 +119,6 @@ Limitations/TODO
 - Tests for floats are pretty good, but we need tests for the other numeric types.
 - Lots of functions are still left to implement:
 
-  - `vec_to_count`
   - `vec_to_min_max`
   - `vec_to_median`
   - `vec_to_mode`

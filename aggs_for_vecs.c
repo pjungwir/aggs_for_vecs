@@ -16,6 +16,7 @@ PG_MODULE_MAGIC;
 #include "util.c"
 #include "vec_without_outliers.c"
 #include "vec_to_count.c"
+#include "vec_to_sum.c"
 #include "vec_to_mean.c"
 // #include "vec_to_median.c"
 // #include "vec_to_mode.c"

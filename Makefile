@@ -1,6 +1,6 @@
 MODULES = aggs_for_vecs
 EXTENSION = aggs_for_vecs
-EXTENSION_VERSION = 1.0.1
+EXTENSION_VERSION = 1.1.0
 DATA = $(EXTENSION)--$(EXTENSION_VERSION).sql
 
 PG_CONFIG = pg_config
