@@ -1,6 +1,7 @@
 MODULES = aggs_for_vecs
 EXTENSION = aggs_for_vecs
-DATA = aggs_for_vecs--1.0.sql
+EXTENSION_VERSION = 1.0.0
+DATA = $(EXTENSION)--$(EXTENSION_VERSION).sql
 
 PG_CONFIG = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)
@@ -19,5 +20,8 @@ bench-results.txt: bench
 bench-report.txt: bench-results.txt
 	./bench/format-table.rb < bench-results.txt | tee bench-report.txt
 
-.PHONY: test bench
+release:
+	git archive --format zip --prefix=$(EXTENSION)-$(EXTENSION_VERSION)/ --output $(EXTENSION)-$(EXTENSION_VERSION).zip master
+
+.PHONY: test bench release
 
