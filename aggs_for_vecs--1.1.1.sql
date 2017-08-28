@@ -13,13 +13,13 @@ LANGUAGE c;
 
 
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_count_transfn(internal, anyarray)
 RETURNS internal
 AS 'aggs_for_vecs', 'vec_to_count_transfn'
 LANGUAGE c;
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_count_finalfn(internal, anyarray)
 RETURNS bigint[]
 AS 'aggs_for_vecs', 'vec_to_count_finalfn'
@@ -34,13 +34,13 @@ CREATE AGGREGATE vec_to_count(anyarray) (
 
 
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_sum_transfn(internal, anyarray)
 RETURNS internal
 AS 'aggs_for_vecs', 'vec_to_sum_transfn'
 LANGUAGE c;
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_sum_finalfn(internal, anyarray)
 RETURNS anyarray
 AS 'aggs_for_vecs', 'vec_to_sum_finalfn'
@@ -55,13 +55,13 @@ CREATE AGGREGATE vec_to_sum(anyarray) (
 
 
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_mean_transfn(internal, anyarray)
 RETURNS internal
 AS 'aggs_for_vecs', 'vec_to_mean_transfn'
 LANGUAGE c;
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_mean_finalfn(internal, anyarray)
 RETURNS float[]
 AS 'aggs_for_vecs', 'vec_to_mean_finalfn'
@@ -76,13 +76,13 @@ CREATE AGGREGATE vec_to_mean(anyarray) (
 
 
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_var_samp_transfn(internal, anyarray)
 RETURNS internal
 AS 'aggs_for_vecs', 'vec_to_var_samp_transfn'
 LANGUAGE c;
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_var_samp_finalfn(internal, anyarray)
 RETURNS float[]
 AS 'aggs_for_vecs', 'vec_to_var_samp_finalfn'
@@ -97,13 +97,13 @@ CREATE AGGREGATE vec_to_var_samp(anyarray) (
 
 
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_min_transfn(internal, anyarray)
 RETURNS internal
 AS 'aggs_for_vecs', 'vec_to_min_transfn'
 LANGUAGE c;
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_min_finalfn(internal, anyarray)
 RETURNS anyarray
 AS 'aggs_for_vecs', 'vec_to_min_finalfn'
@@ -118,13 +118,13 @@ CREATE AGGREGATE vec_to_min(anyarray) (
 
 
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_max_transfn(internal, anyarray)
 RETURNS internal
 AS 'aggs_for_vecs', 'vec_to_max_transfn'
 LANGUAGE c;
 
-CREATE OR REPLACE FUNCTION 
+CREATE OR REPLACE FUNCTION
 vec_to_max_finalfn(internal, anyarray)
 RETURNS anyarray
 AS 'aggs_for_vecs', 'vec_to_max_finalfn'

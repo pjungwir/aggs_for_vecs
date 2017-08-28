@@ -45,7 +45,7 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
   Datum *currentVals;
   bool *currentNulls;
   int i;
-  float tmp_f;
+  float8 tmp_f;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
     elog(ERROR, "vec_to_var_samp_transfn called in non-aggregate context");
@@ -149,14 +149,14 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
     if (state->veccounts[i] > 1) {
       state->state.dnulls[i] = false;
 
-      numerator = state->veccounts[i] * state->vectmpvalues[i].f8 - state->vecvalues[i].f8 * state->vecvalues[i].f8;
+      numerator = (float8)state->veccounts[i] * state->vectmpvalues[i].f8 - state->vecvalues[i].f8 * state->vecvalues[i].f8;
       CHECKFLOATVAL(numerator, isinf(state->vectmpvalues[i].f8) || isinf(state->vecvalues[i].f8), true);
 
       /* Watch out for roundoff error producing a negative numerator */
       if (numerator <= 0.0) {
         state->state.dvalues[i] = Float8GetDatum(0.0);
       } else {
-        state->state.dvalues[i] = Float8GetDatum(numerator / (state->veccounts[i] * (state->veccounts[i] - 1)));
+        state->state.dvalues[i] = Float8GetDatum(numerator / (float8)(state->veccounts[i] * (state->veccounts[i] - 1.0)));
       }
     }
   }
