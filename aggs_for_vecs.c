@@ -28,4 +28,6 @@ PG_MODULE_MAGIC;
 #include "vec_to_var_samp.c"
 // #include "vec_to_skewness.c"
 // #include "vec_to_kurtosis.c"
+#include "hist_2d.c"
+#include "hist_md.c"
 

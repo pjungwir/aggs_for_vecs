@@ -3,7 +3,7 @@ Datum vec_to_sum_transfn(PG_FUNCTION_ARGS);
 PG_FUNCTION_INFO_V1(vec_to_sum_transfn);
 
 /**
- * Returns an of n elements,
+ * Returns an array of n elements,
  * which each element is the sum of non-NULLs found in that position
  * from all input arrays.
  *

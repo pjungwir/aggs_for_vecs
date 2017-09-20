@@ -13,7 +13,9 @@ VALUES
 (1, NULL, NULL),
 (2, ARRAY[NULL, NULL, NULL]::float[], ARRAY[NULL, NULL, NULL]::int[]),
 (3, ARRAY[1, 2, 3], ARRAY[1, 2, 3]),
-(4, ARRAY[1, NULL, 2], ARRAY[1, NULL, 2])
+(4, ARRAY[1, NULL, 2], ARRAY[1, NULL, 2]),
+(5, ARRAY[1, 2, 4], ARRAY[1, 2, 4]),
+(6, ARRAY[1, 1, 4], ARRAY[1, 1, 4])
 ;
 
 COMMIT;
