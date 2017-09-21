@@ -111,6 +111,16 @@ or `NULL` (if an outlier).
 You can include `NULL`s in the min/max arrays to indicate an unbounded limit there,
 or pass a simple `NULL` for either to indicate no bounds at all.
 
+#### `hist_2d(x ANYELEMENT, y ANYELEMENT, x_bucket_start ANYELEMENT, y_bucket_start ANYELEMENT, x_bucket_width ANYELEMENT, y_bucket_width ANYELEMENT, x_bucket_count INTEGER, y_bucket_count INTEGER)`
+
+Aggregate function that takes a bunch of `x` and `y` values, and plots them on a 2-D histogram. The other parameters determine the shape of the histogram (number of buckets on each axis, start of the buckets, width of each bucket).
+
+#### `hist_md(vals ANYARRAY, indexes INTEGER[], bucket_starts ANYARRAY, bucket_widths ANYARRAY, bucket_counts INTEGER[])`
+
+Aggregate function to compute an n-dimensional histogram. It takes a vector of values, and it uses `indexes` to pick one or more elements from that vector and treat them as `x`, `y`, `z`, etc. If you want 2 dimensions, there should be two values for `indexes`, two for `bucket_starts`, two for `bucket_widths`, and two for `bucket_counts`. Or if you want 3 dimensions, you need three values for each of those.
+
+Since the values in `indexes` should follow Postgres's convention of 1-indexed arrays, so that if `indexes` is `{1,4}`, then we will use `vals[1]` and `vals[4]` as the histogram `x` and `y`.
+
 
 
 Limitations/TODO
