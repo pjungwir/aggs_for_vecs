@@ -35,7 +35,7 @@ All input arrays must be the same length, or you get an error. The output array 
 `NULL`s are ignored, and `NULL` elements are also skipped.
 Basically you get the same result as if you could do `MIN` on the first elements,
 then `MIN` on the second elements, etc.
-If you all inputs are simply `NULL`, then you'll get a `NULL` in return.
+If all your inputs are simply `NULL`, then you'll get a `NULL` in return.
 But if the inputs are *arrays of `NULL`s*,
 then you'll get an array of `NULL`s in return (of the same length).
 
