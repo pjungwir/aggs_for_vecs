@@ -9,6 +9,7 @@
 #include <utils/arrayaccess.h>
 #endif
 #include <math.h>
+#include <utils/datum.h>
 #include <utils/numeric.h>
 #include <utils/fmgrprotos.h>
 

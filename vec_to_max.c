@@ -79,13 +79,7 @@ vec_to_max_transfn(PG_FUNCTION_ARGS)
       // do nothing: nulls can't change the result.
     } else if (state->dnulls[i]) {
       state->dnulls[i] = false;
-      if (elemTypeByValue) {
-        state->dvalues[i] = currentVals[i];
-      } else {
-        // only by-reference type supported is NUMERIC
-        Numeric n = DatumGetNumericCopy(currentVals[i]);
-        state->dvalues[i] = NumericGetDatum(n);
-      }
+      state->dvalues[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
     } else {
       // Moving this switch outside the for loop makes sense
       // but doesn't seem to change performance at all,
