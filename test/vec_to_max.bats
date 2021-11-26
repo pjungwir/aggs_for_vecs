@@ -60,5 +60,41 @@ load test_helper
 @test "string max" {
   run query "SELECT vec_to_max(vals) FROM (VALUES (ARRAY['a']), (ARRAY['b'])) t(vals)"
   echo ${lines}
-  [ "${lines[0]}" = "ERROR:  vec_to_max input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION" ]
+  [ "${lines[0]}" = "ERROR:  vec_to_max input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC" ]
+}
+
+@test "numeric max lots" {
+  result="$(query "SELECT vec_to_max(nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4)")";
+  echo $result;
+  [ "$result" = "{1.23,2.34,3.45}" ]
+}
+
+@test "numeric max none" {
+  result="$(query "SELECT vec_to_max(nums) FROM measurements WHERE sensor_id = -1")";
+  echo $result;
+  [ "$result" = "NULL" ]
+}
+
+@test "numeric max one null" {
+  result="$(query "SELECT vec_to_max(nums) FROM measurements WHERE sensor_id = 1")";
+  echo $result;
+  [ "$result" = "NULL" ]
+}
+
+@test "numeric max array of nulls" {
+  result="$(query "SELECT vec_to_max(nums) FROM measurements WHERE sensor_id = 2")";
+  echo $result;
+  [ "$result" = "{NULL,NULL,NULL}" ]
+}
+
+@test "numeric max one not-null" {
+  result="$(query "SELECT vec_to_max(nums) FROM measurements WHERE sensor_id = 4")";
+  echo $result;
+  [ "$result" = "{1.23,NULL,2.34}" ]
+}
+
+@test "numeric max array of nulls and one other" {
+  result="$(query "SELECT vec_to_max(nums) FROM measurements WHERE sensor_id IN (2, 4)")";
+  echo $result;
+  [ "$result" = "{1.23,NULL,2.34}" ]
 }
