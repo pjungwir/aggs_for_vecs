@@ -1,0 +1,210 @@
+-- smallint weighted_mean lots
+SELECT vec_to_weighted_mean(smallints, smallints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,2,2.6}
+(1 row)
+
+-- smallint weighted_mean none
+SELECT vec_to_weighted_mean(smallints, smallints) FROM measurements WHERE sensor_id = -1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- smallint weighted_mean one null
+SELECT vec_to_weighted_mean(smallints, smallints) FROM measurements WHERE sensor_id = 1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- smallint weighted_mean array of nulls
+SELECT vec_to_weighted_mean(smallints, smallints) FROM measurements WHERE sensor_id = 2;
+ vec_to_weighted_mean 
+----------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- smallint weighted_mean one not-null
+SELECT vec_to_weighted_mean(smallints, smallints) FROM measurements WHERE sensor_id = 4;
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+
+-- smallint weighted_mean array of nulls and one other
+SELECT vec_to_weighted_mean(smallints, smallints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+
+-- int weighted_mean lots
+SELECT vec_to_weighted_mean(ints, ints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,2,2.6}
+(1 row)
+
+-- int weighted_mean none
+SELECT vec_to_weighted_mean(ints, ints) FROM measurements WHERE sensor_id = -1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- int weighted_mean one null
+SELECT vec_to_weighted_mean(ints, ints) FROM measurements WHERE sensor_id = 1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- int weighted_mean array of nulls
+SELECT vec_to_weighted_mean(ints, ints) FROM measurements WHERE sensor_id = 2;
+ vec_to_weighted_mean 
+----------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- int weighted_mean one not-null
+SELECT vec_to_weighted_mean(ints, ints) FROM measurements WHERE sensor_id = 4;
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+
+-- int weighted_mean array of nulls and one other
+SELECT vec_to_weighted_mean(ints, ints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint weighted_mean lots
+SELECT vec_to_weighted_mean(bigints, bigints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,2,2.6}
+(1 row)
+
+-- bigint weighted_mean none
+SELECT vec_to_weighted_mean(bigints, bigints) FROM measurements WHERE sensor_id = -1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- bigint weighted_mean one null
+SELECT vec_to_weighted_mean(bigints, bigints) FROM measurements WHERE sensor_id = 1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- bigint weighted_mean array of nulls
+SELECT vec_to_weighted_mean(bigints, bigints) FROM measurements WHERE sensor_id = 2;
+ vec_to_weighted_mean 
+----------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- bigint weighted_mean one not-null
+SELECT vec_to_weighted_mean(bigints, bigints) FROM measurements WHERE sensor_id = 4;
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint weighted_mean array of nulls and one other
+SELECT vec_to_weighted_mean(bigints, bigints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+
+-- real weighted_mean lots
+SELECT vec_to_weighted_mean(reals, reals) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,2,2.6}
+(1 row)
+
+-- real weighted_mean none
+SELECT vec_to_weighted_mean(reals, reals) FROM measurements WHERE sensor_id = -1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- real weighted_mean one null
+SELECT vec_to_weighted_mean(reals, reals) FROM measurements WHERE sensor_id = 1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- real weighted_mean array of nulls
+SELECT vec_to_weighted_mean(reals, reals) FROM measurements WHERE sensor_id = 2;
+ vec_to_weighted_mean 
+----------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- real weighted_mean one not-null
+SELECT vec_to_weighted_mean(reals, reals) FROM measurements WHERE sensor_id = 4;
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+
+-- real weighted_mean array of nulls and one other
+SELECT vec_to_weighted_mean(reals, reals) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+
+-- float weighted_mean lots
+SELECT vec_to_weighted_mean(floats, floats) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,2,2.6}
+(1 row)
+
+-- float weighted_mean none
+SELECT vec_to_weighted_mean(floats, floats) FROM measurements WHERE sensor_id = -1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- float weighted_mean one null
+SELECT vec_to_weighted_mean(floats, floats) FROM measurements WHERE sensor_id = 1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- float weighted_mean array of nulls
+SELECT vec_to_weighted_mean(floats, floats) FROM measurements WHERE sensor_id = 2;
+ vec_to_weighted_mean 
+----------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- float weighted_mean one not-null
+SELECT vec_to_weighted_mean(floats, floats) FROM measurements WHERE sensor_id = 4;
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+
+-- float weighted_mean array of nulls and one other
+SELECT vec_to_weighted_mean(floats, floats) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_weighted_mean 
+----------------------
+ {1,NULL,2}
+(1 row)
+

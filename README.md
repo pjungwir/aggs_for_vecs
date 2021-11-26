@@ -92,6 +92,12 @@ Returns the maximum in each array position.
 
 Returns the average (mean) in each array position.
 
+#### `vec_to_weighted_mean(ANYARRAY, ANYARRAY) RETURNS FLOAT[]`
+
+Returns the weighted average (mean) in each array position,
+using the first parameter for the values and the second for the weights.
+The two arrays should have the same length.
+
 #### `vec_to_var_samp(ANYARRAY) RETURNS FLOAT[]`
 
 Returns the [sample variance](http://www.statisticshowto.com/how-to-find-the-sample-variance-and-standard-deviation-in-statistics/) in each array position.

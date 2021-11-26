@@ -18,6 +18,7 @@ REGRESS = setup \
 					vec_to_min \
 					vec_to_sum \
 					vec_to_var_samp \
+					vec_to_weighted_mean \
 					vec_trim_scale \
 					vec_without_outliers
 
