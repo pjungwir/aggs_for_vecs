@@ -50,8 +50,9 @@ vec_to_count_transfn(PG_FUNCTION_ARGS)
         elemTypeId != INT4OID &&
         elemTypeId != INT8OID &&
         elemTypeId != FLOAT4OID &&
-        elemTypeId != FLOAT8OID) {
-      ereport(ERROR, (errmsg("vec_to_count input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION")));
+        elemTypeId != FLOAT8OID &&
+        elemTypeId != NUMERICOID) {
+      ereport(ERROR, (errmsg("vec_to_count input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC")));
     }
     if (ARR_NDIM(currentArray) != 1) {
       ereport(ERROR, (errmsg("One-dimensional arrays are required")));
