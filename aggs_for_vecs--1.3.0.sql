@@ -6,6 +6,14 @@
 
 
 CREATE OR REPLACE FUNCTION
+pad_vec(anyarray, int)
+RETURNS anyarray
+AS 'aggs_for_vecs', 'pad_vec'
+LANGUAGE c;
+
+
+
+CREATE OR REPLACE FUNCTION
 vec_without_outliers(anyarray, anyarray, anyarray)
 RETURNS anyarray
 AS 'aggs_for_vecs', 'vec_without_outliers'
