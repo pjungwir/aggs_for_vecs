@@ -21,6 +21,7 @@ typedef union pgnum {
   int64 i64;
   float4 f4;
   float8 f8;
+  Numeric num;
 } pgnum;
 
 typedef struct VecArrayBuildState {

@@ -9,6 +9,8 @@
 #include <utils/arrayaccess.h>
 #endif
 #include <math.h>
+#include <utils/numeric.h>
+#include <utils/fmgrprotos.h>
 
 PG_MODULE_MAGIC;
 
