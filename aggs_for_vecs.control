@@ -1,4 +1,4 @@
 comment = 'Various functions for computing statistics on vectors (arrays) of numbers'
-default_version = '1.2.1'
+default_version = '1.3.0'
 module_pathname = '$libdir/aggs_for_vecs'
 relocatable = true
