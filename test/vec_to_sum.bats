@@ -60,7 +60,7 @@ load test_helper
 @test "numeric sum lots" {
   result="$(query "SELECT vec_to_sum(nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4)")";
   echo $result;
-  [ "$result" = "{2,2,5}" ]
+  [ "$result" = "{2.46,2.34,5.79}" ]
 }
 
 @test "numeric sum none" {
@@ -84,13 +84,13 @@ load test_helper
 @test "numeric sum one not-null" {
   result="$(query "SELECT vec_to_sum(nums) FROM measurements WHERE sensor_id = 4")";
   echo $result;
-  [ "$result" = "{1,NULL,2}" ]
+  [ "$result" = "{1.23,NULL,2.34}" ]
 }
 
 @test "numeric sum array of nulls and one other" {
   result="$(query "SELECT vec_to_sum(nums) FROM measurements WHERE sensor_id IN (2, 4)")";
   echo $result;
-  [ "$result" = "{1,NULL,2}" ]
+  [ "$result" = "{1.23,NULL,2.34}" ]
 }
 
 @test "string sum" {
