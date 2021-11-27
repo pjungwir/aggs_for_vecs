@@ -56,9 +56,3 @@ load test_helper
   echo $result;
   [ "$result" = "{{0,0,0},{0,0,0},{0,1,0}}" ]
 }
-
-@test "string hist_md" {
-  run query "SELECT hist_md(vals, '{1,2}'::int[], '{a,a}'::text[], '{b,b}'::text[], '{3,3}'::int[]) FROM (VALUES (ARRAY['a', 'b']), (ARRAY['b', 'c'])) t(vals)"
-  echo ${lines}
-  [ "${lines[0]}" = "ERROR:  hist_md vals must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION" ]
-}

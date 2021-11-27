@@ -56,9 +56,3 @@ load test_helper
   echo $result;
   [ "$result" = "{{0,0,0},{0,0,0},{0,1,0}}" ]
 }
-
-@test "string hist_2d" {
-  run query "SELECT hist_2d(vals[1], vals[2], 'a', 'a', 'b', 'b', 3, 3) FROM (VALUES (ARRAY['a', 'b']), (ARRAY['b', 'c'])) t(vals)"
-  echo ${lines}
-  [ "${lines[0]}" = "ERROR:  hist_2d operands must be numeric types" ]
-}

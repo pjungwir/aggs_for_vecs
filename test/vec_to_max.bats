@@ -57,12 +57,6 @@ load test_helper
   [ "$result" = "{1,NULL,2}" ]
 }
 
-@test "string max" {
-  run query "SELECT vec_to_max(vals) FROM (VALUES (ARRAY['a']), (ARRAY['b'])) t(vals)"
-  echo ${lines}
-  [ "${lines[0]}" = "ERROR:  vec_to_max input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC" ]
-}
-
 @test "numeric max lots" {
   result="$(query "SELECT vec_to_max(nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4)")";
   echo $result;

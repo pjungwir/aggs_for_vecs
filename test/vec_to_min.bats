@@ -57,12 +57,6 @@ load test_helper
   [ "$result" = "{1,NULL,2}" ]
 }
 
-@test "string min" {
-  run query "SELECT vec_to_min(vals) FROM (VALUES (ARRAY['a']), (ARRAY['b'])) t(vals)"
-  echo ${lines}
-  [ "${lines[0]}" = "ERROR:  vec_to_min input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC" ]
-}
-
 @test "numeric min lots" {
   result="$(query "SELECT vec_to_min(nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4)")";
   echo $result;
