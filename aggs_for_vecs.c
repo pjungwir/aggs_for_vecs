@@ -23,6 +23,7 @@ PG_MODULE_MAGIC;
 #include "vec_to_count.c"
 #include "vec_to_sum.c"
 #include "vec_to_mean.c"
+#include "vec_to_mean_numeric.c"
 // #include "vec_to_median.c"
 // #include "vec_to_mode.c"
 #include "vec_to_max.c"
