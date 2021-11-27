@@ -24,7 +24,6 @@ vec_to_mean_transfn(PG_FUNCTION_ARGS)
   Datum *currentVals;
   bool *currentNulls;
   int i;
-  MemoryContext old;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
     elog(ERROR, "vec_to_mean_transfn called in non-aggregate context");
@@ -51,9 +50,8 @@ vec_to_mean_transfn(PG_FUNCTION_ARGS)
         elemTypeId != INT4OID &&
         elemTypeId != INT8OID &&
         elemTypeId != FLOAT4OID &&
-        elemTypeId != FLOAT8OID &&
-        elemTypeId != NUMERICOID) {
-      ereport(ERROR, (errmsg("vec_to_mean input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC")));
+        elemTypeId != FLOAT8OID) {
+      ereport(ERROR, (errmsg("vec_to_mean input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION")));
     }
     if (ARR_NDIM(currentArray) != 1) {
       ereport(ERROR, (errmsg("One-dimensional arrays are required")));
@@ -73,7 +71,6 @@ vec_to_mean_transfn(PG_FUNCTION_ARGS)
     ereport(ERROR, (errmsg("All arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
   }
 
-  if (elemTypeId == NUMERICOID) old = MemoryContextSwitchTo(aggContext);
   for (i = 0; i < arrayLength; i++) {
     if (currentNulls[i]) {
       // do nothing: nulls can't change the result.
@@ -86,7 +83,6 @@ vec_to_mean_transfn(PG_FUNCTION_ARGS)
         case INT8OID:   state->vecvalues[i].f8 = DatumGetInt64(currentVals[i]);  break;
         case FLOAT4OID: state->vecvalues[i].f8 = DatumGetFloat4(currentVals[i]); break;
         case FLOAT8OID: state->vecvalues[i].f8 = DatumGetFloat8(currentVals[i]); break;
-        case NUMERICOID: state->vecvalues[i].num = DatumGetNumericCopy(currentVals[i]); break;
         default: elog(ERROR, "Unknown elemTypeId!");
       }
     } else {
@@ -107,18 +103,11 @@ vec_to_mean_transfn(PG_FUNCTION_ARGS)
         case FLOAT8OID:
           state->vecvalues[i].f8 += (DatumGetFloat8(currentVals[i]) - state->vecvalues[i].f8) / state->veccounts[i];
           break;
-        case NUMERICOID:
-          // instead of performing sub/div/add numeric calculations each row, just add and complete later in final function
-          state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add,
-                      NumericGetDatum(state->vecvalues[i].num),
-                      currentVals[i]));
-          break;
         default:
           elog(ERROR, "Unknown elemTypeId!");
       }
     }
   }
-  if (elemTypeId == NUMERICOID) MemoryContextSwitchTo(old);
   PG_RETURN_POINTER(state);
 }
 
@@ -144,13 +133,7 @@ vec_to_mean_finalfn(PG_FUNCTION_ARGS)
   // Convert from our pgnums to Datums:
   for (i = 0; i < state->state.nelems; i++) {
     if (state->state.dnulls[i]) continue;
-    if (state->inputElementType != NUMERICOID) {
-      state->state.dvalues[i] = Float8GetDatum(state->vecvalues[i].f8);
-    } else {
-      Datum count = DirectFunctionCall1(int8_numeric, UInt32GetDatum(state->veccounts[i]));
-      Datum div = DirectFunctionCall2(numeric_div, NumericGetDatum(state->vecvalues[i].num), count);
-      state->state.dvalues[i] = div;
-    }
+    state->state.dvalues[i] = Float8GetDatum(state->vecvalues[i].f8);
   }
 
   dims[0] = state->state.nelems;
