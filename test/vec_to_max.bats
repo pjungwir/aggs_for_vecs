@@ -92,3 +92,9 @@ load test_helper
   echo $result;
   [ "$result" = "{1.23,NULL,2.34}" ]
 }
+
+@test "numeric max data 01" {
+  result="$(query "SELECT vec_to_max(data_i) FROM measurements2")";
+  echo $result;
+  [ "$result" = "{1.23,NULL,2.34}" ]
+}

@@ -26,4 +26,4 @@ fi
 
 
 psql --no-psqlrc -U "$TESTING_USER" -h "$TESTING_HOST" -p "$TESTING_PORT" "$TESTING_DATABASE" < test/setup.sql;
-
+psql --no-psqlrc -U "$TESTING_USER" -h "$TESTING_HOST" -p "$TESTING_PORT" "$TESTING_DATABASE" < test/setup2.sql;
