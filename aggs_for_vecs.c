@@ -1,6 +1,7 @@
 #include <postgres.h>
 #include <fmgr.h>
 #include <catalog/pg_type.h>
+#include <utils/datum.h>
 #include <utils/array.h>
 #include <utils/builtins.h>
 #include <utils/lsyscache.h>
@@ -17,6 +18,7 @@ PG_MODULE_MAGIC;
 
 
 #include "util.c"
+#include "pad_vec.c"
 #include "vec_without_outliers.c"
 #include "vec_to_count.c"
 #include "vec_to_sum.c"

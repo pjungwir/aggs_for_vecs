@@ -28,7 +28,7 @@ typedef struct VecArrayBuildState {
   ArrayBuildState state;
   Oid inputElementType;
   pgnum *vecvalues;     // The current aggregate result for each position.
-  int *veccounts;       // How many values in this position are not null.
+  uint32 *veccounts;     // How many values in this position are not null.
   pgnum *vectmpvalues;  // Intermediate results if we need them.
 } VecArrayBuildState;
 
@@ -57,9 +57,9 @@ initVecArrayResultWithNulls(Oid input_element_type, Oid state_element_type, Memo
   astate->inputElementType = input_element_type;
   astate->vecvalues = (pgnum *)
     MemoryContextAlloc(rcontext, astate->state.alen * sizeof(pgnum));
-  astate->veccounts = (int *)
-    MemoryContextAlloc(rcontext, astate->state.alen * sizeof(int));
-  memset(astate->veccounts, 0, astate->state.alen * sizeof(int));
+  astate->veccounts = (uint32 *)
+    MemoryContextAlloc(rcontext, astate->state.alen * sizeof(uint32));
+  memset(astate->veccounts, 0, astate->state.alen * sizeof(uint32));
   astate->vectmpvalues = (pgnum *)
     MemoryContextAlloc(rcontext, astate->state.alen * sizeof(pgnum));
   

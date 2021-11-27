@@ -165,7 +165,7 @@ hist_2d_finalfn(PG_FUNCTION_ARGS)
   if (state == NULL) PG_RETURN_NULL();
 
   for (i = 0; i < state->state.nelems; i++) {
-    state->state.dvalues[i] = Int32GetDatum((int32)state->veccounts[i]);
+    state->state.dvalues[i] = UInt32GetDatum(state->veccounts[i]);
   }
 
   dims[0] = state->vecvalues[0].i32;
