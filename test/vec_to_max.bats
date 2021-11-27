@@ -56,9 +56,3 @@ load test_helper
   echo $result;
   [ "$result" = "{1,NULL,2}" ]
 }
-
-@test "string max" {
-  run query "SELECT vec_to_max(vals) FROM (VALUES (ARRAY['a']), (ARRAY['b'])) t(vals)"
-  echo ${lines}
-  [ "${lines[0]}" = "ERROR:  vec_to_max input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION" ]
-}

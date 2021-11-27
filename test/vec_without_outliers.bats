@@ -44,9 +44,3 @@ load test_helper
   echo $result;
   [ "$result" = "{1,NULL,2}" ]
 }
-
-@test "string count" {
-  run query "SELECT vec_without_outliers(vals, NULL, NULL) FROM (VALUES (ARRAY['a']), (ARRAY['b'])) t(vals)"
-  echo ${lines}
-  [ "${lines[0]}" = "ERROR:  vec_without_outliers input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION" ]
-}

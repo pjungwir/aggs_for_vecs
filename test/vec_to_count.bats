@@ -56,9 +56,3 @@ load test_helper
   echo $result;
   [ "$result" = "{1,0,1}" ]
 }
-
-@test "string count" {
-  run query "SELECT vec_to_count(vals) FROM (VALUES (ARRAY['a']), (ARRAY['b'])) t(vals)"
-  echo ${lines}
-  [ "${lines[0]}" = "ERROR:  vec_to_count input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION" ]
-}

@@ -56,9 +56,3 @@ load test_helper
   echo $result;
   [ "$result" = "{NULL,NULL,NULL}" ]
 }
-
-@test "string var_samp" {
-  run query "SELECT vec_to_var_samp(vals) FROM (VALUES (ARRAY['a']), (ARRAY['b'])) t(vals)"
-  echo ${lines}
-  [ "${lines[0]}" = "ERROR:  vec_to_var_samp input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION" ]
-}
