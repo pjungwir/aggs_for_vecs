@@ -1,0 +1,210 @@
+-- smallint hist_md
+SELECT hist_md(smallints, '{1,2}'::int[], '{0,0}'::smallint[], '{1,1}'::smallint[], '{3,3}'::int[]) FROM measurements;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,1,0},{0,2,0}}
+(1 row)
+
+-- smallint hist_md none
+SELECT hist_md(smallints, '{1,2}'::int[], '{0,0}'::smallint[], '{1,1}'::smallint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = -1;
+ hist_md 
+---------
+ 
+(1 row)
+
+-- smallint hist_md one null
+SELECT hist_md(smallints, '{1,2}'::int[], '{0,0}'::smallint[], '{1,1}'::smallint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 1;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- smallint hist_md array of nulls
+SELECT hist_md(smallints, '{1,2}'::int[], '{0,0}'::smallint[], '{1,1}'::smallint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 2;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- smallint hist_md one not-null
+SELECT hist_md(smallints, '{1,3}'::int[], '{0,0}'::smallint[], '{1,1}'::smallint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 4;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+
+-- smallint hist_md array of nulls and one other
+SELECT hist_md(smallints, '{1,3}'::int[], '{0,0}'::smallint[], '{1,1}'::smallint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id IN (2, 4);
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+
+-- int hist_md
+SELECT hist_md(ints, '{1,2}'::int[], '{0,0}'::int[], '{1,1}'::int[], '{3,3}'::int[]) FROM measurements;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,1,0},{0,2,0}}
+(1 row)
+
+-- int hist_md none
+SELECT hist_md(ints, '{1,2}'::int[], '{0,0}'::int[], '{1,1}'::int[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = -1;
+ hist_md 
+---------
+ 
+(1 row)
+
+-- int hist_md one null
+SELECT hist_md(ints, '{1,2}'::int[], '{0,0}'::int[], '{1,1}'::int[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 1;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- int hist_md array of nulls
+SELECT hist_md(ints, '{1,2}'::int[], '{0,0}'::int[], '{1,1}'::int[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 2;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- int hist_md one not-null
+SELECT hist_md(ints, '{1,3}'::int[], '{0,0}'::int[], '{1,1}'::int[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 4;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+
+-- int hist_md array of nulls and one other
+SELECT hist_md(ints, '{1,3}'::int[], '{0,0}'::int[], '{1,1}'::int[], '{3,3}'::int[]) FROM measurements WHERE sensor_id IN (2, 4);
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+
+-- bigint hist_md
+SELECT hist_md(bigints, '{1,2}'::int[], '{0,0}'::bigint[], '{1,1}'::bigint[], '{3,3}'::int[]) FROM measurements;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,1,0},{0,2,0}}
+(1 row)
+
+-- bigint hist_md none
+SELECT hist_md(bigints, '{1,2}'::int[], '{0,0}'::bigint[], '{1,1}'::bigint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = -1;
+ hist_md 
+---------
+ 
+(1 row)
+
+-- bigint hist_md one null
+SELECT hist_md(bigints, '{1,2}'::int[], '{0,0}'::bigint[], '{1,1}'::bigint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 1;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- bigint hist_md array of nulls
+SELECT hist_md(bigints, '{1,2}'::int[], '{0,0}'::bigint[], '{1,1}'::bigint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 2;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- bigint hist_md one not-null
+SELECT hist_md(bigints, '{1,3}'::int[], '{0,0}'::bigint[], '{1,1}'::bigint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 4;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+
+-- bigint hist_md array of nulls and one other
+SELECT hist_md(bigints, '{1,3}'::int[], '{0,0}'::bigint[], '{1,1}'::bigint[], '{3,3}'::int[]) FROM measurements WHERE sensor_id IN (2, 4);
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+
+-- real hist_md
+SELECT hist_md(reals, '{1,2}'::int[], '{0,0}'::real[], '{1,1}'::real[], '{3,3}'::int[]) FROM measurements;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,1,0},{0,2,0}}
+(1 row)
+
+-- real hist_md none
+SELECT hist_md(reals, '{1,2}'::int[], '{0,0}'::real[], '{1,1}'::real[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = -1;
+ hist_md 
+---------
+ 
+(1 row)
+
+-- real hist_md one null
+SELECT hist_md(reals, '{1,2}'::int[], '{0,0}'::real[], '{1,1}'::real[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 1;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- real hist_md array of nulls
+SELECT hist_md(reals, '{1,2}'::int[], '{0,0}'::real[], '{1,1}'::real[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 2;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- real hist_md one not-null
+SELECT hist_md(reals, '{1,3}'::int[], '{0,0}'::real[], '{1,1}'::real[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 4;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+
+-- real hist_md array of nulls and one other
+SELECT hist_md(reals, '{1,3}'::int[], '{0,0}'::real[], '{1,1}'::real[], '{3,3}'::int[]) FROM measurements WHERE sensor_id IN (2, 4);
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+
+-- float8 hist_md
+SELECT hist_md(floats, '{1,2}'::int[], '{0,0}'::float[], '{1,1}'::float[], '{3,3}'::int[]) FROM measurements;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,1,0},{0,2,0}}
+(1 row)
+
+-- float8 hist_md none
+SELECT hist_md(floats, '{1,2}'::int[], '{0,0}'::float[], '{1,1}'::float[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = -1;
+ hist_md 
+---------
+ 
+(1 row)
+
+-- float8 hist_md one null
+SELECT hist_md(floats, '{1,2}'::int[], '{0,0}'::float[], '{1,1}'::float[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 1;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- float8 hist_md array of nulls
+SELECT hist_md(floats, '{1,2}'::int[], '{0,0}'::float[], '{1,1}'::float[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 2;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,0,0}}
+(1 row)
+
+-- float8 hist_md one not-null
+SELECT hist_md(floats, '{1,3}'::int[], '{0,0}'::float[], '{1,1}'::float[], '{3,3}'::int[]) FROM measurements WHERE sensor_id = 4;
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+
+-- float8 hist_md array of nulls and one other
+SELECT hist_md(floats, '{1,3}'::int[], '{0,0}'::float[], '{1,1}'::float[], '{3,3}'::int[]) FROM measurements WHERE sensor_id IN (2, 4);
+          hist_md          
+---------------------------
+ {{0,0,0},{0,0,0},{0,1,0}}
+(1 row)
+

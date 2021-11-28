@@ -1,0 +1,210 @@
+-- smallint max lots
+SELECT vec_to_max(smallints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_max 
+------------
+ {1,2,3}
+(1 row)
+
+-- smallint max none
+SELECT vec_to_max(smallints) FROM measurements WHERE sensor_id = -1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- smallint max one null
+SELECT vec_to_max(smallints) FROM measurements WHERE sensor_id = 1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- smallint max array of nulls
+SELECT vec_to_max(smallints) FROM measurements WHERE sensor_id = 2;
+    vec_to_max    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- smallint max one not-null
+SELECT vec_to_max(smallints) FROM measurements WHERE sensor_id = 4;
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- smallint max array of nulls and one other
+SELECT vec_to_max(smallints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- int max lots
+SELECT vec_to_max(ints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_max 
+------------
+ {1,2,3}
+(1 row)
+
+-- int max none
+SELECT vec_to_max(ints) FROM measurements WHERE sensor_id = -1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- int max one null
+SELECT vec_to_max(ints) FROM measurements WHERE sensor_id = 1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- int max array of nulls
+SELECT vec_to_max(ints) FROM measurements WHERE sensor_id = 2;
+    vec_to_max    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- int max one not-null
+SELECT vec_to_max(ints) FROM measurements WHERE sensor_id = 4;
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- int max array of nulls and one other
+SELECT vec_to_max(ints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint max lots
+SELECT vec_to_max(bigints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_max 
+------------
+ {1,2,3}
+(1 row)
+
+-- bigint max none
+SELECT vec_to_max(bigints) FROM measurements WHERE sensor_id = -1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- bigint max one null
+SELECT vec_to_max(bigints) FROM measurements WHERE sensor_id = 1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- bigint max array of nulls
+SELECT vec_to_max(bigints) FROM measurements WHERE sensor_id = 2;
+    vec_to_max    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- bigint max one not-null
+SELECT vec_to_max(bigints) FROM measurements WHERE sensor_id = 4;
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint max array of nulls and one other
+SELECT vec_to_max(bigints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- real max lots
+SELECT vec_to_max(reals) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_max 
+------------
+ {1,2,3}
+(1 row)
+
+-- real max none
+SELECT vec_to_max(reals) FROM measurements WHERE sensor_id = -1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- real max one null
+SELECT vec_to_max(reals) FROM measurements WHERE sensor_id = 1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- real max array of nulls
+SELECT vec_to_max(reals) FROM measurements WHERE sensor_id = 2;
+    vec_to_max    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- real max one not-null
+SELECT vec_to_max(reals) FROM measurements WHERE sensor_id = 4;
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- real max array of nulls and one other
+SELECT vec_to_max(reals) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 max lots
+SELECT vec_to_max(floats) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_max 
+------------
+ {1,2,3}
+(1 row)
+
+-- float8 max none
+SELECT vec_to_max(floats) FROM measurements WHERE sensor_id = -1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- float8 max one null
+SELECT vec_to_max(floats) FROM measurements WHERE sensor_id = 1;
+ vec_to_max 
+------------
+ 
+(1 row)
+
+-- float8 max array of nulls
+SELECT vec_to_max(floats) FROM measurements WHERE sensor_id = 2;
+    vec_to_max    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- float8 max one not-null
+SELECT vec_to_max(floats) FROM measurements WHERE sensor_id = 4;
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 max array of nulls and one other
+SELECT vec_to_max(floats) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_max 
+------------
+ {1,NULL,2}
+(1 row)
+

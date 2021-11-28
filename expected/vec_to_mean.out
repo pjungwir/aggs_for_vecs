@@ -1,0 +1,210 @@
+-- smallint mean lots" {
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- smallint mean none" {
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- smallint mean one null" {
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- smallint mean array of nulls" {
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- smallint mean one not-null" {
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- smallint mean array of nulls and one other" {
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- int mean lots" {
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- int mean none" {
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- int mean one null" {
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- int mean array of nulls" {
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- int mean one not-null" {
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- int mean array of nulls and one other" {
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint mean lots" {
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- bigint mean none" {
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- bigint mean one null" {
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- bigint mean array of nulls" {
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- bigint mean one not-null" {
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint mean array of nulls and one other" {
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- real mean lots" {
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- real mean none" {
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- real mean one null" {
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- real mean array of nulls" {
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- real mean one not-null" {
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- real mean array of nulls and one other" {
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 mean lots" {
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- float8 mean none" {
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- float8 mean one null" {
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- float8 mean array of nulls" {
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- float8 mean one not-null" {
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 mean array of nulls and one other" {
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+

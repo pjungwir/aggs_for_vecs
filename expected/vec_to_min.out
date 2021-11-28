@@ -1,0 +1,210 @@
+-- smallint min lots
+SELECT vec_to_min(smallints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_min 
+------------
+ {1,2,2}
+(1 row)
+
+-- smallint min none
+SELECT vec_to_min(smallints) FROM measurements WHERE sensor_id = -1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- smallint min one null
+SELECT vec_to_min(smallints) FROM measurements WHERE sensor_id = 1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- smallint min array of nulls
+SELECT vec_to_min(smallints) FROM measurements WHERE sensor_id = 2;
+    vec_to_min    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- smallint min one not-null
+SELECT vec_to_min(smallints) FROM measurements WHERE sensor_id = 4;
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- smallint min array of nulls and one other
+SELECT vec_to_min(smallints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- int min lots
+SELECT vec_to_min(ints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_min 
+------------
+ {1,2,2}
+(1 row)
+
+-- int min none
+SELECT vec_to_min(ints) FROM measurements WHERE sensor_id = -1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- int min one null
+SELECT vec_to_min(ints) FROM measurements WHERE sensor_id = 1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- int min array of nulls
+SELECT vec_to_min(ints) FROM measurements WHERE sensor_id = 2;
+    vec_to_min    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- int min one not-null
+SELECT vec_to_min(ints) FROM measurements WHERE sensor_id = 4;
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- int min array of nulls and one other
+SELECT vec_to_min(ints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint min lots
+SELECT vec_to_min(bigints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_min 
+------------
+ {1,2,2}
+(1 row)
+
+-- bigint min none
+SELECT vec_to_min(bigints) FROM measurements WHERE sensor_id = -1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- bigint min one null
+SELECT vec_to_min(bigints) FROM measurements WHERE sensor_id = 1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- bigint min array of nulls
+SELECT vec_to_min(bigints) FROM measurements WHERE sensor_id = 2;
+    vec_to_min    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- bigint min one not-null
+SELECT vec_to_min(bigints) FROM measurements WHERE sensor_id = 4;
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint min array of nulls and one other
+SELECT vec_to_min(bigints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- real min lots
+SELECT vec_to_min(reals) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_min 
+------------
+ {1,2,2}
+(1 row)
+
+-- real min none
+SELECT vec_to_min(reals) FROM measurements WHERE sensor_id = -1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- real min one null
+SELECT vec_to_min(reals) FROM measurements WHERE sensor_id = 1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- real min array of nulls
+SELECT vec_to_min(reals) FROM measurements WHERE sensor_id = 2;
+    vec_to_min    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- real min one not-null
+SELECT vec_to_min(reals) FROM measurements WHERE sensor_id = 4;
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- real min array of nulls and one other
+SELECT vec_to_min(reals) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 min lots
+SELECT vec_to_min(floats) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_min 
+------------
+ {1,2,2}
+(1 row)
+
+-- float8 min none
+SELECT vec_to_min(floats) FROM measurements WHERE sensor_id = -1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- float8 min one null
+SELECT vec_to_min(floats) FROM measurements WHERE sensor_id = 1;
+ vec_to_min 
+------------
+ 
+(1 row)
+
+-- float8 min array of nulls
+SELECT vec_to_min(floats) FROM measurements WHERE sensor_id = 2;
+    vec_to_min    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- float8 min one not-null
+SELECT vec_to_min(floats) FROM measurements WHERE sensor_id = 4;
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 min array of nulls and one other
+SELECT vec_to_min(floats) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_min 
+------------
+ {1,NULL,2}
+(1 row)
+

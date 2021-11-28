@@ -123,10 +123,16 @@ Since the values in `indexes` should follow Postgres's convention of 1-indexed a
 
 
 
+Testing
+-------
+
+These tests follow the [PGXS and `pg_regress` framework](https://www.postgresql.org/docs/current/extend-pgxs.html) used for Postgres extensions, including Postgres's own contrib package. To run the tests, first install the extension somewhere then say `make installcheck`. You can use standard libpq envvars to control the database connection, e.g. `PGPORT=5436 make installcheck`.
+
+
+
 Limitations/TODO
 ----------------
 
-- Tests for floats are pretty good, but we need tests for the other numeric types.
 - Lots of functions are still left to implement:
 
   - `vec_to_min_max`

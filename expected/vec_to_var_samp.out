@@ -1,0 +1,210 @@
+-- smallint var_samp lots" {
+SELECT vec_to_var_samp(smallints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_var_samp 
+-----------------
+ {0,NULL,0.5}
+(1 row)
+
+-- smallint var_samp none" {
+SELECT vec_to_var_samp(smallints) FROM measurements WHERE sensor_id = -1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- smallint var_samp one null" {
+SELECT vec_to_var_samp(smallints) FROM measurements WHERE sensor_id = 1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- smallint var_samp array of nulls" {
+SELECT vec_to_var_samp(smallints) FROM measurements WHERE sensor_id = 2;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- smallint var_samp one not-null" {
+SELECT vec_to_var_samp(smallints) FROM measurements WHERE sensor_id = 4;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- smallint var_samp array of nulls and one other" {
+SELECT vec_to_var_samp(smallints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- int var_samp lots" {
+SELECT vec_to_var_samp(ints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_var_samp 
+-----------------
+ {0,NULL,0.5}
+(1 row)
+
+-- int var_samp none" {
+SELECT vec_to_var_samp(ints) FROM measurements WHERE sensor_id = -1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- int var_samp one null" {
+SELECT vec_to_var_samp(ints) FROM measurements WHERE sensor_id = 1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- int var_samp array of nulls" {
+SELECT vec_to_var_samp(ints) FROM measurements WHERE sensor_id = 2;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- int var_samp one not-null" {
+SELECT vec_to_var_samp(ints) FROM measurements WHERE sensor_id = 4;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- int var_samp array of nulls and one other" {
+SELECT vec_to_var_samp(ints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- bigint var_samp lots" {
+SELECT vec_to_var_samp(bigints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_var_samp 
+-----------------
+ {0,NULL,0.5}
+(1 row)
+
+-- bigint var_samp none" {
+SELECT vec_to_var_samp(bigints) FROM measurements WHERE sensor_id = -1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- bigint var_samp one null" {
+SELECT vec_to_var_samp(bigints) FROM measurements WHERE sensor_id = 1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- bigint var_samp array of nulls" {
+SELECT vec_to_var_samp(bigints) FROM measurements WHERE sensor_id = 2;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- bigint var_samp one not-null" {
+SELECT vec_to_var_samp(bigints) FROM measurements WHERE sensor_id = 4;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- bigint var_samp array of nulls and one other" {
+SELECT vec_to_var_samp(bigints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- real var_samp lots" {
+SELECT vec_to_var_samp(reals) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_var_samp 
+-----------------
+ {0,NULL,0.5}
+(1 row)
+
+-- real var_samp none" {
+SELECT vec_to_var_samp(reals) FROM measurements WHERE sensor_id = -1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- real var_samp one null" {
+SELECT vec_to_var_samp(reals) FROM measurements WHERE sensor_id = 1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- real var_samp array of nulls" {
+SELECT vec_to_var_samp(reals) FROM measurements WHERE sensor_id = 2;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- real var_samp one not-null" {
+SELECT vec_to_var_samp(reals) FROM measurements WHERE sensor_id = 4;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- real var_samp array of nulls and one other" {
+SELECT vec_to_var_samp(reals) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- float8 var_samp lots" {
+SELECT vec_to_var_samp(floats) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_var_samp 
+-----------------
+ {0,NULL,0.5}
+(1 row)
+
+-- float8 var_samp none" {
+SELECT vec_to_var_samp(floats) FROM measurements WHERE sensor_id = -1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- float8 var_samp one null" {
+SELECT vec_to_var_samp(floats) FROM measurements WHERE sensor_id = 1;
+ vec_to_var_samp 
+-----------------
+ 
+(1 row)
+
+-- float8 var_samp array of nulls" {
+SELECT vec_to_var_samp(floats) FROM measurements WHERE sensor_id = 2;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- float8 var_samp one not-null" {
+SELECT vec_to_var_samp(floats) FROM measurements WHERE sensor_id = 4;
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- float8 var_samp array of nulls and one other" {
+SELECT vec_to_var_samp(floats) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_var_samp  
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
