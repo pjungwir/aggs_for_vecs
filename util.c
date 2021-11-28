@@ -113,7 +113,7 @@ trimScaleNumeric(Datum num);
 Datum
 trimScaleNumeric(Datum num) {
  #if PG_VERSION_NUM >= 130000
-   return DirectFunctionCall1(trim_scale, div);
+   return DirectFunctionCall1(trim_scale, num);
 #else
   char *str;
   int len;
