@@ -92,3 +92,17 @@ load test_helper
   echo $result;
   [ "$result" = "{1.23,NULL,2.34}" ]
 }
+
+# numeric min data 01 results calculated via:
+# WITH di AS (
+# 	SELECT idx_i, min(val_i) AS min_i
+# 	FROM measurements2 d, unnest(d.data_i) WITH ORDINALITY AS a(val_i, idx_i)
+# 	GROUP BY idx_i
+# )
+# SELECT array_agg(min_i ORDER BY idx_i) AS data_i_min FROM di
+
+@test "numeric min data 01" {
+  result="$(query "SELECT vec_to_min(data_i) FROM measurements2")";
+  echo $result;
+  [ "$result" = "{0,-75585.95336,225.00002,49.500015,2531,0.09494743,-332.28107,2531,0}" ]
+}
