@@ -12,7 +12,9 @@
 #include <math.h>
 #include <utils/datum.h>
 #include <utils/numeric.h>
+#if PG_VERSION_NUM >= 100000
 #include <utils/fmgrprotos.h>
+#endif
 
 PG_MODULE_MAGIC;
 
