@@ -409,21 +409,21 @@ CREATE AGGREGATE vec_to_mean(float[]) (
 );
 
 CREATE OR REPLACE FUNCTION
-vec_to_mean_transfn(internal, numeric[])
+vec_to_mean_numeric_transfn(internal, numeric[])
 RETURNS internal
-AS 'aggs_for_vecs', 'vec_to_mean_transfn'
+AS 'aggs_for_vecs', 'vec_to_mean_numeric_transfn'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
-vec_to_mean_finalfn(internal, numeric[])
+vec_to_mean_numeric_finalfn(internal, numeric[])
 RETURNS numeric[] -- sic: not float[] like the others
-AS 'aggs_for_vecs', 'vec_to_mean_finalfn'
+AS 'aggs_for_vecs', 'vec_to_mean_numeric_finalfn'
 LANGUAGE c;
 
 CREATE AGGREGATE vec_to_mean(numeric[]) (
-  sfunc = vec_to_mean_transfn,
+  sfunc = vec_to_mean_numeric_transfn,
   stype = internal,
-  finalfunc = vec_to_mean_finalfn,
+  finalfunc = vec_to_mean_numeric_finalfn,
   finalfunc_extra
 );
 
