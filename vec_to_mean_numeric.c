@@ -96,12 +96,6 @@ vec_to_mean_numeric_finalfn(PG_FUNCTION_ARGS)
   int dims[1];
   int lbs[1];
   int i;
-#if PG_VERSION_NUM < 130000
-  char *str;
-  int len;
-  int j;
-  int p;
-#endif
 
   Assert(AggCheckCallContext(fcinfo, NULL));
 
@@ -121,21 +115,7 @@ vec_to_mean_numeric_finalfn(PG_FUNCTION_ARGS)
 #if PG_VERSION_NUM >= 130000
     div = DirectFunctionCall1(trim_scale, div);
 #else
-    // look for number of trailing zeros in string version, then set scale accordingly
-    str = DatumGetCString(DirectFunctionCall1(numeric_out, div));
-    len = strlen(str);
-    p = -1;
-    for (j = len - 1; j >= 0; j--) {
-      if (str[j] == '0') {
-        continue;
-      } else if (str[j] == '.') {
-          // we found the decimal point; handle all trailing zeros by setting scale to 0
-          div = DirectFunctionCall2(numeric_trunc, div, Int32GetDatum(p > j ? p - j : 0));
-          break;
-      } else if (p < 0 ) {
-        p = j;
-      }
-    }
+    div = trimScaleNumeric(div);
 #endif
     state->state.dvalues[i] = div;
   }

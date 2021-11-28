@@ -104,3 +104,36 @@ initArrayResultWithNulls(Oid element_type, MemoryContext rcontext, int arLen) {
 
   return astate;
 }
+
+// trim the output scale to drop trailing zeros; in PG13 the trim_scale function is available,
+// otherwise manually find the appropriate scale to trim to
+Datum
+trimScaleNumeric(Datum num);
+
+Datum
+trimScaleNumeric(Datum num) {
+ #if PG_VERSION_NUM >= 130000
+   return DirectFunctionCall1(trim_scale, div);
+#else
+  char *str;
+  int len;
+  int j;
+  int p;
+  // look for number of trailing zeros in string version, then set scale accordingly
+  str = DatumGetCString(DirectFunctionCall1(numeric_out, num));
+  len = strlen(str);
+  p = -1;
+  for (j = len - 1; j >= 0; j--) {
+    if (str[j] == '0') {
+      continue;
+    } else if (str[j] == '.') {
+        // we found the decimal point; handle all trailing zeros by setting scale to 0
+        return DirectFunctionCall2(numeric_trunc, num, Int32GetDatum(p > j ? p - j : 0));
+        break;
+    } else if (p < 0 ) {
+      p = j;
+    }
+  }
+  return num;
+#endif
+}
