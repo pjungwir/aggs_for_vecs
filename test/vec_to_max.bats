@@ -95,11 +95,11 @@ load test_helper
 
 # numeric max data 01 results calculated via:
 # WITH di AS (
-# 	SELECT idx_i, avg(val_i) AS avg_i
+# 	SELECT idx_i, max(val_i) AS max_i
 # 	FROM measurements2 d, unnest(d.data_i) WITH ORDINALITY AS a(val_i, idx_i)
 # 	GROUP BY idx_i
 # )
-# SELECT array_agg(avg_i ORDER BY idx_i) AS data_i_avg FROM di
+# SELECT array_agg(max_i ORDER BY idx_i) AS data_i_max FROM di
 
 @test "numeric max data 01" {
   result="$(query "SELECT vec_to_max(data_i) FROM measurements2")";
