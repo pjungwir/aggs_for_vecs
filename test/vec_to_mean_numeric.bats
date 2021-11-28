@@ -53,3 +53,17 @@ load test_helper
   echo $result;
   [ "$result" = "{1}" ]
 }
+
+# numeric mean data 01 results calculated via:
+# WITH di AS (
+# 	SELECT idx_i, avg(val_i) AS avg_i
+# 	FROM measurements2 d, unnest(d.data_i) WITH ORDINALITY AS a(val_i, idx_i)
+# 	GROUP BY idx_i
+# )
+# SELECT array_agg(avg_i ORDER BY idx_i) AS data_i_avg FROM di
+
+@test "numeric mean data 01" {
+  result="$(query "SELECT vec_to_mean(data_i) FROM measurements2")";
+  echo $result;
+  [ "$result" = "{195478.788043478261,18.8083637445652174,229.7496696739130435,49.9944814891304348,137826.625,0.99496976375,-5.2822864641304348,254911.58152173913,136650.663043478261}" ]
+}
