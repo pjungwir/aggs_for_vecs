@@ -130,11 +130,18 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
         state->vecvalues[i].f8    += tmp_f;
         state->vectmpvalues[i].f8 += tmp_f * tmp_f;
       } else {
+ #if PG_VERSION_NUM < 120000
         state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add, NumericGetDatum(state->vecvalues[i].num), currentVals[i]));
         state->vectmpvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add, 
                                                         NumericGetDatum(state->vectmpvalues[i].num), 
                                                         DirectFunctionCall2(numeric_mul, currentVals[i], currentVals[i])
                                                     ));
+  #else
+          state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
+          state->vectmpvalues[i].num = numeric_add_opt_error(state->vectmpvalues[i].num, 
+                                        numeric_mul_opt_error(DatumGetNumeric(currentVals[i]), DatumGetNumeric(currentVals[i]), NULL),
+                                        NULL);
+  #endif
       }
     }
   }
@@ -179,6 +186,7 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
         }
       } else {
         count_num = DirectFunctionCall1(int8_numeric, UInt32GetDatum(state->veccounts[i]));
+ #if PG_VERSION_NUM < 120000
         state->state.dvalues[i] = trimScaleNumeric(
                                   DirectFunctionCall2(numeric_div,
                                     DirectFunctionCall2(numeric_sub,
@@ -196,6 +204,26 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
                                       DirectFunctionCall1(int4_numeric, Int32GetDatum(1))
                                     )
                                   ));
+#else
+        state->state.dvalues[i] = trimScaleNumeric(NumericGetDatum(
+                                  numeric_div_opt_error(
+                                    numeric_sub_opt_error(
+                                      state->vectmpvalues[i].num,
+                                      numeric_div_opt_error(
+                                        numeric_mul_opt_error(state->vecvalues[i].num, state->vecvalues[i].num, NULL),
+                                        DatumGetNumeric(count_num),
+                                        NULL
+                                      ),
+                                      NULL
+                                    ),
+                                    numeric_sub_opt_error(
+                                      DatumGetNumeric(count_num),
+                                      DatumGetNumeric(DirectFunctionCall1(int4_numeric, Int32GetDatum(1))),
+                                      NULL
+                                    ),
+                                    NULL
+                                  )));
+#endif
       }
     }
   }
