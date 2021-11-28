@@ -44,3 +44,27 @@ load test_helper
   echo $result;
   [ "$result" = "{1,NULL,2}" ]
 }
+
+@test "numeric outliers both limits are null" {
+  result="$(query "SELECT vec_without_outliers(nums, NULL, NULL) FROM measurements WHERE sensor_id IN (4)")";
+  echo $result;
+  [ "$result" = "{1.23,NULL,2.34}" ]
+}
+
+@test "numeric outliers one limit is null" {
+  result="$(query "SELECT vec_without_outliers(nums, NULL, ARRAY[NULL, NULL, 1]::numeric[]) FROM measurements WHERE sensor_id IN (4)")";
+  echo $result;
+  [ "$result" = "{1.23,NULL,NULL}" ]
+}
+
+@test "numeric outliers both limits are present" {
+  result="$(query "SELECT vec_without_outliers(nums, ARRAY[5, NULL, -5]::numeric[], ARRAY[NULL, NULL, 1]::numeric[]) FROM measurements WHERE sensor_id IN (4)")";
+  echo $result;
+  [ "$result" = "{NULL,NULL,NULL}" ]
+}
+
+@test "numeric outliers pass mins and maxes" {
+  result="$(query "SELECT vec_without_outliers(nums, ARRAY[-5, -5, -5]::numeric[], ARRAY[5, 5, 5]::numeric[]) FROM measurements WHERE sensor_id IN (4)")";
+  echo $result;
+  [ "$result" = "{1.23,NULL,2.34}" ]
+}
