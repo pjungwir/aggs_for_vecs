@@ -101,7 +101,7 @@ vec_to_max_transfn(PG_FUNCTION_ARGS)
           if (DatumGetFloat8(currentVals[i]) > DatumGetFloat8(state->dvalues[i])) state->dvalues[i] = currentVals[i];
           break;
         case NUMERICOID:
-          if (DatumGetBool(DirectFunctionCall2(numeric_gt, currentVals[i], state->dvalues[i]))) state->dvalues[i] = currentVals[i];
+          if (DatumGetBool(DirectFunctionCall2(numeric_gt, currentVals[i], state->dvalues[i]))) state->dvalues[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
           break;
         default:
           elog(ERROR, "Unknown elemTypeId!");
