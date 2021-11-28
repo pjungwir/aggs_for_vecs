@@ -92,3 +92,17 @@ load test_helper
   echo $result;
   [ "$result" = "{1.23,NULL,2.34}" ]
 }
+
+# numeric sum data 01 results calculated via:
+# WITH di AS (
+# 	SELECT idx_i, sum(val_i) AS sum_i
+# 	FROM measurements2 d, unnest(d.data_i) WITH ORDINALITY AS a(val_i, idx_i)
+# 	GROUP BY idx_i
+# )
+# SELECT array_agg(sum_i ORDER BY idx_i) AS data_i_sum FROM di
+
+@test "numeric sum data 01" {
+  result="$(query "SELECT vec_to_sum(data_i) FROM measurements2")";
+  echo $result;
+  [ "$result" = "{35968097,3460.738929,42273.93922,9198.984594,25360099,183.07443653,-971.9407094,46903731,25143722}" ]
+}
