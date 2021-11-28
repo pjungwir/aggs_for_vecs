@@ -130,7 +130,7 @@ trimScaleNumeric(Datum num) {
         // we found the decimal point; handle all trailing zeros by setting scale to 0
         return DirectFunctionCall2(numeric_trunc, num, Int32GetDatum(p > j ? p - j : 0));
         break;
-    } else if (p < 0 ) {
+    } else if (p < 0) {
       p = j;
     }
   }
