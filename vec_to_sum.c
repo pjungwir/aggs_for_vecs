@@ -124,13 +124,13 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
           state->vecvalues[i].f8 += DatumGetFloat8(currentVals[i]);
           break;
         case NUMERICOID:
- #if PG_VERSION_NUM < 120000
+#if PG_VERSION_NUM < 120000
           state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add,
                       NumericGetDatum(state->vecvalues[i].num),
                       currentVals[i]));
-  #else
+#else
           state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
-  #endif
+#endif
           break;
         default:
           elog(ERROR, "Unknown elemTypeId!");

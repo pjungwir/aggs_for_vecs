@@ -76,11 +76,11 @@ vec_to_mean_numeric_transfn(PG_FUNCTION_ARGS)
     } else {
       state->veccounts[i] += 1;
       // instead of performing sub/div/add numeric calculations each row, just add and complete later in final function
- #if PG_VERSION_NUM < 120000
+#if PG_VERSION_NUM < 120000
       state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add, NumericGetDatum(state->vecvalues[i].num), currentVals[i]));
-  #else
+#else
       state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
-  #endif
+#endif
     }
   }
   MemoryContextSwitchTo(old);
@@ -112,11 +112,11 @@ vec_to_mean_numeric_finalfn(PG_FUNCTION_ARGS)
   for (i = 0; i < state->state.nelems; i++) {
     if (state->state.dnulls[i]) continue;
     count = DirectFunctionCall1(int8_numeric, UInt32GetDatum(state->veccounts[i]));
- #if PG_VERSION_NUM < 120000
+#if PG_VERSION_NUM < 120000
     div = DirectFunctionCall2(numeric_div, NumericGetDatum(state->vecvalues[i].num), count);
-  #else
+#else
     div = NumericGetDatum(numeric_div_opt_error(state->vecvalues[i].num, DatumGetNumeric(count), NULL));
-  #endif
+#endif
 
     // trim the output scale to drop trailing zeros; in PG13 the trim_scale function is available,
     // otherwise manually find the appropriate scale to trim to
