@@ -40,6 +40,16 @@ LANGUAGE c;
 
 
 
+-- vec_trim_scale
+
+CREATE OR REPLACE FUNCTION
+vec_trim_scale(numeric[])
+RETURNS numeric[]
+AS 'aggs_for_vecs', 'vec_trim_scale'
+LANGUAGE c;
+
+
+
 -- vec_without_outliers
 
 CREATE OR REPLACE FUNCTION

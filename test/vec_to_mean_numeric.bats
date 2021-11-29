@@ -3,7 +3,7 @@ load test_helper
 @test "numeric mean lots" {
   result="$(query "SELECT vec_to_mean(nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4)")";
   echo $result;
-  [ "$result" = "{1.23,2.34,2.895}" ]
+  [ "$result" = "{1.23000000000000000000,2.3400000000000000,2.8950000000000000}" ]
 }
 
 @test "numeric mean none" {
@@ -27,19 +27,19 @@ load test_helper
 @test "numeric mean one not-null" {
   result="$(query "SELECT vec_to_mean(nums) FROM measurements WHERE sensor_id = 4")";
   echo $result;
-  [ "$result" = "{1.23,NULL,2.34}" ]
+  [ "$result" = "{1.23000000000000000000,NULL,2.3400000000000000}" ]
 }
 
 @test "numeric mean array of nulls and one other" {
   result="$(query "SELECT vec_to_mean(nums) FROM measurements WHERE sensor_id IN (2, 4)")";
   echo $result;
-  [ "$result" = "{1.23,NULL,2.34}" ]
+  [ "$result" = "{1.23000000000000000000,NULL,2.3400000000000000}" ]
 }
 
 @test "numeric mean everything" {
   result="$(query "SELECT vec_to_mean(nums) FROM measurements")";
   echo $result;
-  [ "$result" = "{1.23,1.97,3.7}" ]
+  [ "$result" = "{1.23000000000000000000,1.9700000000000000,3.7000000000000000}" ]
 }
 
 @test "numeric mean repeating tail" {
@@ -51,7 +51,7 @@ load test_helper
 @test "numeric mean whole number" {
   result="$(query "SELECT vec_to_mean(vals) FROM (VALUES (ARRAY[1]::numeric[]), (ARRAY[1]::numeric[])) t(vals)")";
   echo $result;
-  [ "$result" = "{1}" ]
+  [ "$result" = "{1.00000000000000000000}" ]
 }
 
 # numeric mean data 01 results calculated via:
@@ -65,5 +65,5 @@ load test_helper
 @test "numeric mean data 01" {
   result="$(query "SELECT vec_to_mean(data_i) FROM measurements2")";
   echo $result;
-  [ "$result" = "{195478.788043478261,18.8083637445652174,229.7496696739130435,49.9944814891304348,137826.625,0.99496976375,-5.2822864641304348,254911.58152173913,136650.663043478261}" ]
+  [ "$result" = "{195478.788043478261,18.8083637445652174,229.7496696739130435,49.9944814891304348,137826.625000000000,0.99496976375000000000,-5.2822864641304348,254911.581521739130,136650.663043478261}" ]
 }

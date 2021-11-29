@@ -60,7 +60,7 @@ load test_helper
 @test "numeric var_samp lots" {
   result="$(query "SELECT vec_to_var_samp(nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4)")";
   echo $result;
-  [ "$result" = "{0,NULL,0.61605}" ]
+  [ "$result" = "{0.00000000000000000000,NULL,0.61605000000000000000}" ]
 }
 
 @test "numeric var_samp none" {
@@ -126,5 +126,5 @@ load test_helper
 @test "numeric var_samp data 01 data_a" {
   result="$(query "SELECT vec_to_var_samp(pad_vec(data_a, 3)) FROM measurements2")";
   echo $result;
-  [ "$result" = "{3111992499.95126503,NULL,0}" ]
+  [ "$result" = "{3111992499.95126503,NULL,0.00000000000000000000}" ]
 }

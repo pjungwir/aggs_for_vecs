@@ -187,8 +187,7 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
       } else {
         count_num = DirectFunctionCall1(int8_numeric, UInt32GetDatum(state->veccounts[i]));
 #if PG_VERSION_NUM < 120000
-        state->state.dvalues[i] = trimScaleNumeric(
-                                  DirectFunctionCall2(numeric_div,
+        state->state.dvalues[i] = DirectFunctionCall2(numeric_div,
                                     DirectFunctionCall2(numeric_sub,
                                       NumericGetDatum(state->vectmpvalues[i].num),
                                       DirectFunctionCall2(numeric_div,
@@ -203,9 +202,9 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
                                       count_num,
                                       DirectFunctionCall1(int4_numeric, Int32GetDatum(1))
                                     )
-                                  ));
+                                  );
 #else
-        state->state.dvalues[i] = trimScaleNumeric(NumericGetDatum(
+        state->state.dvalues[i] = NumericGetDatum(
                                   numeric_div_opt_error(
                                     numeric_sub_opt_error(
                                       state->vectmpvalues[i].num,
@@ -222,7 +221,7 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
                                       NULL
                                     ),
                                     NULL
-                                  )));
+                                  ));
 #endif
       }
     }

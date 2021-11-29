@@ -118,9 +118,6 @@ vec_to_mean_numeric_finalfn(PG_FUNCTION_ARGS)
     div = NumericGetDatum(numeric_div_opt_error(state->vecvalues[i].num, DatumGetNumeric(count), NULL));
 #endif
 
-    // trim the output scale to drop trailing zeros; in PG13 the trim_scale function is available,
-    // otherwise manually find the appropriate scale to trim to
-    div = trimScaleNumeric(div);
     state->state.dvalues[i] = div;
   }
 
