@@ -111,6 +111,14 @@ or `NULL` (if an outlier).
 You can include `NULL`s in the min/max arrays to indicate an unbounded limit there,
 or pass a simple `NULL` for either to indicate no bounds at all.
 
+#### `vec_trim_scale(NUMERIC[]) RETURNS NUMERIC[]`
+
+This is not an aggregate function, but is useful to trim trailing zeros from numeric elements,
+for example on the results of a `vec_to_mean()` operation. In Postgres 13 or later the built-in
+[`trim_scale` function](https://www.postgresql.org/docs/13/functions-math.html) will be applied
+to each array element, which adjusts the scale of each numeric such that trailing zeros are
+dropped. For Postgres 12 or older a polyfill implementation of that function is included.
+
 #### `hist_2d(x ANYELEMENT, y ANYELEMENT, x_bucket_start ANYELEMENT, y_bucket_start ANYELEMENT, x_bucket_width ANYELEMENT, y_bucket_width ANYELEMENT, x_bucket_count INTEGER, y_bucket_count INTEGER)`
 
 Aggregate function that takes a bunch of `x` and `y` values, and plots them on a 2-D histogram. The other parameters determine the shape of the histogram (number of buckets on each axis, start of the buckets, width of each bucket).
