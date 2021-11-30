@@ -69,7 +69,7 @@ vec_trim_scale(PG_FUNCTION_ARGS)
 Datum
 trimScaleNumeric(Datum num) {
 #if PG_VERSION_NUM >= 130000
-   return DirectFunctionCall1(trim_scale, num);
+   return DirectFunctionCall1(numeric_trim_scale, num);
 #else
   char *str;
   int len;
