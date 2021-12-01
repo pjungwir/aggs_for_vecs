@@ -25,8 +25,9 @@ _PG_init(void);
 void
 _PG_fini(void);
 
-// a cached Numeric value of 0 to speed up certain operations
+// some cached Numeric values to speed up certain operations
 static Datum NUMERIC_ZERO;
+static Datum NUMERIC_ONE;
 
 void
 _PG_init(void)
@@ -34,6 +35,7 @@ _PG_init(void)
   MemoryContext old;
   old = MemoryContextSwitchTo(TopMemoryContext);
   NUMERIC_ZERO = DirectFunctionCall1(int4_numeric, Int32GetDatum(0));
+  NUMERIC_ONE = DirectFunctionCall1(int4_numeric, Int32GetDatum(1));
   MemoryContextSwitchTo(old);
 }
 
@@ -43,6 +45,7 @@ _PG_fini(void)
   MemoryContext old;
   old = MemoryContextSwitchTo(TopMemoryContext);
   pfree(DatumGetPointer(NUMERIC_ZERO));
+  pfree(DatumGetPointer(NUMERIC_ONE));
   MemoryContextSwitchTo(old);
 }
 
