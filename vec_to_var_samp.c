@@ -46,6 +46,7 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
   bool *currentNulls;
   int i;
   float8 tmp_f;
+  MemoryContext old;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
     elog(ERROR, "vec_to_var_samp_transfn called in non-aggregate context");
@@ -72,15 +73,16 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
         elemTypeId != INT4OID &&
         elemTypeId != INT8OID &&
         elemTypeId != FLOAT4OID &&
-        elemTypeId != FLOAT8OID) {
-      ereport(ERROR, (errmsg("vec_to_var_samp input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION")));
+        elemTypeId != FLOAT8OID &&
+        elemTypeId != NUMERICOID) {
+      ereport(ERROR, (errmsg("vec_to_var_samp input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC")));
     }
     if (ARR_NDIM(currentArray) != 1) {
       ereport(ERROR, (errmsg("One-dimensional arrays are required")));
     }
     arrayLength = (ARR_DIMS(currentArray))[0];
     // Just start with all NULLs and let the comparisons below replace them:
-    state = initVecArrayResultWithNulls(elemTypeId, FLOAT8OID, aggContext, arrayLength);
+    state = initVecArrayResultWithNulls(elemTypeId, (elemTypeId != NUMERICOID ? FLOAT8OID : NUMERICOID), aggContext, arrayLength);
   } else {
     elemTypeId = state->inputElementType;
     arrayLength = state->state.nelems;
@@ -93,6 +95,7 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
     ereport(ERROR, (errmsg("All arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
   }
 
+  if (elemTypeId == NUMERICOID) old = MemoryContextSwitchTo(aggContext);
   for (i = 0; i < arrayLength; i++) {
     if (currentNulls[i]) {
       // do nothing: nulls can't change the result.
@@ -104,9 +107,14 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
         case INT8OID:   state->vecvalues[i].f8 = DatumGetInt64(currentVals[i]);  break;
         case FLOAT4OID: state->vecvalues[i].f8 = DatumGetFloat4(currentVals[i]); break;
         case FLOAT8OID: state->vecvalues[i].f8 = DatumGetFloat8(currentVals[i]); break;
+        case NUMERICOID: state->vecvalues[i].num = DatumGetNumericCopy(currentVals[i]); break;
         default: elog(ERROR, "Unknown elemTypeId!");
       }
-      state->vectmpvalues[i].f8 = state->vecvalues[i].f8 * state->vecvalues[i].f8;
+      if (elemTypeId != NUMERICOID) {
+        state->vectmpvalues[i].f8 = state->vecvalues[i].f8 * state->vecvalues[i].f8;
+      } else {
+        state->vectmpvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_mul, currentVals[i], currentVals[i]));
+      }
     } else {
       state->veccounts[i] += 1;
       switch (elemTypeId) {
@@ -115,12 +123,29 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
         case INT8OID:   tmp_f = DatumGetInt64(currentVals[i]);  break;
         case FLOAT4OID: tmp_f = DatumGetFloat4(currentVals[i]); break;
         case FLOAT8OID: tmp_f = DatumGetFloat8(currentVals[i]); break;
+        case NUMERICOID: break;
         default: elog(ERROR, "Unknown elemTypeId!");
       }
-      state->vecvalues[i].f8    += tmp_f;
-      state->vectmpvalues[i].f8 += tmp_f * tmp_f;
+      if (elemTypeId != NUMERICOID) {
+        state->vecvalues[i].f8    += tmp_f;
+        state->vectmpvalues[i].f8 += tmp_f * tmp_f;
+      } else {
+#if PG_VERSION_NUM < 120000
+        state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add, NumericGetDatum(state->vecvalues[i].num), currentVals[i]));
+        state->vectmpvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add, 
+                                                        NumericGetDatum(state->vectmpvalues[i].num), 
+                                                        DirectFunctionCall2(numeric_mul, currentVals[i], currentVals[i])
+                                                    ));
+#else
+          state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
+          state->vectmpvalues[i].num = numeric_add_opt_error(state->vectmpvalues[i].num, 
+                                        numeric_mul_opt_error(DatumGetNumeric(currentVals[i]), DatumGetNumeric(currentVals[i]), NULL),
+                                        NULL);
+#endif
+      }
     }
   }
+  if (elemTypeId == NUMERICOID) MemoryContextSwitchTo(old);
   PG_RETURN_POINTER(state);
 }
 
@@ -136,6 +161,7 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
   int lbs[1];
   int i;
   float8 numerator;
+  Datum count_num;
 
   Assert(AggCheckCallContext(fcinfo, NULL));
 
@@ -148,15 +174,55 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
     // Sample variance is undefined if N is 0 *or* 1:
     if (state->veccounts[i] > 1) {
       state->state.dnulls[i] = false;
+      if (state->inputElementType != NUMERICOID) {
+        numerator = (float8)state->veccounts[i] * state->vectmpvalues[i].f8 - state->vecvalues[i].f8 * state->vecvalues[i].f8;
+        CHECKFLOATVAL(numerator, isinf(state->vectmpvalues[i].f8) || isinf(state->vecvalues[i].f8), true);
 
-      numerator = (float8)state->veccounts[i] * state->vectmpvalues[i].f8 - state->vecvalues[i].f8 * state->vecvalues[i].f8;
-      CHECKFLOATVAL(numerator, isinf(state->vectmpvalues[i].f8) || isinf(state->vecvalues[i].f8), true);
-
-      /* Watch out for roundoff error producing a negative numerator */
-      if (numerator <= 0.0) {
-        state->state.dvalues[i] = Float8GetDatum(0.0);
+        /* Watch out for roundoff error producing a negative numerator */
+        if (numerator <= 0.0) {
+          state->state.dvalues[i] = Float8GetDatum(0.0);
+        } else {
+          state->state.dvalues[i] = Float8GetDatum(numerator / (float8)(state->veccounts[i] * (state->veccounts[i] - 1.0)));
+        }
       } else {
-        state->state.dvalues[i] = Float8GetDatum(numerator / (float8)(state->veccounts[i] * (state->veccounts[i] - 1.0)));
+        count_num = DirectFunctionCall1(int8_numeric, UInt32GetDatum(state->veccounts[i]));
+#if PG_VERSION_NUM < 120000
+        state->state.dvalues[i] = DirectFunctionCall2(numeric_div,
+                                    DirectFunctionCall2(numeric_sub,
+                                      NumericGetDatum(state->vectmpvalues[i].num),
+                                      DirectFunctionCall2(numeric_div,
+                                        DirectFunctionCall2(numeric_mul, 
+                                          NumericGetDatum(state->vecvalues[i].num),
+                                          NumericGetDatum(state->vecvalues[i].num)
+                                        ),
+                                        count_num
+                                      )
+                                    ),
+                                    DirectFunctionCall2(numeric_sub,
+                                      count_num,
+                                      DirectFunctionCall1(int4_numeric, Int32GetDatum(1))
+                                    )
+                                  );
+#else
+        state->state.dvalues[i] = NumericGetDatum(
+                                  numeric_div_opt_error(
+                                    numeric_sub_opt_error(
+                                      state->vectmpvalues[i].num,
+                                      numeric_div_opt_error(
+                                        numeric_mul_opt_error(state->vecvalues[i].num, state->vecvalues[i].num, NULL),
+                                        DatumGetNumeric(count_num),
+                                        NULL
+                                      ),
+                                      NULL
+                                    ),
+                                    numeric_sub_opt_error(
+                                      DatumGetNumeric(count_num),
+                                      DatumGetNumeric(DirectFunctionCall1(int4_numeric, Int32GetDatum(1))),
+                                      NULL
+                                    ),
+                                    NULL
+                                  ));
+#endif
       }
     }
   }

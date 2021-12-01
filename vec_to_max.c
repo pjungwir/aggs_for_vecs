@@ -24,6 +24,7 @@ vec_to_max_transfn(PG_FUNCTION_ARGS)
   Datum *currentVals;
   bool *currentNulls;
   int i;
+  MemoryContext old;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
     elog(ERROR, "vec_to_max_transfn called in non-aggregate context");
@@ -50,8 +51,9 @@ vec_to_max_transfn(PG_FUNCTION_ARGS)
         elemTypeId != INT4OID &&
         elemTypeId != INT8OID &&
         elemTypeId != FLOAT4OID &&
-        elemTypeId != FLOAT8OID) {
-      ereport(ERROR, (errmsg("vec_to_max input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION")));
+        elemTypeId != FLOAT8OID &&
+        elemTypeId != NUMERICOID) {
+      ereport(ERROR, (errmsg("vec_to_max input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC")));
     }
     if (ARR_NDIM(currentArray) != 1) {
       ereport(ERROR, (errmsg("One-dimensional arrays are required")));
@@ -71,13 +73,13 @@ vec_to_max_transfn(PG_FUNCTION_ARGS)
     ereport(ERROR, (errmsg("All arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
   }
 
+  if (elemTypeId == NUMERICOID) old = MemoryContextSwitchTo(aggContext);
   for (i = 0; i < arrayLength; i++) {
     if (currentNulls[i]) {
       // do nothing: nulls can't change the result.
     } else if (state->dnulls[i]) {
       state->dnulls[i] = false;
-      // All element types we support are copy-by-value:
-      state->dvalues[i] = currentVals[i];
+      state->dvalues[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
     } else {
       // Moving this switch outside the for loop makes sense
       // but doesn't seem to change performance at all,
@@ -98,11 +100,15 @@ vec_to_max_transfn(PG_FUNCTION_ARGS)
         case FLOAT8OID:
           if (DatumGetFloat8(currentVals[i]) > DatumGetFloat8(state->dvalues[i])) state->dvalues[i] = currentVals[i];
           break;
+        case NUMERICOID:
+          if (DatumGetBool(DirectFunctionCall2(numeric_gt, currentVals[i], state->dvalues[i]))) state->dvalues[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
+          break;
         default:
           elog(ERROR, "Unknown elemTypeId!");
       }
     }
   }
+  if (elemTypeId == NUMERICOID) MemoryContextSwitchTo(old);
   PG_RETURN_POINTER(state);
 }
 

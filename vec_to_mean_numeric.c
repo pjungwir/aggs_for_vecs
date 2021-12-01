@@ -1,16 +1,16 @@
 
-Datum vec_to_count_transfn(PG_FUNCTION_ARGS);
-PG_FUNCTION_INFO_V1(vec_to_count_transfn);
+Datum vec_to_mean_numeric_transfn(PG_FUNCTION_ARGS);
+PG_FUNCTION_INFO_V1(vec_to_mean_numeric_transfn);
 
 /**
- * Returns an of n elements,
- * which each element is the count of non-NULLs found in that position
+ * Returns an array of n elements,
+ * which each element is the mean value found in that position
  * from all input arrays.
  *
  * by Paul A. Jungwirth
  */
 Datum
-vec_to_count_transfn(PG_FUNCTION_ARGS)
+vec_to_mean_numeric_transfn(PG_FUNCTION_ARGS)
 {
   Oid elemTypeId;
   int16 elemTypeWidth;
@@ -24,9 +24,10 @@ vec_to_count_transfn(PG_FUNCTION_ARGS)
   Datum *currentVals;
   bool *currentNulls;
   int i;
+  MemoryContext old;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
-    elog(ERROR, "vec_to_count_transfn called in non-aggregate context");
+    elog(ERROR, "vec_to_mean_numeric_transfn called in non-aggregate context");
   }
 
   // PG_ARGISNULL tests for SQL NULL,
@@ -46,24 +47,12 @@ vec_to_count_transfn(PG_FUNCTION_ARGS)
     // Since we have our first not-null argument
     // we can initialize the state to match its length.
     elemTypeId = ARR_ELEMTYPE(currentArray);
-    if (elemTypeId != INT2OID &&
-        elemTypeId != INT4OID &&
-        elemTypeId != INT8OID &&
-        elemTypeId != FLOAT4OID &&
-        elemTypeId != FLOAT8OID &&
-        elemTypeId != NUMERICOID) {
-      ereport(ERROR, (errmsg("vec_to_count input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC")));
-    }
     if (ARR_NDIM(currentArray) != 1) {
       ereport(ERROR, (errmsg("One-dimensional arrays are required")));
     }
     arrayLength = (ARR_DIMS(currentArray))[0];
-    // Start with all zeros:
-    state = initVecArrayResultWithNulls(elemTypeId, INT8OID, aggContext, arrayLength);
-    for (i = 0; i < arrayLength; i++) {
-      state->vecvalues[i].i64 = 0;
-      state->state.dnulls[i] = false;
-    }
+    // Just start with all NULLs and let the comparisons below replace them:
+    state = initVecArrayResultWithNulls(elemTypeId, NUMERICOID, aggContext, arrayLength);
   } else {
     elemTypeId = state->inputElementType;
     arrayLength = state->state.nelems;
@@ -76,27 +65,41 @@ vec_to_count_transfn(PG_FUNCTION_ARGS)
     ereport(ERROR, (errmsg("All arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
   }
 
+  old = MemoryContextSwitchTo(aggContext);
   for (i = 0; i < arrayLength; i++) {
     if (currentNulls[i]) {
       // do nothing: nulls can't change the result.
+    } else if (state->state.dnulls[i]) {
+      state->state.dnulls[i] = false;
+      state->veccounts[i] = 1;
+      state->vecvalues[i].num = DatumGetNumericCopy(currentVals[i]);
     } else {
-      state->vecvalues[i].i64 += 1;
+      state->veccounts[i] += 1;
+      // instead of performing sub/div/add numeric calculations each row, just add and complete later in final function
+#if PG_VERSION_NUM < 120000
+      state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add, NumericGetDatum(state->vecvalues[i].num), currentVals[i]));
+#else
+      state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
+#endif
     }
   }
+  MemoryContextSwitchTo(old);
   PG_RETURN_POINTER(state);
 }
 
-Datum vec_to_count_finalfn(PG_FUNCTION_ARGS);
-PG_FUNCTION_INFO_V1(vec_to_count_finalfn);
+Datum vec_to_mean_numeric_finalfn(PG_FUNCTION_ARGS);
+PG_FUNCTION_INFO_V1(vec_to_mean_numeric_finalfn);
 
 Datum
-vec_to_count_finalfn(PG_FUNCTION_ARGS)
+vec_to_mean_numeric_finalfn(PG_FUNCTION_ARGS)
 {
   Datum result;
   VecArrayBuildState *state;
   int dims[1];
   int lbs[1];
   int i;
+  Datum count;
+  Datum div;
 
   Assert(AggCheckCallContext(fcinfo, NULL));
 
@@ -107,7 +110,15 @@ vec_to_count_finalfn(PG_FUNCTION_ARGS)
 
   // Convert from our pgnums to Datums:
   for (i = 0; i < state->state.nelems; i++) {
-    state->state.dvalues[i] = Int64GetDatum(state->vecvalues[i].i64);
+    if (state->state.dnulls[i]) continue;
+    count = DirectFunctionCall1(int8_numeric, UInt32GetDatum(state->veccounts[i]));
+#if PG_VERSION_NUM < 120000
+    div = DirectFunctionCall2(numeric_div, NumericGetDatum(state->vecvalues[i].num), count);
+#else
+    div = NumericGetDatum(numeric_div_opt_error(state->vecvalues[i].num, DatumGetNumeric(count), NULL));
+#endif
+
+    state->state.dvalues[i] = div;
   }
 
   dims[0] = state->state.nelems;

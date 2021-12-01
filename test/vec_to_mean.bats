@@ -56,9 +56,3 @@ load test_helper
   echo $result;
   [ "$result" = "{1,NULL,2}" ]
 }
-
-@test "string mean" {
-  run query "SELECT vec_to_mean(vals) FROM (VALUES (ARRAY['a']), (ARRAY['b'])) t(vals)"
-  echo ${lines}
-  [ "${lines[0]}" = "ERROR:  vec_to_mean input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION" ]
-}

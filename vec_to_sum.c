@@ -24,6 +24,7 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
   Datum *currentVals;
   bool *currentNulls;
   int i;
+  MemoryContext old;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
     elog(ERROR, "vec_to_sum_transfn called in non-aggregate context");
@@ -50,8 +51,9 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
         elemTypeId != INT4OID &&
         elemTypeId != INT8OID &&
         elemTypeId != FLOAT4OID &&
-        elemTypeId != FLOAT8OID) {
-      ereport(ERROR, (errmsg("vec_to_sum input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION")));
+        elemTypeId != FLOAT8OID &&
+        elemTypeId != NUMERICOID) {
+      ereport(ERROR, (errmsg("vec_to_sum input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC")));
     }
     if (ARR_NDIM(currentArray) != 1) {
       ereport(ERROR, (errmsg("One-dimensional arrays are required")));
@@ -59,6 +61,7 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
     arrayLength = (ARR_DIMS(currentArray))[0];
     // Start with all zeros:
     state = initVecArrayResultWithNulls(elemTypeId, elemTypeId, aggContext, arrayLength);
+    if (elemTypeId == NUMERICOID) old = MemoryContextSwitchTo(aggContext);
     for (i = 0; i < arrayLength; i++) {
       switch (elemTypeId) {
         case INT2OID:
@@ -76,11 +79,15 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
         case FLOAT8OID:
           state->vecvalues[i].f8 = 0;
           break;
+        case NUMERICOID:
+          state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall1(int8_numeric, Int64GetDatum(0)));
+          break;
         default:
           elog(ERROR, "Unknown elemTypeId!");
       }
       state->state.dnulls[i] = true;
     }
+    if (elemTypeId == NUMERICOID) MemoryContextSwitchTo(old);
   } else {
     elemTypeId = state->inputElementType;
     arrayLength = state->state.nelems;
@@ -93,6 +100,8 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
     ereport(ERROR, (errmsg("All arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
   }
 
+  // Make sure we allocate Numerics in a context that will persist between calls!:
+  if (elemTypeId == NUMERICOID) old = MemoryContextSwitchTo(aggContext);
   for (i = 0; i < arrayLength; i++) {
     if (currentNulls[i]) {
       // do nothing: nulls can't change the result.
@@ -114,11 +123,21 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
         case FLOAT8OID:
           state->vecvalues[i].f8 += DatumGetFloat8(currentVals[i]);
           break;
+        case NUMERICOID:
+#if PG_VERSION_NUM < 120000
+          state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add,
+                      NumericGetDatum(state->vecvalues[i].num),
+                      currentVals[i]));
+#else
+          state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
+#endif
+          break;
         default:
           elog(ERROR, "Unknown elemTypeId!");
       }
     }
   }
+  if (elemTypeId == NUMERICOID) MemoryContextSwitchTo(old);
   PG_RETURN_POINTER(state);
 }
 
@@ -159,6 +178,9 @@ vec_to_sum_finalfn(PG_FUNCTION_ARGS)
         break;
       case FLOAT8OID:
         state->state.dvalues[i] = Float8GetDatum(state->vecvalues[i].f8);
+        break;
+      case NUMERICOID:
+        state->state.dvalues[i] = NumericGetDatum(state->vecvalues[i].num);
         break;
     }
   }

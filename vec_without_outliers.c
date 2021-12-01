@@ -63,8 +63,9 @@ vec_without_outliers(PG_FUNCTION_ARGS)
       elemTypeId != INT4OID &&
       elemTypeId != INT8OID &&
       elemTypeId != FLOAT4OID &&
-      elemTypeId != FLOAT8OID) {
-    ereport(ERROR, (errmsg("vec_without_outliers input must be array of SMALLINT, INTEGER, BIGINT, REAL, or DOUBLE PRECISION")));
+      elemTypeId != FLOAT8OID &&
+      elemTypeId != NUMERICOID) {
+    ereport(ERROR, (errmsg("vec_without_outliers input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC")));
   }
   if (minsArray && elemTypeId != ARR_ELEMTYPE(minsArray)) {
     ereport(ERROR, (errmsg("vec_without_outliers mins array must be the same type as input array")));
@@ -142,6 +143,15 @@ vec_without_outliers(PG_FUNCTION_ARGS)
       case FLOAT8OID:
         if ((minsArray  && !minsNulls[i]  && DatumGetFloat8(valsContent[i]) < DatumGetFloat8(minsContent[i])) ||
             (maxesArray && !maxesNulls[i] && DatumGetFloat8(valsContent[i]) > DatumGetFloat8(maxesContent[i]))) {
+          retNulls[i] = true;
+        } else {
+          retNulls[i] = false;
+          retContent[i] = valsContent[i];
+        }
+        break;
+      case NUMERICOID:
+        if ((minsArray  && !minsNulls[i]  && DatumGetInt32(DirectFunctionCall2(numeric_cmp, valsContent[i], minsContent[i])) < 0) ||
+            (maxesArray && !maxesNulls[i] && DatumGetInt32(DirectFunctionCall2(numeric_cmp, valsContent[i], maxesContent[i])) > 0)) {
           retNulls[i] = true;
         } else {
           retNulls[i] = false;
