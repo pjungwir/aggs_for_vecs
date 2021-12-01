@@ -5,6 +5,7 @@
 #include <utils/array.h>
 #include <utils/builtins.h>
 #include <utils/lsyscache.h>
+#include <utils/memutils.h>
 #include <utils/typcache.h>
 #if PG_VERSION_NUM >= 90500
 #include <utils/arrayaccess.h>
@@ -18,9 +19,40 @@
 
 PG_MODULE_MAGIC;
 
+void
+_PG_init(void);
+
+void
+_PG_fini(void);
+
+// a cached Numeric value of 0 to speed up certain operations
+static Datum NUMERIC_ZERO;
+
+void
+_PG_init(void)
+{
+  MemoryContext old;
+  old = MemoryContextSwitchTo(TopMemoryContext);
+  NUMERIC_ZERO = DirectFunctionCall1(int4_numeric, Int32GetDatum(0));
+  MemoryContextSwitchTo(old);
+}
+
+void
+_PG_fini(void)
+{
+  MemoryContext old;
+  old = MemoryContextSwitchTo(TopMemoryContext);
+  pfree(DatumGetPointer(NUMERIC_ZERO));
+  MemoryContextSwitchTo(old);
+}
 
 #include "util.c"
 #include "pad_vec.c"
+#include "vec_add.c"
+#include "vec_sub.c"
+#include "vec_mul.c"
+#include "vec_div.c"
+#include "vec_pow.c"
 #include "vec_trim_scale.c"
 #include "vec_without_outliers.c"
 #include "vec_to_count.c"
