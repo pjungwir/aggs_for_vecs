@@ -1,0 +1,287 @@
+-- smallint mean lots
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- smallint mean none
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- smallint mean one null
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- smallint mean array of nulls
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- smallint mean one not-null
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- smallint mean array of nulls and one other
+SELECT vec_to_mean(smallints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- int mean lots
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- int mean none
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- int mean one null
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- int mean array of nulls
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- int mean one not-null
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- int mean array of nulls and one other
+SELECT vec_to_mean(ints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint mean lots
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- bigint mean none
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- bigint mean one null
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- bigint mean array of nulls
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- bigint mean one not-null
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint mean array of nulls and one other
+SELECT vec_to_mean(bigints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- real mean lots
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- real mean none
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- real mean one null
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- real mean array of nulls
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- real mean one not-null
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- real mean array of nulls and one other
+SELECT vec_to_mean(reals) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 mean lots
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_mean 
+-------------
+ {1,2,2.5}
+(1 row)
+
+-- float8 mean none
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- float8 mean one null
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- float8 mean array of nulls
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- float8 mean one not-null
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id = 4;
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 mean array of nulls and one other
+SELECT vec_to_mean(floats) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_mean 
+-------------
+ {1,NULL,2}
+(1 row)
+
+-- numeric mean lots
+SELECT vec_to_mean(nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+                          vec_to_mean                           
+----------------------------------------------------------------
+ {1.23000000000000000000,2.3400000000000000,2.8950000000000000}
+(1 row)
+
+-- numeric mean none
+SELECT vec_to_mean(nums) FROM measurements WHERE sensor_id = -1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- numeric mean one null
+SELECT vec_to_mean(nums) FROM measurements WHERE sensor_id = 1;
+ vec_to_mean 
+-------------
+ 
+(1 row)
+
+-- numeric mean array of nulls
+SELECT vec_to_mean(nums) FROM measurements WHERE sensor_id = 2;
+   vec_to_mean    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- numeric mean one not-null
+SELECT vec_to_mean(nums) FROM measurements WHERE sensor_id = 4;
+                   vec_to_mean                    
+--------------------------------------------------
+ {1.23000000000000000000,NULL,2.3400000000000000}
+(1 row)
+
+-- numeric mean array of nulls and one other
+SELECT vec_to_mean(nums) FROM measurements WHERE sensor_id IN (2, 4);
+                   vec_to_mean                    
+--------------------------------------------------
+ {1.23000000000000000000,NULL,2.3400000000000000}
+(1 row)
+
+-- numeric mean everything
+SELECT vec_to_mean(nums) FROM measurements;
+                          vec_to_mean                           
+----------------------------------------------------------------
+ {1.23000000000000000000,1.9700000000000000,3.7000000000000000}
+(1 row)
+
+-- numeric mean repeating tail
+SELECT vec_to_mean(vals) FROM (VALUES (ARRAY[1]::numeric[]), (ARRAY[0]::numeric[]), (ARRAY[0]::numeric[])) t(vals);
+       vec_to_mean        
+--------------------------
+ {0.33333333333333333333}
+(1 row)
+
+-- numeric mean whole number
+SELECT vec_to_mean(vals) FROM (VALUES (ARRAY[1]::numeric[]), (ARRAY[1]::numeric[])) t(vals);
+       vec_to_mean        
+--------------------------
+ {1.00000000000000000000}
+(1 row)
+
+-- numeric mean data 01
+-- results expected to match:
+-- WITH di AS (
+--   SELECT idx_i, avg(val_i) AS avg_i
+--   FROM measurements2 d, unnest(d.data_i) WITH ORDINALITY AS a(val_i, idx_i)
+--   GROUP BY idx_i
+-- )
+-- SELECT array_agg(avg_i ORDER BY idx_i) AS data_i_avg FROM di
+SELECT vec_to_mean(data_i) FROM measurements2;
+                                                                                        vec_to_mean                                                                                        
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {195478.788043478261,18.8083637445652174,229.7496696739130435,49.9944814891304348,137826.625000000000,0.99496976375000000000,-5.2822864641304348,254911.581521739130,136650.663043478261}
+(1 row)
+

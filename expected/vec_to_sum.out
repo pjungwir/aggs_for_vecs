@@ -1,0 +1,266 @@
+-- smallint sum lots
+SELECT vec_to_sum(smallints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_sum 
+------------
+ {2,2,5}
+(1 row)
+
+-- smallint sum none
+SELECT vec_to_sum(smallints) FROM measurements WHERE sensor_id = -1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- smallint sum one null
+SELECT vec_to_sum(smallints) FROM measurements WHERE sensor_id = 1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- smallint sum array of nulls
+SELECT vec_to_sum(smallints) FROM measurements WHERE sensor_id = 2;
+    vec_to_sum    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- smallint sum one not-null
+SELECT vec_to_sum(smallints) FROM measurements WHERE sensor_id = 4;
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- smallint sum array of nulls and one other
+SELECT vec_to_sum(smallints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- int sum lots
+SELECT vec_to_sum(ints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_sum 
+------------
+ {2,2,5}
+(1 row)
+
+-- int sum none
+SELECT vec_to_sum(ints) FROM measurements WHERE sensor_id = -1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- int sum one null
+SELECT vec_to_sum(ints) FROM measurements WHERE sensor_id = 1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- int sum array of nulls
+SELECT vec_to_sum(ints) FROM measurements WHERE sensor_id = 2;
+    vec_to_sum    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- int sum one not-null
+SELECT vec_to_sum(ints) FROM measurements WHERE sensor_id = 4;
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- int sum array of nulls and one other
+SELECT vec_to_sum(ints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint sum lots
+SELECT vec_to_sum(bigints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_sum 
+------------
+ {2,2,5}
+(1 row)
+
+-- bigint sum none
+SELECT vec_to_sum(bigints) FROM measurements WHERE sensor_id = -1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- bigint sum one null
+SELECT vec_to_sum(bigints) FROM measurements WHERE sensor_id = 1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- bigint sum array of nulls
+SELECT vec_to_sum(bigints) FROM measurements WHERE sensor_id = 2;
+    vec_to_sum    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- bigint sum one not-null
+SELECT vec_to_sum(bigints) FROM measurements WHERE sensor_id = 4;
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint sum array of nulls and one other
+SELECT vec_to_sum(bigints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- real sum lots
+SELECT vec_to_sum(reals) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_sum 
+------------
+ {2,2,5}
+(1 row)
+
+-- real sum none
+SELECT vec_to_sum(reals) FROM measurements WHERE sensor_id = -1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- real sum one null
+SELECT vec_to_sum(reals) FROM measurements WHERE sensor_id = 1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- real sum array of nulls
+SELECT vec_to_sum(reals) FROM measurements WHERE sensor_id = 2;
+    vec_to_sum    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- real sum one not-null
+SELECT vec_to_sum(reals) FROM measurements WHERE sensor_id = 4;
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- real sum array of nulls and one other
+SELECT vec_to_sum(reals) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 sum lots
+SELECT vec_to_sum(floats) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_sum 
+------------
+ {2,2,5}
+(1 row)
+
+-- float8 sum none
+SELECT vec_to_sum(floats) FROM measurements WHERE sensor_id = -1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- float8 sum one null
+SELECT vec_to_sum(floats) FROM measurements WHERE sensor_id = 1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- float8 sum array of nulls
+SELECT vec_to_sum(floats) FROM measurements WHERE sensor_id = 2;
+    vec_to_sum    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- float8 sum one not-null
+SELECT vec_to_sum(floats) FROM measurements WHERE sensor_id = 4;
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 sum array of nulls and one other
+SELECT vec_to_sum(floats) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_sum 
+------------
+ {1,NULL,2}
+(1 row)
+
+-- numeric sum lots
+SELECT vec_to_sum(nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+    vec_to_sum    
+------------------
+ {2.46,2.34,5.79}
+(1 row)
+
+-- numeric sum none
+SELECT vec_to_sum(nums) FROM measurements WHERE sensor_id = -1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- numeric sum one null
+SELECT vec_to_sum(nums) FROM measurements WHERE sensor_id = 1;
+ vec_to_sum 
+------------
+ 
+(1 row)
+
+-- numeric sum array of nulls
+SELECT vec_to_sum(nums) FROM measurements WHERE sensor_id = 2;
+    vec_to_sum    
+------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- numeric sum one not-null
+SELECT vec_to_sum(nums) FROM measurements WHERE sensor_id = 4;
+    vec_to_sum    
+------------------
+ {1.23,NULL,2.34}
+(1 row)
+
+-- numeric sum array of nulls and one other
+SELECT vec_to_sum(nums) FROM measurements WHERE sensor_id IN (2, 4);
+    vec_to_sum    
+------------------
+ {1.23,NULL,2.34}
+(1 row)
+
+-- numeric sum data 01
+-- results expected to match:
+-- WITH di AS (
+-- 	SELECT idx_i, sum(val_i) AS sum_i
+-- 	FROM measurements2 d, unnest(d.data_i) WITH ORDINALITY AS a(val_i, idx_i)
+-- 	GROUP BY idx_i
+-- )
+-- SELECT array_agg(sum_i ORDER BY idx_i) AS data_i_sum FROM di
+SELECT vec_to_sum(data_i) FROM measurements2;
+                                             vec_to_sum                                              
+-----------------------------------------------------------------------------------------------------
+ {35968097,3460.738929,42273.93922,9198.984594,25360099,183.07443653,-971.9407094,46903731,25143722}
+(1 row)
+

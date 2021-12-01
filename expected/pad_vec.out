@@ -1,0 +1,102 @@
+-- smallint pad same length
+SELECT pad_vec(smallints, 3) FROM measurements WHERE sensor_id IN (4);
+  pad_vec   
+------------
+ {1,NULL,2}
+(1 row)
+
+-- smallint pad adds NULLs
+SELECT pad_vec(smallints, 5) FROM measurements WHERE sensor_id IN (4);
+       pad_vec        
+----------------------
+ {1,NULL,2,NULL,NULL}
+(1 row)
+
+-- smallint pad too long
+SELECT pad_vec(smallints, 2) FROM measurements WHERE sensor_id IN (4);
+ERROR:  pad_vec found an array with 3 elements but we're trying to pad out to only 2
+-- int pad same length
+SELECT pad_vec(ints, 3) FROM measurements WHERE sensor_id IN (4);
+  pad_vec   
+------------
+ {1,NULL,2}
+(1 row)
+
+-- int pad adds NULLs
+SELECT pad_vec(ints, 5) FROM measurements WHERE sensor_id IN (4);
+       pad_vec        
+----------------------
+ {1,NULL,2,NULL,NULL}
+(1 row)
+
+-- int pad too long
+SELECT pad_vec(ints, 2) FROM measurements WHERE sensor_id IN (4);
+ERROR:  pad_vec found an array with 3 elements but we're trying to pad out to only 2
+-- bigint pad same length
+SELECT pad_vec(bigints, 3) FROM measurements WHERE sensor_id IN (4);
+  pad_vec   
+------------
+ {1,NULL,2}
+(1 row)
+
+-- bigint pad adds NULLs
+SELECT pad_vec(bigints, 5) FROM measurements WHERE sensor_id IN (4);
+       pad_vec        
+----------------------
+ {1,NULL,2,NULL,NULL}
+(1 row)
+
+-- bigint pad too long
+SELECT pad_vec(bigints, 2) FROM measurements WHERE sensor_id IN (4);
+ERROR:  pad_vec found an array with 3 elements but we're trying to pad out to only 2
+-- real pad same length
+SELECT pad_vec(reals, 3) FROM measurements WHERE sensor_id IN (4);
+  pad_vec   
+------------
+ {1,NULL,2}
+(1 row)
+
+-- real pad adds NULLs
+SELECT pad_vec(reals, 5) FROM measurements WHERE sensor_id IN (4);
+       pad_vec        
+----------------------
+ {1,NULL,2,NULL,NULL}
+(1 row)
+
+-- real pad too long
+SELECT pad_vec(reals, 2) FROM measurements WHERE sensor_id IN (4);
+ERROR:  pad_vec found an array with 3 elements but we're trying to pad out to only 2
+-- float8 pad same length
+SELECT pad_vec(floats, 3) FROM measurements WHERE sensor_id IN (4);
+  pad_vec   
+------------
+ {1,NULL,2}
+(1 row)
+
+-- float8 pad adds NULLs
+SELECT pad_vec(floats, 5) FROM measurements WHERE sensor_id IN (4);
+       pad_vec        
+----------------------
+ {1,NULL,2,NULL,NULL}
+(1 row)
+
+-- float8 pad too long
+SELECT pad_vec(floats, 2) FROM measurements WHERE sensor_id IN (4);
+ERROR:  pad_vec found an array with 3 elements but we're trying to pad out to only 2
+-- numeric pad same length
+SELECT pad_vec(nums, 3) FROM measurements WHERE sensor_id IN (4);
+     pad_vec      
+------------------
+ {1.23,NULL,2.34}
+(1 row)
+
+-- numeric pad adds NULLs
+SELECT pad_vec(nums, 5) FROM measurements WHERE sensor_id IN (4);
+          pad_vec           
+----------------------------
+ {1.23,NULL,2.34,NULL,NULL}
+(1 row)
+
+-- numeric pad too long
+SELECT pad_vec(nums, 2) FROM measurements WHERE sensor_id IN (4);
+ERROR:  pad_vec found an array with 3 elements but we're trying to pad out to only 2

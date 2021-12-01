@@ -1,3 +1,70 @@
+BEGIN; 
+
+CREATE EXTENSION aggs_for_vecs;
+
+DROP TABLE IF EXISTS measurements;
+CREATE TABLE measurements (
+  sensor_id INTEGER PRIMARY KEY,
+  smallints SMALLINT[],
+  ints INT[],
+  bigints BIGINT[],
+  reals REAL[],
+  floats FLOAT[],
+  nums NUMERIC[]
+);
+CREATE INDEX idx_measurements_sensor_id ON measurements (sensor_id);
+
+INSERT INTO measurements
+VALUES
+(1, NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL),
+(2, ARRAY[NULL, NULL, NULL]::smallint[],
+    ARRAY[NULL, NULL, NULL]::int[],
+    ARRAY[NULL, NULL, NULL]::bigint[],
+    ARRAY[NULL, NULL, NULL]::real[],
+    ARRAY[NULL, NULL, NULL]::float[],
+    ARRAY[NULL, NULL, NULL]::numeric[]),
+(3, ARRAY[1, 2, 3],
+    ARRAY[1, 2, 3],
+    ARRAY[1, 2, 3],
+    ARRAY[1, 2, 3],
+    ARRAY[1, 2, 3],
+    ARRAY[1.23, 2.34, 3.45]),
+(4, ARRAY[1, NULL, 2],
+    ARRAY[1, NULL, 2],
+    ARRAY[1, NULL, 2],
+    ARRAY[1, NULL, 2],
+    ARRAY[1, NULL, 2],
+    ARRAY[1.23, NULL, 2.34]),
+(5, ARRAY[1, 2, 4],
+    ARRAY[1, 2, 4],
+    ARRAY[1, 2, 4],
+    ARRAY[1, 2, 4],
+    ARRAY[1, 2, 4],
+    ARRAY[1.23, 2.34, 4.45]),
+(6, ARRAY[1, 1, 4],
+    ARRAY[1, 1, 4],
+    ARRAY[1, 1, 4],
+    ARRAY[1, 1, 4],
+    ARRAY[1, 1, 4],
+    ARRAY[1.23, 1.23, 4.56])
+;
+
+DROP TABLE IF EXISTS measurements2;
+CREATE TABLE measurements2 (
+  stream_id TEXT NOT NULL,
+  ts TIMESTAMP WITH TIME ZONE NOT NULL,
+  data_i NUMERIC[],
+  data_a NUMERIC[],
+  data_s TEXT[],
+  PRIMARY KEY (stream_id, ts)  
+);
+
+COPY measurements2 FROM STDIN DELIMITER ',' CSV HEADER;
 "stream_id","ts","data_i","data_a","data_s"
 "7714f762-2361-4ec2-98ab-7e96807b32a6","2021-11-23 15:04:17.011+13","{31,-1.348291,228.79181,49.664787,3021,0.99999994,-23.358469,3021,1}","{6255484}",
 "7714f762-2361-4ec2-98ab-7e96807b32a6","2021-11-23 15:05:17.004+13","{5933,25.575808,231.44753,49.88478,5905,0.99999981,232.00935,5905,3}","{6255582,NULL,61.765}",
@@ -183,3 +250,6 @@
 "7714f762-2361-4ec2-98ab-7e96807b32a6","2021-11-23 21:32:31.005+13","{6473,22.600191,225.81842,50.335007,4023,0.99999988,286.4179,4023,2}","{6401360,NULL,61.765}",
 "7714f762-2361-4ec2-98ab-7e96807b32a6","2021-11-23 21:33:31.006+13","{4798,17.870099,225.49713,50.29408,3383,0.99999996,268.5231,3383,0}","{6401416,NULL,61.765}",
 "7714f762-2361-4ec2-98ab-7e96807b32a6","2021-11-23 21:34:31.006+13","{7222,-24.502656,229.46155,50.32881,4376,1,-294.77994,4376,0}","{6401488,NULL,61.765}",
+\.
+
+COMMIT;
