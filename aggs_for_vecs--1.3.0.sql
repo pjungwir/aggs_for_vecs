@@ -1034,19 +1034,19 @@ CREATE AGGREGATE hist_md(numeric[], integer[], numeric[], numeric[], integer[]) 
 CREATE OR REPLACE FUNCTION
 vec_add(anyarray, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_add_with_vec'
+AS 'aggs_for_vecs', 'vec_add_with_vec'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_add(anyarray, anyelement)
 RETURNS anyarray
-AS 'floatvec', 'vec_add_with_scalar'
+AS 'aggs_for_vecs', 'vec_add_with_scalar'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_add(anyelement, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_add_with_scalar'
+AS 'aggs_for_vecs', 'vec_add_with_scalar'
 LANGUAGE c;
 
 
@@ -1056,19 +1056,19 @@ LANGUAGE c;
 CREATE OR REPLACE FUNCTION
 vec_sub(anyarray, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_sub_with_vec'
+AS 'aggs_for_vecs', 'vec_sub_with_vec'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_sub(anyarray, anyelement)
 RETURNS anyarray
-AS 'floatvec', 'vec_sub_with_scalar'
+AS 'aggs_for_vecs', 'vec_sub_with_scalar'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_sub(anyelement, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_sub_with_scalar'
+AS 'aggs_for_vecs', 'vec_sub_with_scalar'
 LANGUAGE c;
 
 
@@ -1078,19 +1078,19 @@ LANGUAGE c;
 CREATE OR REPLACE FUNCTION
 vec_mul(anyarray, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_mul_with_vec'
+AS 'aggs_for_vecs', 'vec_mul_with_vec'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_mul(anyarray, anyelement)
 RETURNS anyarray
-AS 'floatvec', 'vec_mul_with_scalar'
+AS 'aggs_for_vecs', 'vec_mul_with_scalar'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_mul(anyelement, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_mul_with_scalar'
+AS 'aggs_for_vecs', 'vec_mul_with_scalar'
 LANGUAGE c;
 
 
@@ -1100,19 +1100,19 @@ LANGUAGE c;
 CREATE OR REPLACE FUNCTION
 vec_div(anyarray, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_div_with_vec'
+AS 'aggs_for_vecs', 'vec_div_with_vec'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_div(anyarray, anyelement)
 RETURNS anyarray
-AS 'floatvec', 'vec_div_with_scalar'
+AS 'aggs_for_vecs', 'vec_div_with_scalar'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_div(anyelement, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_div_with_scalar'
+AS 'aggs_for_vecs', 'vec_div_with_scalar'
 LANGUAGE c;
 
 
@@ -1122,17 +1122,17 @@ LANGUAGE c;
 CREATE OR REPLACE FUNCTION
 vec_pow(anyarray, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_pow_with_vec'
+AS 'aggs_for_vecs', 'vec_pow_with_vec'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_pow(anyarray, anyelement)
 RETURNS anyarray
-AS 'floatvec', 'vec_pow_with_scalar'
+AS 'aggs_for_vecs', 'vec_pow_with_scalar'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_pow(anyelement, anyarray)
 RETURNS anyarray
-AS 'floatvec', 'vec_pow_with_scalar'
+AS 'aggs_for_vecs', 'vec_pow_with_scalar'
 LANGUAGE c;
