@@ -69,8 +69,8 @@ they'll give you instructions how to make one.
 
 
 
-The functions
--------------
+Aggregate functions
+-------------------
 
 #### `vec_to_count(ANYARRAY) RETURNS BIGINT[]`
 
@@ -98,27 +98,6 @@ Returns the [sample variance](http://www.statisticshowto.com/how-to-find-the-sam
 The code is very similar to [the built-in `var_samp` function](https://www.postgresql.org/docs/current/static/functions-aggregate.html),
 so if it works there it should work here (or it's a bug).
 
-#### `vec_without_outliers(ANYARRAY, ANYARRAY, ANYARRAY) RETURNS ANYARRAY`
-
-This is not an aggregate function, but is useful to trim down the inputs to the other functions here.
-You pass it three arrays all of the same length and type.
-The first array has the actual values.
-The second array gives the minimum amount allowed in each position;
-the third array, the maximum.
-The function returns an array where each element is either the input value
-(if within the min/max)
-or `NULL` (if an outlier).
-You can include `NULL`s in the min/max arrays to indicate an unbounded limit there,
-or pass a simple `NULL` for either to indicate no bounds at all.
-
-#### `vec_trim_scale(NUMERIC[]) RETURNS NUMERIC[]`
-
-This is not an aggregate function, but is useful to trim trailing zeros from numeric elements,
-for example on the results of a `vec_to_mean()` operation. In Postgres 13 or later the built-in
-[`trim_scale` function](https://www.postgresql.org/docs/13/functions-math.html) will be applied
-to each array element, which adjusts the scale of each numeric such that trailing zeros are
-dropped. For Postgres 12 or older a polyfill implementation of that function is included.
-
 #### `hist_2d(x ANYELEMENT, y ANYELEMENT, x_bucket_start ANYELEMENT, y_bucket_start ANYELEMENT, x_bucket_width ANYELEMENT, y_bucket_width ANYELEMENT, x_bucket_count INTEGER, y_bucket_count INTEGER)`
 
 Aggregate function that takes a bunch of `x` and `y` values, and plots them on a 2-D histogram. The other parameters determine the shape of the histogram (number of buckets on each axis, start of the buckets, width of each bucket).
@@ -129,6 +108,70 @@ Aggregate function to compute an n-dimensional histogram. It takes a vector of v
 
 Since the values in `indexes` should follow Postgres's convention of 1-indexed arrays, so that if `indexes` is `{1,4}`, then we will use `vals[1]` and `vals[4]` as the histogram `x` and `y`.
 
+
+Non-aggregate math functions
+----------------------------
+
+The following functions are not aggregate functions, and accept two arguments `(l, r)` in the
+following forms:
+
+1. array, array
+2. array, number
+3. number, array
+
+If `number` is provided instead of `array`, it is treated as if it were an array of the same length as
+the other argument, where every element has this value. In all cases the argument value types must be
+the same (for example both the `integer` type), and when two arrays are provided they must be of the
+same length. Each function returns an array of the same length as the input array(s) of the same type.
+
+#### `vec_add(l, r) RETURNS ANYARRAY`
+
+Returns each array position in the first argument added to the same position in the second argument.
+
+#### `vec_div(l, r) RETURNS ANYARRAY`
+
+Returns each array position in the first argument divided by the same position in the second argument.
+
+#### `vec_mul(l, r) RETURNS ANYARRAY`
+
+Returns each array position in the first argument multiplied by the same position in the second argument.
+
+#### `vec_sub(l, r) RETURNS ANYARRAY`
+
+Returns each array position in the second argument subtracted from the same position in the first argument.
+
+
+Non-aggregate utility functions
+-------------------------------
+
+The following are other non-arrgregate functions that are useful in combination with the other functions
+provided by this extension.
+
+#### `pad_vec(ANYRARRAY, INTEGER) RETURNS ANYARRAY`
+
+Return an array with the same elements as the given array, but extended to have the length of the second
+argument if necessary. Any added elements will be set to `NULL`. If the given array is already the given
+length, it is returned directly.
+
+#### `vec_trim_scale(NUMERIC[]) RETURNS NUMERIC[]`
+
+Trims trailing zeros from `NUMERIC` elements, for example on the results of a `vec_to_mean()` operation.
+In Postgres 13 or later the built-in [`trim_scale` function](https://www.postgresql.org/docs/13/functions-math.html)
+will be applied to each array element, which adjusts the scale of each numeric such that trailing zeros are
+dropped. For Postgres 12 or older a polyfill implementation of that function is used.
+
+#### `vec_without_outliers(ANYARRAY, ANYARRAY, ANYARRAY) RETURNS ANYARRAY`
+
+Useful to trim down the inputs to the other functions here.
+You pass it three arrays all of the same length and type.
+The first array has the actual values.
+The second array gives the minimum amount allowed in each position;
+the third array, the maximum.
+The function returns an array where each element is either the input value
+(if within the min/max)
+or `NULL` (if an outlier).
+You can include `NULL`s in the min/max arrays to indicate an unbounded limit there,
+or pass a simple `NULL` for either to indicate no bounds at all.
 
 
 Limitations/TODO
