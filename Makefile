@@ -7,6 +7,11 @@ REGRESS = setup \
 					hist_2d \
 					hist_md \
 					pad_vec \
+					vec_add \
+					vec_div \
+					vec_mul \
+					vec_pow \
+					vec_sub \
 					vec_to_count \
 					vec_to_max \
 					vec_to_mean \

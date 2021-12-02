@@ -1,0 +1,252 @@
+-- int mul to scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(5::int, ints) FROM measurements WHERE sensor_id IN (4)) r(r);
+      r      | pg_typeof 
+-------------+-----------
+ {5,NULL,10} | integer[]
+(1 row)
+
+-- int mul to scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(ints, 5::int) FROM measurements WHERE sensor_id IN (4)) r(r);
+      r      | pg_typeof 
+-------------+-----------
+ {5,NULL,10} | integer[]
+(1 row)
+
+-- int mul to array
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(ints, ints) FROM measurements WHERE sensor_id IN (4)) r(r);
+     r      | pg_typeof 
+------------+-----------
+ {1,NULL,4} | integer[]
+(1 row)
+
+-- int mul to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::int, ints) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         | pg_typeof 
+------------------+-----------
+ {NULL,NULL,NULL} | integer[]
+(1 row)
+
+-- int mul to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(ints, NULL::int) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         | pg_typeof 
+------------------+-----------
+ {NULL,NULL,NULL} | integer[]
+(1 row)
+
+-- int mul scalar to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(5::int, NULL::int[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- int mul scalar to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::int[], 5::int) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- int mul to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(ints, NULL::int[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- int mul to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::int[], ints) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- null int mul to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::int, NULL::int[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- null int mul to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::int[], NULL::int) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- null int mul to null array
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::int[], NULL::int[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- float mul to scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(5::float, floats) FROM measurements WHERE sensor_id IN (4)) r(r);
+      r      |     pg_typeof      
+-------------+--------------------
+ {5,NULL,10} | double precision[]
+(1 row)
+
+-- float mul to scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(floats, 5::float) FROM measurements WHERE sensor_id IN (4)) r(r);
+      r      |     pg_typeof      
+-------------+--------------------
+ {5,NULL,10} | double precision[]
+(1 row)
+
+-- float mul to array
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(floats, floats) FROM measurements WHERE sensor_id IN (4)) r(r);
+     r      |     pg_typeof      
+------------+--------------------
+ {1,NULL,4} | double precision[]
+(1 row)
+
+-- float mul to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::float, floats) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         |     pg_typeof      
+------------------+--------------------
+ {NULL,NULL,NULL} | double precision[]
+(1 row)
+
+-- float mul to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(floats, NULL::float) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         |     pg_typeof      
+------------------+--------------------
+ {NULL,NULL,NULL} | double precision[]
+(1 row)
+
+-- float mul scalar to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(5::float, NULL::float[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- float mul scalar to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::float[], 5::float) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- float mul to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(floats, NULL::float[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- float mul to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::float[], floats) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- null float mul to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::float, NULL::float[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- null float mul to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::float[], NULL::float) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- null float mul to null array
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::float[], NULL::float[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- numeric mul to scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(5::numeric, nums) FROM measurements WHERE sensor_id IN (4)) r(r);
+         r         | pg_typeof 
+-------------------+-----------
+ {6.15,NULL,11.70} | numeric[]
+(1 row)
+
+-- numeric mul to scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(nums, 5::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
+         r         | pg_typeof 
+-------------------+-----------
+ {6.15,NULL,11.70} | numeric[]
+(1 row)
+
+-- numeric mul to array
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(nums, nums) FROM measurements WHERE sensor_id IN (4)) r(r);
+          r           | pg_typeof 
+----------------------+-----------
+ {1.5129,NULL,5.4756} | numeric[]
+(1 row)
+
+-- numeric mul to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::numeric, nums) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         | pg_typeof 
+------------------+-----------
+ {NULL,NULL,NULL} | numeric[]
+(1 row)
+
+-- numeric mul to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(nums, NULL::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         | pg_typeof 
+------------------+-----------
+ {NULL,NULL,NULL} | numeric[]
+(1 row)
+
+-- numeric mul scalar to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(5::numeric, NULL::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- numeric mul scalar to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::numeric[], 5::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- numeric mul to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(nums, NULL::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- numeric mul to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::numeric[], nums) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- null numeric mul to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::numeric, NULL::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- null numeric mul to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::numeric[], NULL::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- null numeric mul to null array
+SELECT r, pg_typeof(r) FROM (SELECT vec_mul(NULL::numeric[], NULL::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+

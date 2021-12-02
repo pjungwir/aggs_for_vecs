@@ -1,0 +1,273 @@
+-- int div to scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(5::int, ints) FROM measurements WHERE sensor_id IN (4)) r(r);
+     r      | pg_typeof 
+------------+-----------
+ {5,NULL,2} | integer[]
+(1 row)
+
+-- int div to scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(ints, 5::int) FROM measurements WHERE sensor_id IN (4)) r(r);
+     r      | pg_typeof 
+------------+-----------
+ {0,NULL,0} | integer[]
+(1 row)
+
+-- int div to array
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(ints, ints) FROM measurements WHERE sensor_id IN (4)) r(r);
+     r      | pg_typeof 
+------------+-----------
+ {1,NULL,1} | integer[]
+(1 row)
+
+-- int div to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::int, ints) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         | pg_typeof 
+------------------+-----------
+ {NULL,NULL,NULL} | integer[]
+(1 row)
+
+-- int div to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(ints, NULL::int) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         | pg_typeof 
+------------------+-----------
+ {NULL,NULL,NULL} | integer[]
+(1 row)
+
+-- int div scalar to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(5::int, NULL::int[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- int div scalar to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::int[], 5::int) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- int div to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(ints, NULL::int[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- int div to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::int[], ints) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- null int div to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::int, NULL::int[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- null int div to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::int[], NULL::int) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- null int div to null array
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::int[], NULL::int[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- float div to scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(5::float, floats) FROM measurements WHERE sensor_id IN (4)) r(r);
+      r       |     pg_typeof      
+--------------+--------------------
+ {5,NULL,2.5} | double precision[]
+(1 row)
+
+-- float div to scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(floats, 5::float) FROM measurements WHERE sensor_id IN (4)) r(r);
+       r        |     pg_typeof      
+----------------+--------------------
+ {0.2,NULL,0.4} | double precision[]
+(1 row)
+
+-- float div to array
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(floats, floats) FROM measurements WHERE sensor_id IN (4)) r(r);
+     r      |     pg_typeof      
+------------+--------------------
+ {1,NULL,1} | double precision[]
+(1 row)
+
+-- float div to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::float, floats) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         |     pg_typeof      
+------------------+--------------------
+ {NULL,NULL,NULL} | double precision[]
+(1 row)
+
+-- float div to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(floats, NULL::float) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         |     pg_typeof      
+------------------+--------------------
+ {NULL,NULL,NULL} | double precision[]
+(1 row)
+
+-- float div scalar to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(5::float, NULL::float[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- float div scalar to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::float[], 5::float) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- float div to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(floats, NULL::float[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- float div to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::float[], floats) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- null float div to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::float, NULL::float[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- null float div to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::float[], NULL::float) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- null float div to null array
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::float[], NULL::float[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r |     pg_typeof      
+---+--------------------
+   | double precision[]
+(1 row)
+
+-- numeric div to scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(5::numeric, nums) FROM measurements WHERE sensor_id IN (4)) r(r);
+                      r                       | pg_typeof 
+----------------------------------------------+-----------
+ {4.0650406504065041,NULL,2.1367521367521368} | numeric[]
+(1 row)
+
+-- numeric div to scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(nums, 5::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
+                          r                           | pg_typeof 
+------------------------------------------------------+-----------
+ {0.24600000000000000000,NULL,0.46800000000000000000} | numeric[]
+(1 row)
+
+-- numeric div to array
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(nums, nums) FROM measurements WHERE sensor_id IN (4)) r(r);
+                          r                           | pg_typeof 
+------------------------------------------------------+-----------
+ {1.00000000000000000000,NULL,1.00000000000000000000} | numeric[]
+(1 row)
+
+-- numeric div to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::numeric, nums) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         | pg_typeof 
+------------------+-----------
+ {NULL,NULL,NULL} | numeric[]
+(1 row)
+
+-- numeric div to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(nums, NULL::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
+        r         | pg_typeof 
+------------------+-----------
+ {NULL,NULL,NULL} | numeric[]
+(1 row)
+
+-- numeric div scalar to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(5::numeric, NULL::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- numeric div scalar to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::numeric[], 5::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- numeric div to null array lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(nums, NULL::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- numeric div to null array rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::numeric[], nums) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- null numeric div to null scalar lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::numeric, NULL::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- null numeric div to null scalar rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::numeric[], NULL::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- null numeric div to null array
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(NULL::numeric[], NULL::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+ r | pg_typeof 
+---+-----------
+   | numeric[]
+(1 row)
+
+-- numeric div to scalar 0 lhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(0::numeric, nums) FROM measurements WHERE sensor_id IN (4)) r(r);
+                          r                           | pg_typeof 
+------------------------------------------------------+-----------
+ {0.00000000000000000000,NULL,0.00000000000000000000} | numeric[]
+(1 row)
+
+-- numeric div to scalar 0 rhs
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(nums, 0::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
+       r        | pg_typeof 
+----------------+-----------
+ {NaN,NULL,NaN} | numeric[]
+(1 row)
+
+-- numeric div to array 0
+SELECT r, pg_typeof(r) FROM (SELECT vec_div(nums, ARRAY[0,0,1]::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
+               r               | pg_typeof 
+-------------------------------+-----------
+ {NaN,NULL,2.3400000000000000} | numeric[]
+(1 row)
+
