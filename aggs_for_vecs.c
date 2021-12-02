@@ -56,6 +56,7 @@ _PG_fini(void)
 #include "vec_mul.c"
 #include "vec_div.c"
 #include "vec_pow.c"
+#include "vec_coalesce.c"
 #include "vec_trim_scale.c"
 #include "vec_without_outliers.c"
 #include "vec_to_count.c"
