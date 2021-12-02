@@ -174,10 +174,16 @@ You can include `NULL`s in the min/max arrays to indicate an unbounded limit the
 or pass a simple `NULL` for either to indicate no bounds at all.
 
 
+Testing
+-------
+
+These tests follow the [PGXS and `pg_regress` framework](https://www.postgresql.org/docs/current/extend-pgxs.html) used for Postgres extensions, including Postgres's own contrib package. To run the tests, first install the extension somewhere then say `make installcheck`. You can use standard libpq envvars to control the database connection, e.g. `PGPORT=5436 make installcheck`.
+
+
+
 Limitations/TODO
 ----------------
 
-- Tests for floats are pretty good, but we need tests for the other numeric types.
 - Lots of functions are still left to implement:
 
   - `vec_to_min_max`

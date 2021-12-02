@@ -1,0 +1,252 @@
+-- smallint count lots
+SELECT vec_to_count(smallints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_count 
+--------------
+ {2,1,2}
+(1 row)
+
+-- smallint count none
+SELECT vec_to_count(smallints) FROM measurements WHERE sensor_id = -1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- smallint count one null
+SELECT vec_to_count(smallints) FROM measurements WHERE sensor_id = 1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- smallint count array of nulls
+SELECT vec_to_count(smallints) FROM measurements WHERE sensor_id = 2;
+ vec_to_count 
+--------------
+ {0,0,0}
+(1 row)
+
+-- smallint count one not-null
+SELECT vec_to_count(smallints) FROM measurements WHERE sensor_id = 4;
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- smallint count array of nulls and one other
+SELECT vec_to_count(smallints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- int count lots
+SELECT vec_to_count(ints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_count 
+--------------
+ {2,1,2}
+(1 row)
+
+-- int count none
+SELECT vec_to_count(ints) FROM measurements WHERE sensor_id = -1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- int count one null
+SELECT vec_to_count(ints) FROM measurements WHERE sensor_id = 1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- int count array of nulls
+SELECT vec_to_count(ints) FROM measurements WHERE sensor_id = 2;
+ vec_to_count 
+--------------
+ {0,0,0}
+(1 row)
+
+-- int count one not-null
+SELECT vec_to_count(ints) FROM measurements WHERE sensor_id = 4;
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- int count array of nulls and one other
+SELECT vec_to_count(ints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- bigint count lots
+SELECT vec_to_count(bigints) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_count 
+--------------
+ {2,1,2}
+(1 row)
+
+-- bigint count none
+SELECT vec_to_count(bigints) FROM measurements WHERE sensor_id = -1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- bigint count one null
+SELECT vec_to_count(bigints) FROM measurements WHERE sensor_id = 1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- bigint count array of nulls
+SELECT vec_to_count(bigints) FROM measurements WHERE sensor_id = 2;
+ vec_to_count 
+--------------
+ {0,0,0}
+(1 row)
+
+-- bigint count one not-null
+SELECT vec_to_count(bigints) FROM measurements WHERE sensor_id = 4;
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- bigint count array of nulls and one other
+SELECT vec_to_count(bigints) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- real count lots
+SELECT vec_to_count(reals) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_count 
+--------------
+ {2,1,2}
+(1 row)
+
+-- real count none
+SELECT vec_to_count(reals) FROM measurements WHERE sensor_id = -1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- real count one null
+SELECT vec_to_count(reals) FROM measurements WHERE sensor_id = 1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- real count array of nulls
+SELECT vec_to_count(reals) FROM measurements WHERE sensor_id = 2;
+ vec_to_count 
+--------------
+ {0,0,0}
+(1 row)
+
+-- real count one not-null
+SELECT vec_to_count(reals) FROM measurements WHERE sensor_id = 4;
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- real count array of nulls and one other
+SELECT vec_to_count(reals) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- float8 count lots
+SELECT vec_to_count(floats) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_count 
+--------------
+ {2,1,2}
+(1 row)
+
+-- float8 count none
+SELECT vec_to_count(floats) FROM measurements WHERE sensor_id = -1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- float8 count one null
+SELECT vec_to_count(floats) FROM measurements WHERE sensor_id = 1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- float8 count array of nulls
+SELECT vec_to_count(floats) FROM measurements WHERE sensor_id = 2;
+ vec_to_count 
+--------------
+ {0,0,0}
+(1 row)
+
+-- float8 count one not-null
+SELECT vec_to_count(floats) FROM measurements WHERE sensor_id = 4;
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- float8 count array of nulls and one other
+SELECT vec_to_count(floats) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- numeric count lots
+SELECT vec_to_count(nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+ vec_to_count 
+--------------
+ {2,1,2}
+(1 row)
+
+-- numeric count none
+SELECT vec_to_count(nums) FROM measurements WHERE sensor_id = -1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- numeric count one null
+SELECT vec_to_count(nums) FROM measurements WHERE sensor_id = 1;
+ vec_to_count 
+--------------
+ 
+(1 row)
+
+-- numeric count array of nulls
+SELECT vec_to_count(nums) FROM measurements WHERE sensor_id = 2;
+ vec_to_count 
+--------------
+ {0,0,0}
+(1 row)
+
+-- numeric count one not-null
+SELECT vec_to_count(nums) FROM measurements WHERE sensor_id = 4;
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+
+-- numeric count array of nulls and one other
+SELECT vec_to_count(nums) FROM measurements WHERE sensor_id IN (2, 4);
+ vec_to_count 
+--------------
+ {1,0,1}
+(1 row)
+

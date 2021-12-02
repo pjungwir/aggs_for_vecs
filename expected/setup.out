@@ -1,0 +1,65 @@
+BEGIN; 
+CREATE EXTENSION aggs_for_vecs;
+DROP TABLE IF EXISTS measurements;
+NOTICE:  table "measurements" does not exist, skipping
+CREATE TABLE measurements (
+  sensor_id INTEGER PRIMARY KEY,
+  smallints SMALLINT[],
+  ints INT[],
+  bigints BIGINT[],
+  reals REAL[],
+  floats FLOAT[],
+  nums NUMERIC[]
+);
+CREATE INDEX idx_measurements_sensor_id ON measurements (sensor_id);
+INSERT INTO measurements
+VALUES
+(1, NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL),
+(2, ARRAY[NULL, NULL, NULL]::smallint[],
+    ARRAY[NULL, NULL, NULL]::int[],
+    ARRAY[NULL, NULL, NULL]::bigint[],
+    ARRAY[NULL, NULL, NULL]::real[],
+    ARRAY[NULL, NULL, NULL]::float[],
+    ARRAY[NULL, NULL, NULL]::numeric[]),
+(3, ARRAY[1, 2, 3],
+    ARRAY[1, 2, 3],
+    ARRAY[1, 2, 3],
+    ARRAY[1, 2, 3],
+    ARRAY[1, 2, 3],
+    ARRAY[1.23, 2.34, 3.45]),
+(4, ARRAY[1, NULL, 2],
+    ARRAY[1, NULL, 2],
+    ARRAY[1, NULL, 2],
+    ARRAY[1, NULL, 2],
+    ARRAY[1, NULL, 2],
+    ARRAY[1.23, NULL, 2.34]),
+(5, ARRAY[1, 2, 4],
+    ARRAY[1, 2, 4],
+    ARRAY[1, 2, 4],
+    ARRAY[1, 2, 4],
+    ARRAY[1, 2, 4],
+    ARRAY[1.23, 2.34, 4.45]),
+(6, ARRAY[1, 1, 4],
+    ARRAY[1, 1, 4],
+    ARRAY[1, 1, 4],
+    ARRAY[1, 1, 4],
+    ARRAY[1, 1, 4],
+    ARRAY[1.23, 1.23, 4.56])
+;
+DROP TABLE IF EXISTS measurements2;
+NOTICE:  table "measurements2" does not exist, skipping
+CREATE TABLE measurements2 (
+  stream_id TEXT NOT NULL,
+  ts TIMESTAMP WITH TIME ZONE NOT NULL,
+  data_i NUMERIC[],
+  data_a NUMERIC[],
+  data_s TEXT[],
+  PRIMARY KEY (stream_id, ts)  
+);
+COPY measurements2 FROM STDIN DELIMITER ',' CSV HEADER;
+COMMIT;
