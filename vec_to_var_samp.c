@@ -200,7 +200,7 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
                                     ),
                                     DirectFunctionCall2(numeric_sub,
                                       count_num,
-                                      DirectFunctionCall1(int4_numeric, Int32GetDatum(1))
+                                      NUMERIC_ONE
                                     )
                                   );
 #else
@@ -217,7 +217,7 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
                                     ),
                                     numeric_sub_opt_error(
                                       DatumGetNumeric(count_num),
-                                      DatumGetNumeric(DirectFunctionCall1(int4_numeric, Int32GetDatum(1))),
+                                      DatumGetNumeric(NUMERIC_ONE),
                                       NULL
                                     ),
                                     NULL
