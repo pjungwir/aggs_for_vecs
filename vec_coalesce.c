@@ -71,6 +71,7 @@ vec_coalesce(PG_FUNCTION_ARGS)
           retContent[j] = inputContent[j];
         }
       }
+      retNulls[i] = false;
       retContent[i] = scalarContent;
     } else if (retContent) {
       retNulls[i] = false;
