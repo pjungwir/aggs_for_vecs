@@ -8,6 +8,7 @@ REGRESS = setup \
 					hist_md \
 					pad_vec \
 					vec_add \
+					vec_coalesce \
 					vec_div \
 					vec_mul \
 					vec_pow \
