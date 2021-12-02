@@ -19,9 +19,9 @@ vec_coalesce(PG_FUNCTION_ARGS)
   char elemTypeAlignmentCode;
   int inputLength;
   ArrayType *inputArray, *retArray;
-  Datum *inputContent, scalarContent, *retContent;
+  Datum *inputContent, scalarContent, *retContent = 0;
   bool *inputNulls, *retNulls;
-  int i;
+  int i, j;
   int dims[1];
   int lbs[1];
 
@@ -56,18 +56,30 @@ vec_coalesce(PG_FUNCTION_ARGS)
   deconstruct_array(inputArray, scalarTypeId, elemTypeWidth, elemTypeByValue, elemTypeAlignmentCode,
       &inputContent, &inputNulls, &inputLength);
 
-  retContent = palloc0(sizeof(Datum) * inputLength);
-  retNulls = palloc0(sizeof(bool) * inputLength);
-
   scalarContent = PG_GETARG_DATUM(1);
+
   for (i = 0; i < inputLength; i++) {
-    retNulls[i] = false;
     if (inputNulls[i]) {
+      if (!retContent) {
+        // lazy-init return structures now
+        retContent = palloc0(sizeof(Datum) * inputLength);
+        retNulls = palloc0(sizeof(bool) * inputLength);
+
+        // back-fill skipped values as needed
+        for (j = 0; j < i; j++) {
+          retNulls[j] = false;
+          retContent[j] = inputContent[j];
+        }
+      }
       retContent[i] = scalarContent;
-    } else {
+    } else if (retContent) {
+      retNulls[i] = false;
       retContent[i] = inputContent[i];
     }
   }
+
+  // if we found no NULL elements; simply return the input to save a few cycles
+  if (!retContent) PG_RETURN_ARRAYTYPE_P(inputArray);
 
   dims[0] = inputLength;
   lbs[0] = 1;
