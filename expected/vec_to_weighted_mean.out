@@ -208,3 +208,80 @@ SELECT vec_to_weighted_mean(floats, floats) FROM measurements WHERE sensor_id IN
  {1,NULL,2}
 (1 row)
 
+-- numeric weighted mean lots
+SELECT vec_to_weighted_mean(nums, nums) FROM measurements WHERE sensor_id IN (1, 2, 3, 4);
+                    vec_to_weighted_mean                    
+------------------------------------------------------------
+ {1.2300000000000000,2.3400000000000000,3.0013989637305699}
+(1 row)
+
+-- numeric weighted mean none
+SELECT vec_to_weighted_mean(nums, nums) FROM measurements WHERE sensor_id = -1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- numeric weighted mean one null
+SELECT vec_to_weighted_mean(nums, nums) FROM measurements WHERE sensor_id = 1;
+ vec_to_weighted_mean 
+----------------------
+ 
+(1 row)
+
+-- numeric weighted mean array of nulls
+SELECT vec_to_weighted_mean(nums, nums) FROM measurements WHERE sensor_id = 2;
+ vec_to_weighted_mean 
+----------------------
+ {NULL,NULL,NULL}
+(1 row)
+
+-- numeric weighted mean one not-null
+SELECT vec_to_weighted_mean(nums, nums) FROM measurements WHERE sensor_id = 4;
+               vec_to_weighted_mean               
+--------------------------------------------------
+ {1.23000000000000000000,NULL,2.3400000000000000}
+(1 row)
+
+-- numeric weighted mean array of nulls and one other
+SELECT vec_to_weighted_mean(nums, nums) FROM measurements WHERE sensor_id IN (2, 4);
+               vec_to_weighted_mean               
+--------------------------------------------------
+ {1.23000000000000000000,NULL,2.3400000000000000}
+(1 row)
+
+-- numeric weighted mean everything
+SELECT vec_to_weighted_mean(nums, nums) FROM measurements;
+                    vec_to_weighted_mean                    
+------------------------------------------------------------
+ {1.2300000000000000,2.1089847715736041,3.9171756756756757}
+(1 row)
+
+-- numeric weighted mean repeating tail
+SELECT vec_to_weighted_mean(vals, vals) FROM (VALUES (ARRAY[1]::numeric[]), (ARRAY[0]::numeric[]), (ARRAY[0]::numeric[])) t(vals);
+   vec_to_weighted_mean   
+--------------------------
+ {1.00000000000000000000}
+(1 row)
+
+-- numeric weighted mean whole number
+SELECT vec_to_weighted_mean(vals, vals) FROM (VALUES (ARRAY[1]::numeric[]), (ARRAY[1]::numeric[])) t(vals);
+   vec_to_weighted_mean   
+--------------------------
+ {1.00000000000000000000}
+(1 row)
+
+-- numeric weighted mean data 01
+-- results expected to match:
+-- WITH di AS (
+--   SELECT idx_i, sum(val_i * val_i) / sum(val_i) AS avg_i
+--   FROM measurements2 d, unnest(d.data_i) WITH ORDINALITY AS a(val_i, idx_i)
+--   GROUP BY idx_i
+-- )
+-- SELECT array_agg(avg_i ORDER BY idx_i) AS data_i_avg FROM di
+SELECT vec_to_weighted_mean(data_i, data_i) FROM measurements2;
+                                                                                         vec_to_weighted_mean                                                                                         
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {15512520.937103316864,2393642.708648408277,229.8051872353514445,49.9971640060257455,7405305.981706577723,0.99941945428883988438,-9318.6771749349126032,15924635.570980675290,22237181.258514312241}
+(1 row)
+

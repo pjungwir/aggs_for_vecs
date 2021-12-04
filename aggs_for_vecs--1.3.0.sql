@@ -536,24 +536,24 @@ CREATE AGGREGATE vec_to_weighted_mean(float[], float[]) (
   finalfunc_extra
 );
 
--- CREATE OR REPLACE FUNCTION
--- vec_to_weighted_mean_numeric_transfn(internal, numeric[], numeric[])
--- RETURNS internal
--- AS 'aggs_for_vecs', 'vec_to_weighted_mean_numeric_transfn'
--- LANGUAGE c;
--- 
--- CREATE OR REPLACE FUNCTION
--- vec_to_weighted_mean_numeric_finalfn(internal, numeric[], numeric[])
--- RETURNS numeric[] -- sic: not float[] like the others
--- AS 'aggs_for_vecs', 'vec_to_weighted_mean_numeric_finalfn'
--- LANGUAGE c;
--- 
--- CREATE AGGREGATE vec_to_weighted_mean(numeric[], numeric[]) (
---   sfunc = vec_to_weighted_mean_numeric_transfn,
---   stype = internal,
---   finalfunc = vec_to_weighted_mean_numeric_finalfn,
---   finalfunc_extra
--- );
+CREATE OR REPLACE FUNCTION
+vec_to_weighted_mean_numeric_transfn(internal, numeric[], numeric[])
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_to_weighted_mean_numeric_transfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION
+vec_to_weighted_mean_numeric_finalfn(internal, numeric[], numeric[])
+RETURNS numeric[] -- sic: not float[] like the others
+AS 'aggs_for_vecs', 'vec_to_weighted_mean_numeric_finalfn'
+LANGUAGE c;
+
+CREATE AGGREGATE vec_to_weighted_mean(numeric[], numeric[]) (
+  sfunc = vec_to_weighted_mean_numeric_transfn,
+  stype = internal,
+  finalfunc = vec_to_weighted_mean_numeric_finalfn,
+  finalfunc_extra
+);
 
 
 

@@ -63,6 +63,7 @@ _PG_fini(void)
 #include "vec_to_mean.c"
 #include "vec_to_mean_numeric.c"
 #include "vec_to_weighted_mean.c"
+#include "vec_to_weighted_mean_numeric.c"
 // #include "vec_to_median.c"
 // #include "vec_to_mode.c"
 #include "vec_to_max.c"
