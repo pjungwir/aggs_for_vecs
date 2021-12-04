@@ -85,6 +85,41 @@ LANGUAGE c;
 
 
 
+-- vec_coalesce
+
+CREATE OR REPLACE FUNCTION
+vec_coalesce(smallint[], smallint)
+RETURNS smallint[]
+AS 'aggs_for_vecs', 'vec_coalesce'
+LANGUAGE c;
+CREATE OR REPLACE FUNCTION
+vec_coalesce(int[], int)
+RETURNS int[]
+AS 'aggs_for_vecs', 'vec_coalesce'
+LANGUAGE c;
+CREATE OR REPLACE FUNCTION
+vec_coalesce(bigint[], bigint)
+RETURNS bigint[]
+AS 'aggs_for_vecs', 'vec_coalesce'
+LANGUAGE c;
+CREATE OR REPLACE FUNCTION
+vec_coalesce(real[], real)
+RETURNS real[]
+AS 'aggs_for_vecs', 'vec_coalesce'
+LANGUAGE c;
+CREATE OR REPLACE FUNCTION
+vec_coalesce(float[], float)
+RETURNS float[]
+AS 'aggs_for_vecs', 'vec_coalesce'
+LANGUAGE c;
+CREATE OR REPLACE FUNCTION
+vec_coalesce(numeric[], numeric)
+RETURNS numeric[]
+AS 'aggs_for_vecs', 'vec_coalesce'
+LANGUAGE c;
+
+
+
 -- vec_to_count
 
 CREATE OR REPLACE FUNCTION

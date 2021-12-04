@@ -1,0 +1,40 @@
+-- null scalar
+SELECT r, pg_typeof(r) FROM (SELECT vec_coalesce(ARRAY[1,2,3]::integer[], NULL)) r(r);
+ r | pg_typeof 
+---+-----------
+   | integer[]
+(1 row)
+
+-- ints
+SELECT r, pg_typeof(r) FROM (SELECT vec_coalesce(ints, 0) FROM measurements WHERE sensor_id BETWEEN 1 AND 5) r(r);
+    r    | pg_typeof 
+---------+-----------
+         | integer[]
+ {0,0,0} | integer[]
+ {1,2,3} | integer[]
+ {1,0,2} | integer[]
+ {1,2,4} | integer[]
+(5 rows)
+
+-- floats
+SELECT r, pg_typeof(r) FROM (SELECT vec_coalesce(floats, 0) FROM measurements WHERE sensor_id BETWEEN 1 AND 5) r(r);
+    r    |     pg_typeof      
+---------+--------------------
+         | double precision[]
+ {0,0,0} | double precision[]
+ {1,2,3} | double precision[]
+ {1,0,2} | double precision[]
+ {1,2,4} | double precision[]
+(5 rows)
+
+--numeric
+SELECT r, pg_typeof(r) FROM (SELECT vec_coalesce(nums, 0) FROM measurements WHERE sensor_id BETWEEN 1 AND 5) r(r);
+        r         | pg_typeof 
+------------------+-----------
+                  | numeric[]
+ {0,0,0}          | numeric[]
+ {1.23,2.34,3.45} | numeric[]
+ {1.23,0,2.34}    | numeric[]
+ {1.23,2.34,4.45} | numeric[]
+(5 rows)
+
