@@ -99,8 +99,8 @@ vec_to_weighted_mean_numeric_transfn(PG_FUNCTION_ARGS)
       state->state.dnulls[i] = false;
       state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(
               numeric_mul,
-              DatumGetNumeric(currentWeightVals[i]),
-              DatumGetNumeric(currentVals[i])));
+              currentWeightVals[i],
+              currentVals[i]));
       state->vectmpvalues[i].num = DatumGetNumericCopy(currentWeightVals[i]);
     } else {
       // Instead of performing sub/div/add numeric calculations each row,
