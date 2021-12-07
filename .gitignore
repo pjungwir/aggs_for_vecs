@@ -2,6 +2,8 @@
 *.so
 .*.swp
 .*.swo
+/.cproject
+/.project
 /.vscode
 /bench-results.txt
 /bench-report.txt
