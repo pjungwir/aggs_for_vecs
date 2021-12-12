@@ -1,13 +1,13 @@
 
-Datum vec_accum(PG_FUNCTION_ARGS);
-PG_FUNCTION_INFO_V1(vec_accum);
+Datum vec_stat_accum(PG_FUNCTION_ARGS);
+PG_FUNCTION_INFO_V1(vec_stat_accum);
 
 /**
  * Aggregate transition function for accumulating basic statistics via
  * delegate aggregate transition function and comparison functions.
  */
 Datum
-vec_accum(PG_FUNCTION_ARGS)
+vec_stat_accum(PG_FUNCTION_ARGS)
 {
   Oid elemTypeId;
   int16 elemTypeWidth;

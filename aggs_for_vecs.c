@@ -56,9 +56,9 @@ _PG_fini(void)
 }
 
 #include "util.c"
-#include "util_accum.c"
 #include "pad_vec.c"
-#include "vec_accum.c"
+#include "vec_stat.c"
+#include "vec_stat_accum.c"
 #include "vec_agg_count.c"
 #include "vec_agg_max.c"
 #include "vec_agg_mean.c"
