@@ -55,10 +55,10 @@ assign c_array <<EOQ
               EXTRACT(epoch FROM max_time),
               300
           ) AS bucket,
-          vec_agg_count(vec_stat_agg(nums)),
-          vec_agg_min(vec_stat_agg(nums)),
-          vec_agg_max(vec_stat_agg(nums)),
-          vec_agg_mean(vec_stat_agg(nums))
+          vec_agg_count(nums),
+          vec_agg_min(nums),
+          vec_agg_max(nums),
+          vec_agg_mean(nums)
   FROM    bounds,
           measurements
   WHERE   sensor_id = 1
