@@ -1289,3 +1289,94 @@ vec_pow(anyelement, anyarray)
 RETURNS anyarray
 AS 'aggs_for_vecs', 'vec_pow_with_scalar'
 LANGUAGE c;
+
+
+
+-- vec_accum
+
+CREATE OR REPLACE FUNCTION
+vec_accum(internal, numeric[])
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_accum'
+LANGUAGE c
+IMMUTABLE;
+
+
+
+-- vec_agg_count
+
+CREATE OR REPLACE FUNCTION
+vec_agg_count_finalfn(internal)
+RETURNS bigint[]
+AS 'aggs_for_vecs', 'vec_agg_count_finalfn'
+LANGUAGE c;
+
+CREATE AGGREGATE vec_agg_count(numeric[]) (
+  sfunc = vec_accum,
+  stype = internal,
+  finalfunc = vec_agg_count_finalfn
+);
+
+
+
+-- vec_agg_max
+
+CREATE OR REPLACE FUNCTION
+vec_agg_max_finalfn(internal)
+RETURNS bigint[]
+AS 'aggs_for_vecs', 'vec_agg_max_finalfn'
+LANGUAGE c;
+
+CREATE AGGREGATE vec_agg_max(numeric[]) (
+  sfunc = vec_accum,
+  stype = internal,
+  finalfunc = vec_agg_max_finalfn
+);
+
+
+
+-- vec_agg_mean
+
+CREATE OR REPLACE FUNCTION
+vec_agg_mean_finalfn(internal)
+RETURNS bigint[]
+AS 'aggs_for_vecs', 'vec_agg_mean_finalfn'
+LANGUAGE c;
+
+CREATE AGGREGATE vec_agg_mean(numeric[]) (
+  sfunc = vec_accum,
+  stype = internal,
+  finalfunc = vec_agg_mean_finalfn
+);
+
+
+
+-- vec_agg_min
+
+CREATE OR REPLACE FUNCTION
+vec_agg_min_finalfn(internal)
+RETURNS bigint[]
+AS 'aggs_for_vecs', 'vec_agg_min_finalfn'
+LANGUAGE c;
+
+CREATE AGGREGATE vec_agg_min(numeric[]) (
+  sfunc = vec_accum,
+  stype = internal,
+  finalfunc = vec_agg_min_finalfn
+);
+
+
+
+-- vec_agg_sum
+
+CREATE OR REPLACE FUNCTION
+vec_agg_sum_finalfn(internal)
+RETURNS bigint[]
+AS 'aggs_for_vecs', 'vec_agg_sum_finalfn'
+LANGUAGE c;
+
+CREATE AGGREGATE vec_agg_sum(numeric[]) (
+  sfunc = vec_accum,
+  stype = internal,
+  finalfunc = vec_agg_sum_finalfn
+);
