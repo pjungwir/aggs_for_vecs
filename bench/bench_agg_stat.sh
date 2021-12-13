@@ -23,7 +23,8 @@ assign sql_rows <<EOQ
             count(n) AS cnt,
             min(n) AS min_n,
             max(n) AS max_n,
-            avg(n) AS mean_n
+            avg(n) AS mean_n,
+            sum(n) AS sum_n
     FROM    bounds,
             measurements,
             UNNEST(nums) WITH ORDINALITY AS x(n, i)
@@ -35,7 +36,8 @@ assign sql_rows <<EOQ
           array_agg(cnt ORDER BY i) AS cnt_s,
           array_agg(min_n ORDER BY i) AS min_ns,
           array_agg(max_n ORDER BY i) AS max_ns,
-          array_agg(mean_n ORDER BY i) AS mean_ns
+          array_agg(mean_n ORDER BY i) AS mean_ns,
+          array_agg(sum_n ORDER BY i) AS sum_ns
   FROM    unnested
   GROUP BY bucket
   ORDER BY bucket
@@ -58,7 +60,8 @@ assign c_array <<EOQ
           vec_agg_count(nums),
           vec_agg_min(nums),
           vec_agg_max(nums),
-          vec_agg_mean(nums)
+          vec_agg_mean(nums),
+          vec_agg_sum(nums)
   FROM    bounds,
           measurements
   WHERE   sensor_id = 1
