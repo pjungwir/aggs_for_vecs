@@ -32,7 +32,7 @@ vec_agg_mean_finalfn(PG_FUNCTION_ARGS)
         default:
             elog(ERROR, "Unknown array element type");
       }
-      result_build->dnulls = false;
+      result_build->dnulls[i] = false;
     }
   }
 

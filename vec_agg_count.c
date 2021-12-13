@@ -26,7 +26,7 @@ vec_agg_count_finalfn(PG_FUNCTION_ARGS)
 
   for (i = 0; i < state->nelems; i++) {
     result_build->dvalues[i] = Int64GetDatum(state->vec_counts[i]);
-    result_build->dnulls = false;
+    result_build->dnulls[i] = false;
   }
 
   dims[0] = result_build->nelems;

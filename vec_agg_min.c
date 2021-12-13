@@ -25,7 +25,7 @@ vec_agg_min_finalfn(PG_FUNCTION_ARGS)
   for (i = 0; i < state->nelems; i++) {
     if (state->vec_counts[i]) {
       result_build->dvalues[i] = state->vec_mins[i]; // TODO: need copy?
-      result_build->dnulls = false;
+      result_build->dnulls[i] = false;
     }
   }
 
