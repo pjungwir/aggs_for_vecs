@@ -44,8 +44,8 @@ vec_stat_accum(PG_FUNCTION_ARGS)
     arrayLength = (ARR_DIMS(currentArray))[0];
     state = initVecAggAccumState(elemTypeId, aggContext, arrayLength);
     // Set up the delegate aggregate transition/compare function calls
-    state->transfn_fcinfo = MemoryContextAlloc(aggContext,  SizeForFunctionCallInfo(2));
-    state->cmp_fcinfo = MemoryContextAlloc(aggContext,  SizeForFunctionCallInfo(2));
+    state->transfn_fcinfo = HEAP_FCINFO(aggContext,  2);
+    state->cmp_fcinfo = HEAP_FCINFO(aggContext,  2);
     switch(elemTypeId) {
       // TODO: support other number types
       case NUMERICOID:
@@ -56,9 +56,9 @@ vec_stat_accum(PG_FUNCTION_ARGS)
       default:
         elog(ERROR, "Unknown array element type");
     }
-    state->transfn_fcinfo->args[1].isnull = false;
-    state->cmp_fcinfo->args[0].isnull = false;
-    state->cmp_fcinfo->args[1].isnull = false;
+    FC_NULL(state->transfn_fcinfo, 1) = false;
+    FC_NULL(state->cmp_fcinfo, 0) = false;
+    FC_NULL(state->cmp_fcinfo, 1) = false;
   } else {
     elemTypeId = state->elementType;
     arrayLength = state->nelems;
@@ -78,7 +78,7 @@ vec_stat_accum(PG_FUNCTION_ARGS)
     } else {
       if (!state->vec_counts[i]) {
         // first call to delegate aggregate transition, so must init transfn_fcinfo if not already
-        state->transfn_fcinfo->args[0].isnull = true;
+        FC_NULL(state->transfn_fcinfo, 0) = true;
 
         // first non-null element set up as initial min/max values
         oldContext = MemoryContextSwitchTo(aggContext); {
@@ -86,11 +86,11 @@ vec_stat_accum(PG_FUNCTION_ARGS)
           state->vec_maxes[i] = state->vec_mins[i];
         } MemoryContextSwitchTo(oldContext);
       } else {
-        state->transfn_fcinfo->args[0].isnull = false;
+        FC_NULL(state->transfn_fcinfo, 0) = false;
 
         // execute delegate comparison function for min
-        state->cmp_fcinfo->args[0].value = state->vec_mins[i];
-        state->cmp_fcinfo->args[1].value = currentVals[i];
+        FC_ARG(state->cmp_fcinfo, 0) = state->vec_mins[i];
+        FC_ARG(state->cmp_fcinfo, 1) = currentVals[i];
         state->cmp_fcinfo->isnull = false;
         compareResult = FunctionCallInvoke(state->cmp_fcinfo);
         if (state->cmp_fcinfo->isnull) {
@@ -103,8 +103,8 @@ vec_stat_accum(PG_FUNCTION_ARGS)
         }
 
         // execute delegate comparison function for max
-        state->cmp_fcinfo->args[0].value = state->vec_maxes[i];
-        state->cmp_fcinfo->args[1].value = currentVals[i];
+        FC_ARG(state->cmp_fcinfo, 0) = state->vec_maxes[i];
+        FC_ARG(state->cmp_fcinfo, 1) = currentVals[i];
         state->cmp_fcinfo->isnull = false;
         compareResult = FunctionCallInvoke(state->cmp_fcinfo);
         if (state->cmp_fcinfo->isnull) {
@@ -118,8 +118,8 @@ vec_stat_accum(PG_FUNCTION_ARGS)
       }
       
       // execute delegate transition function
-      state->transfn_fcinfo->args[0].value = state->vec_states[i];
-      state->transfn_fcinfo->args[1].value = currentVals[i];
+      FC_ARG(state->transfn_fcinfo, 0) = state->vec_states[i];
+      FC_ARG(state->transfn_fcinfo, 1) = currentVals[i];
       state->transfn_fcinfo->isnull = false;
       state->vec_states[i] = FunctionCallInvoke(state->transfn_fcinfo);
       if (state->transfn_fcinfo->isnull) {

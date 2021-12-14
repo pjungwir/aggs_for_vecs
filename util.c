@@ -15,6 +15,26 @@ do {                              \
       errmsg("value out of range: underflow")));      \
 } while(0)
 
+// Some compatibility macros for supporting FunctionCallInfo across different PG versions
+#if PG_VERSION_NUM < 100000
+
+/* convenience macro to allocate FunctionCallInfoData on the heap */
+#define HEAP_FCINFO(mcontext, nargs) MemoryContextAlloc(mcontext, sizeof(FunctionCallInfoData))
+
+/* getting arguments has a different API, so these macros unify the versions */
+#define FC_ARG(fcinfo, n) ((fcinfo)->arg[(n)])
+#define FC_NULL(fcinfo, n) ((fcinfo)->argnull[(n)])
+
+#else
+
+/* convenience macro to allocate FunctionCallInfoData on the heap */
+#define HEAP_FCINFO(mcontext, nargs) MemoryContextAlloc(mcontext, SizeForFunctionCallInfo(nargs))
+
+/* getting arguments has a different API, so these macros unify the versions */
+#define FC_ARG(fcinfo, n) ((fcinfo)->args[(n)].value)
+#define FC_NULL(fcinfo, n) ((fcinfo)->args[(n)].isnull)
+
+#endif
 typedef union pgnum {
   int16 i16;
   int32 i32;
