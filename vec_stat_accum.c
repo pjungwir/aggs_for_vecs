@@ -23,6 +23,8 @@ vec_stat_accum(PG_FUNCTION_ARGS)
   int i;
   MemoryContext oldContext;
   Datum compareResult;
+  PGFunction accum_func;
+  PGFunction cmp_func;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
     elog(ERROR, "vec_stat_agg called in non-aggregate context");
@@ -50,8 +52,8 @@ vec_stat_accum(PG_FUNCTION_ARGS)
       // TODO: support other number types
       case NUMERICOID:
         // the numeric_avg_accum supports numeric_avg and numeric_sum final functions
-        InitFunctionCallInfoData(*state->transfn_fcinfo, &numeric_avg_accum_fmgrinfo, 2, fcinfo->fncollation, fcinfo->context, fcinfo->resultinfo);
-        InitFunctionCallInfoData(*state->cmp_fcinfo, &numeric_cmp_fmgrinfo, 2, InvalidOid, NULL, NULL);
+        InitFunctionCallInfoData(*state->transfn_fcinfo, NULL, 2, fcinfo->fncollation, fcinfo->context, fcinfo->resultinfo);
+        InitFunctionCallInfoData(*state->cmp_fcinfo, NULL, 2, InvalidOid, NULL, NULL);
         break;
       default:
         elog(ERROR, "Unknown array element type");
@@ -62,6 +64,15 @@ vec_stat_accum(PG_FUNCTION_ARGS)
   } else {
     elemTypeId = state->elementType;
     arrayLength = state->nelems;
+  }
+  switch(elemTypeId) {
+    // TODO: support other number types
+    case NUMERICOID:
+      accum_func = numeric_avg_accum;
+      cmp_func = numeric_cmp;
+      break;
+    default:
+      elog(ERROR, "Unknown array element type");
   }
 
   get_typlenbyvalalign(elemTypeId, &elemTypeWidth, &elemTypeByValue, &elemTypeAlignmentCode);
@@ -92,7 +103,7 @@ vec_stat_accum(PG_FUNCTION_ARGS)
         FC_ARG(state->cmp_fcinfo, 0) = state->vec_mins[i];
         FC_ARG(state->cmp_fcinfo, 1) = currentVals[i];
         state->cmp_fcinfo->isnull = false;
-        compareResult = FunctionCallInvoke(state->cmp_fcinfo);
+        compareResult = (*cmp_func) (state->cmp_fcinfo);
         if (state->cmp_fcinfo->isnull) {
           // delegate function returned no result
           ereport(ERROR, (errmsg("The delegate comparison function returned a NULL result on element %d", i)));
@@ -106,7 +117,7 @@ vec_stat_accum(PG_FUNCTION_ARGS)
         FC_ARG(state->cmp_fcinfo, 0) = state->vec_maxes[i];
         FC_ARG(state->cmp_fcinfo, 1) = currentVals[i];
         state->cmp_fcinfo->isnull = false;
-        compareResult = FunctionCallInvoke(state->cmp_fcinfo);
+        compareResult = (*cmp_func) (state->cmp_fcinfo);
         if (state->cmp_fcinfo->isnull) {
           // delegate function returned no result
           ereport(ERROR, (errmsg("The delegate comparison function returned a NULL result on element %d", i)));
@@ -121,7 +132,7 @@ vec_stat_accum(PG_FUNCTION_ARGS)
       FC_ARG(state->transfn_fcinfo, 0) = state->vec_states[i];
       FC_ARG(state->transfn_fcinfo, 1) = currentVals[i];
       state->transfn_fcinfo->isnull = false;
-      state->vec_states[i] = FunctionCallInvoke(state->transfn_fcinfo);
+      state->vec_states[i] = (*accum_func) (state->transfn_fcinfo);
       if (state->transfn_fcinfo->isnull) {
         // delegate function returned no state
         ereport(ERROR, (errmsg("The delegate transition function returned a NULL aggregate state on element %d", i)));
