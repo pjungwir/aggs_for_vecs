@@ -5,6 +5,8 @@ typedef struct VecAggAccumState {
   Datum           *vec_states;     // Element aggregate state.
   Datum           *vec_mins;       // Element min value seen.
   Datum           *vec_maxes;      // Element max value seen.
+  FunctionCallInfo transfn_fcinfo; // Cached function call for invoking aggregate function.
+  FunctionCallInfo cmp_fcinfo;     // Cached function call for invoking comparison function.
 } VecAggAccumState;
 
 VecAggAccumState *
