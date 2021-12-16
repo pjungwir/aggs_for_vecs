@@ -1295,6 +1295,41 @@ LANGUAGE c;
 -- vec_stat_accum
 
 CREATE OR REPLACE FUNCTION
+vec_stat_accum(internal, smallint[])
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_stat_accum'
+LANGUAGE c
+IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION
+vec_stat_accum(internal, int[])
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_stat_accum'
+LANGUAGE c
+IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION
+vec_stat_accum(internal, bigint[])
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_stat_accum'
+LANGUAGE c
+IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION
+vec_stat_accum(internal, real[])
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_stat_accum'
+LANGUAGE c
+IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION
+vec_stat_accum(internal, float[])
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_stat_accum'
+LANGUAGE c
+IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION
 vec_stat_accum(internal, numeric[])
 RETURNS internal
 AS 'aggs_for_vecs', 'vec_stat_accum'
@@ -1306,15 +1341,45 @@ IMMUTABLE;
 -- vec_agg_count
 
 CREATE OR REPLACE FUNCTION
-vec_agg_count_numeric_finalfn(internal)
+vec_agg_count_finalfn(internal)
 RETURNS bigint[]
 AS 'aggs_for_vecs', 'vec_agg_count_finalfn'
 LANGUAGE c;
 
+CREATE AGGREGATE vec_agg_count(smallint[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_count_finalfn
+);
+
+CREATE AGGREGATE vec_agg_count(int[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_count_finalfn
+);
+
+CREATE AGGREGATE vec_agg_count(bigint[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_count_finalfn
+);
+
+CREATE AGGREGATE vec_agg_count(real[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_count_finalfn
+);
+
+CREATE AGGREGATE vec_agg_count(float[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_count_finalfn
+);
+
 CREATE AGGREGATE vec_agg_count(numeric[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_count_numeric_finalfn
+  finalfunc = vec_agg_count_finalfn
 );
 
 
