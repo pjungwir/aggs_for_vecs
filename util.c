@@ -16,7 +16,14 @@ do {                              \
 } while(0)
 
 // Some compatibility macros for supporting FunctionCallInfo across different PG versions
-#if PG_VERSION_NUM < 100000
+#if PG_VERSION_NUM < 120000
+
+#define LOCAL_FCINFO(name, nargs)              \
+	union                                        \
+	{                                            \
+		FunctionCallInfoData fcinfo;               \
+	} name##data;                                \
+	FunctionCallInfo name = &name##data.fcinfo
 
 /* convenience macro to allocate FunctionCallInfoData on the heap */
 #define HEAP_FCINFO(mcontext, nargs) MemoryContextAlloc(mcontext, sizeof(FunctionCallInfoData))
