@@ -1387,31 +1387,31 @@ CREATE AGGREGATE vec_agg_count(numeric[]) (
 -- vec_agg_max
 
 CREATE OR REPLACE FUNCTION
-vec_agg_max_smallint_finalfn(internal)
+vec_agg_max_int2_finalfn(internal)
 RETURNS smallint[]
 AS 'aggs_for_vecs', 'vec_agg_max_finalfn'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
-vec_agg_max_int_finalfn(internal)
+vec_agg_max_int4_finalfn(internal)
 RETURNS int[]
 AS 'aggs_for_vecs', 'vec_agg_max_finalfn'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
-vec_agg_max_bigint_finalfn(internal)
+vec_agg_max_int8_finalfn(internal)
 RETURNS bigint[]
 AS 'aggs_for_vecs', 'vec_agg_max_finalfn'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
-vec_agg_max_real_finalfn(internal)
+vec_agg_max_float4_finalfn(internal)
 RETURNS real[]
 AS 'aggs_for_vecs', 'vec_agg_max_finalfn'
 LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
-vec_agg_max_float_finalfn(internal)
+vec_agg_max_float8_finalfn(internal)
 RETURNS float[]
 AS 'aggs_for_vecs', 'vec_agg_max_finalfn'
 LANGUAGE c;
@@ -1425,31 +1425,31 @@ LANGUAGE c;
 CREATE AGGREGATE vec_agg_max(smallint[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_max_smallint_finalfn
+  finalfunc = vec_agg_max_int2_finalfn
 );
 
 CREATE AGGREGATE vec_agg_max(int[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_max_int_finalfn
+  finalfunc = vec_agg_max_int4_finalfn
 );
 
 CREATE AGGREGATE vec_agg_max(bigint[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_max_bigint_finalfn
+  finalfunc = vec_agg_max_int8_finalfn
 );
 
 CREATE AGGREGATE vec_agg_max(real[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_max_real_finalfn
+  finalfunc = vec_agg_max_float4_finalfn
 );
 
 CREATE AGGREGATE vec_agg_max(float[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_max_float_finalfn
+  finalfunc = vec_agg_max_float8_finalfn
 );
 
 CREATE AGGREGATE vec_agg_max(numeric[]) (
@@ -1463,10 +1463,52 @@ CREATE AGGREGATE vec_agg_max(numeric[]) (
 -- vec_agg_mean
 
 CREATE OR REPLACE FUNCTION
+vec_agg_mean_int8_finalfn(internal)
+RETURNS bigint[]
+AS 'aggs_for_vecs', 'vec_agg_mean_finalfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION
+vec_agg_mean_float8_finalfn(internal)
+RETURNS float[]
+AS 'aggs_for_vecs', 'vec_agg_mean_finalfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION
 vec_agg_mean_numeric_finalfn(internal)
 RETURNS numeric[]
 AS 'aggs_for_vecs', 'vec_agg_mean_finalfn'
 LANGUAGE c;
+
+CREATE AGGREGATE vec_agg_mean(smallint[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_mean_int8_finalfn
+);
+
+CREATE AGGREGATE vec_agg_mean(int[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_mean_int8_finalfn
+);
+
+CREATE AGGREGATE vec_agg_mean(bigint[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_mean_numeric_finalfn
+);
+
+CREATE AGGREGATE vec_agg_mean(real[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_mean_float8_finalfn
+);
+
+CREATE AGGREGATE vec_agg_mean(float[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_mean_float8_finalfn
+);
 
 CREATE AGGREGATE vec_agg_mean(numeric[]) (
   sfunc     = vec_stat_accum,
@@ -1475,14 +1517,73 @@ CREATE AGGREGATE vec_agg_mean(numeric[]) (
 );
 
 
-
 -- vec_agg_min
+
+CREATE OR REPLACE FUNCTION
+vec_agg_min_int2_finalfn(internal)
+RETURNS smallint[]
+AS 'aggs_for_vecs', 'vec_agg_min_finalfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION
+vec_agg_min_int4_finalfn(internal)
+RETURNS int[]
+AS 'aggs_for_vecs', 'vec_agg_min_finalfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION
+vec_agg_min_int8_finalfn(internal)
+RETURNS bigint[]
+AS 'aggs_for_vecs', 'vec_agg_min_finalfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION
+vec_agg_min_float4_finalfn(internal)
+RETURNS real[]
+AS 'aggs_for_vecs', 'vec_agg_min_finalfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION
+vec_agg_min_float8_finalfn(internal)
+RETURNS float[]
+AS 'aggs_for_vecs', 'vec_agg_min_finalfn'
+LANGUAGE c;
 
 CREATE OR REPLACE FUNCTION
 vec_agg_min_numeric_finalfn(internal)
 RETURNS numeric[]
 AS 'aggs_for_vecs', 'vec_agg_min_finalfn'
 LANGUAGE c;
+
+CREATE AGGREGATE vec_agg_min(smallint[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_min_int2_finalfn
+);
+
+CREATE AGGREGATE vec_agg_min(int[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_min_int4_finalfn
+);
+
+CREATE AGGREGATE vec_agg_min(bigint[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_min_int8_finalfn
+);
+
+CREATE AGGREGATE vec_agg_min(real[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_min_float4_finalfn
+);
+
+CREATE AGGREGATE vec_agg_min(float[]) (
+  sfunc     = vec_stat_accum,
+  stype     = internal,
+  finalfunc = vec_agg_min_float8_finalfn
+);
 
 CREATE AGGREGATE vec_agg_min(numeric[]) (
   sfunc     = vec_stat_accum,
