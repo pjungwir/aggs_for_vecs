@@ -53,3 +53,11 @@ SELECT vec_agg_count(data_i) AS counts
 	, vec_agg_min(data_i) AS mins
 	, vec_agg_max(data_i) AS maxes
 FROM measurements2;
+
+-- numeric stats 3
+SELECT vec_agg_count(pad_vec(data_a, 3)) AS counts
+	, vec_agg_sum(pad_vec(data_a, 3)) AS sums
+	, vec_trim_scale(vec_agg_mean(pad_vec(data_a, 3))) AS means
+	, vec_agg_min(pad_vec(data_a, 3)) AS mins
+	, vec_agg_max(pad_vec(data_a, 3)) AS maxes
+FROM measurements2;
