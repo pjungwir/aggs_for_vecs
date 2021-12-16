@@ -1306,7 +1306,7 @@ IMMUTABLE;
 -- vec_agg_count
 
 CREATE OR REPLACE FUNCTION
-vec_agg_count_finalfn(internal)
+vec_agg_count_numeric_finalfn(internal)
 RETURNS bigint[]
 AS 'aggs_for_vecs', 'vec_agg_count_finalfn'
 LANGUAGE c;
@@ -1314,7 +1314,7 @@ LANGUAGE c;
 CREATE AGGREGATE vec_agg_count(numeric[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_count_finalfn
+  finalfunc = vec_agg_count_numeric_finalfn
 );
 
 
@@ -1322,15 +1322,15 @@ CREATE AGGREGATE vec_agg_count(numeric[]) (
 -- vec_agg_max
 
 CREATE OR REPLACE FUNCTION
-vec_agg_max_finalfn(internal)
-RETURNS bigint[]
+vec_agg_max_numeric_finalfn(internal)
+RETURNS numeric[]
 AS 'aggs_for_vecs', 'vec_agg_max_finalfn'
 LANGUAGE c;
 
 CREATE AGGREGATE vec_agg_max(numeric[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_max_finalfn
+  finalfunc = vec_agg_max_numeric_finalfn
 );
 
 
@@ -1338,15 +1338,15 @@ CREATE AGGREGATE vec_agg_max(numeric[]) (
 -- vec_agg_mean
 
 CREATE OR REPLACE FUNCTION
-vec_agg_mean_finalfn(internal)
-RETURNS bigint[]
+vec_agg_mean_numeric_finalfn(internal)
+RETURNS numeric[]
 AS 'aggs_for_vecs', 'vec_agg_mean_finalfn'
 LANGUAGE c;
 
 CREATE AGGREGATE vec_agg_mean(numeric[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_mean_finalfn
+  finalfunc = vec_agg_mean_numeric_finalfn
 );
 
 
@@ -1354,15 +1354,15 @@ CREATE AGGREGATE vec_agg_mean(numeric[]) (
 -- vec_agg_min
 
 CREATE OR REPLACE FUNCTION
-vec_agg_min_finalfn(internal)
-RETURNS bigint[]
+vec_agg_min_numeric_finalfn(internal)
+RETURNS numeric[]
 AS 'aggs_for_vecs', 'vec_agg_min_finalfn'
 LANGUAGE c;
 
 CREATE AGGREGATE vec_agg_min(numeric[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_min_finalfn
+  finalfunc = vec_agg_min_numeric_finalfn
 );
 
 
@@ -1370,13 +1370,13 @@ CREATE AGGREGATE vec_agg_min(numeric[]) (
 -- vec_agg_sum
 
 CREATE OR REPLACE FUNCTION
-vec_agg_sum_finalfn(internal)
-RETURNS bigint[]
+vec_agg_sum_numeric_finalfn(internal)
+RETURNS numeric[]
 AS 'aggs_for_vecs', 'vec_agg_sum_finalfn'
 LANGUAGE c;
 
 CREATE AGGREGATE vec_agg_sum(numeric[]) (
   sfunc     = vec_stat_accum,
   stype     = internal,
-  finalfunc = vec_agg_sum_finalfn
+  finalfunc = vec_agg_sum_numeric_finalfn
 );
