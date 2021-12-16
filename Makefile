@@ -13,6 +13,7 @@ REGRESS = setup \
 					vec_mul \
 					vec_pow \
 					vec_sub \
+					vec_agg_stat \
 					vec_to_count \
 					vec_to_max \
 					vec_to_mean \
