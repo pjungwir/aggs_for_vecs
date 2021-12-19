@@ -159,7 +159,7 @@ Return an array with the same elements as the given array, but extended to have 
 argument if necessary. Any added elements will be set to `NULL`. If the given array is already the given
 length, it is returned directly.
 
-### `vec_coalesce(ANYARRAY, ANYELEMENT) RETURNS ANYARRAY`
+#### `vec_coalesce(ANYARRAY, ANYELEMENT) RETURNS ANYARRAY`
 
 Return an array with the same elements as the given array, execept all `NULL` elements are replaced
 by the given second argument.
