@@ -8,9 +8,13 @@ PG_FUNCTION_INFO_V1(vec_agg_count_finalfn);
 Datum
 vec_agg_count_finalfn(PG_FUNCTION_ARGS)
 {
-  Datum result;
-  ArrayBuildState *result_build;
+  ArrayType *result;
   VecAggAccumState *state;
+  int16 typlen;
+  bool typbyval;
+  char typalign;
+  Datum *dvalues;
+  bool *dnulls;
   int dims[1];
   int lbs[1];
   int i;
@@ -22,16 +26,18 @@ vec_agg_count_finalfn(PG_FUNCTION_ARGS)
     PG_RETURN_NULL();
   }
 
-  result_build = initArrayResultWithNulls(INT8OID, CurrentMemoryContext, state->nelems);
+  dvalues = palloc(state->nelems * sizeof(Datum));
+  dnulls = palloc(state->nelems * sizeof(bool));
 
   for (i = 0; i < state->nelems; i++) {
-    result_build->dvalues[i] = Int64GetDatum(state->vec_counts[i]);
-    result_build->dnulls[i] = false;
+    dvalues[i] = Int64GetDatum(state->vec_counts[i]);
+    dnulls[i] = false;
   }
 
-  dims[0] = result_build->nelems;
+  dims[0] = state->nelems;
   lbs[0] = 1;
 
-  result = makeMdArrayResult(result_build, 1, dims, lbs, CurrentMemoryContext, false);
-  PG_RETURN_DATUM(result);
+  get_typlenbyvalalign(INT8OID, &typlen, &typbyval, &typalign);
+  result = construct_md_array(dvalues, dnulls, 1, dims, lbs, INT8OID, typlen, typbyval, typalign);  
+  PG_RETURN_ARRAYTYPE_P(result);
 }
