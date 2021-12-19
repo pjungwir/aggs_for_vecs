@@ -1,0 +1,106 @@
+
+Datum vec_to_first_transfn(PG_FUNCTION_ARGS);
+PG_FUNCTION_INFO_V1(vec_to_first_transfn);
+
+/**
+ * Returns an of n elements, which each element is the first non-null value found in that position
+ * from all input arrays.
+ */
+Datum
+vec_to_first_transfn(PG_FUNCTION_ARGS)
+{
+  Oid elemTypeId;
+  int16 elemTypeWidth;
+  bool elemTypeByValue;
+  char elemTypeAlignmentCode;
+  int currentLength;
+  MemoryContext aggContext;
+  ArrayBuildState *state = NULL;
+  ArrayType *currentArray;
+  int arrayLength;
+  Datum *currentVals;
+  bool *currentNulls;
+  int i;
+  MemoryContext old;
+  bool done;
+
+  if (!AggCheckCallContext(fcinfo, &aggContext)) {
+    elog(ERROR, "vec_to_first_transfn called in non-aggregate context");
+  }
+
+  if (!PG_ARGISNULL(0)) {
+    state = (ArrayBuildState *)PG_GETARG_POINTER(0);
+  }
+
+  if (PG_ARGISNULL(1)) {
+    // just return the current state unchanged (possibly still NULL)
+    PG_RETURN_POINTER(state);
+  }
+  currentArray = PG_GETARG_ARRAYTYPE_P(1);
+  done = true;
+
+  if (state == NULL) {
+    elemTypeId = ARR_ELEMTYPE(currentArray);
+    if (ARR_NDIM(currentArray) != 1) {
+      ereport(ERROR, (errmsg("One-dimensional arrays are required")));
+    }
+    arrayLength = (ARR_DIMS(currentArray))[0];
+    state = initArrayResultWithNulls(elemTypeId, aggContext, arrayLength);
+  } else {
+    elemTypeId = state->element_type;
+    arrayLength = state->nelems;
+  }
+
+  // small optimization to quick return when all firsts found
+  for (i = 0; i < arrayLength; i++) {
+    if (state->dnulls[i]) {
+      done = false;
+      break;
+    }
+  }
+  if (done) {
+    PG_RETURN_POINTER(state);
+  }
+
+  get_typlenbyvalalign(elemTypeId, &elemTypeWidth, &elemTypeByValue, &elemTypeAlignmentCode);
+  deconstruct_array(currentArray, elemTypeId, elemTypeWidth, elemTypeByValue, elemTypeAlignmentCode,
+      &currentVals, &currentNulls, &currentLength);
+  if (currentLength != arrayLength) {
+    ereport(ERROR, (errmsg("All arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
+  }
+
+  if (elemTypeId == NUMERICOID) old = MemoryContextSwitchTo(aggContext);
+  for (i = 0; i < arrayLength; i++) {
+    if (!currentNulls[i] && state->dnulls[i]) {
+      state->dnulls[i] = false;
+      state->dvalues[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
+    }
+  }
+  if (elemTypeId == NUMERICOID) MemoryContextSwitchTo(old);
+  PG_RETURN_POINTER(state);
+}
+
+Datum vec_to_first_finalfn(PG_FUNCTION_ARGS);
+PG_FUNCTION_INFO_V1(vec_to_first_finalfn);
+
+Datum
+vec_to_first_finalfn(PG_FUNCTION_ARGS)
+{
+  Datum result;
+  ArrayBuildState *state;
+  int dims[1];
+  int lbs[1];
+
+  Assert(AggCheckCallContext(fcinfo, NULL));
+
+  state = PG_ARGISNULL(0) ? NULL : (ArrayBuildState *)PG_GETARG_POINTER(0);
+
+  if (state == NULL)
+    PG_RETURN_NULL();
+
+  dims[0] = state->nelems;
+  lbs[0] = 1;
+
+  result = makeMdArrayResult(state, 1, dims, lbs, CurrentMemoryContext, false);
+  PG_RETURN_DATUM(result);
+}

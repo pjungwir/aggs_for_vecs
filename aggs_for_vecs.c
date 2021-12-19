@@ -67,6 +67,8 @@ _PG_fini(void)
 #include "vec_trim_scale.c"
 #include "vec_without_outliers.c"
 #include "vec_to_count.c"
+#include "vec_to_first.c"
+#include "vec_to_last.c"
 #include "vec_to_sum.c"
 #include "vec_to_mean.c"
 #include "vec_to_mean_numeric.c"

@@ -1648,3 +1648,49 @@ CREATE AGGREGATE vec_agg_sum(numeric[]) (
   stype     = internal,
   finalfunc = vec_agg_sum_numeric_finalfn
 );
+
+
+
+-- vec_to_first
+
+CREATE OR REPLACE FUNCTION
+vec_to_first_transfn(internal, anyarray)
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_to_first_transfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION
+vec_to_first_finalfn(internal, anyarray)
+RETURNS anyarray
+AS 'aggs_for_vecs', 'vec_to_first_finalfn'
+LANGUAGE c;
+
+CREATE AGGREGATE vec_to_first(anyarray) (
+  sfunc     = vec_to_first_transfn,
+  stype     = internal,
+  finalfunc = vec_to_first_finalfn,
+  finalfunc_extra
+);
+
+
+
+-- vec_to_last
+
+CREATE OR REPLACE FUNCTION
+vec_to_last_transfn(internal, anyarray)
+RETURNS internal
+AS 'aggs_for_vecs', 'vec_to_last_transfn'
+LANGUAGE c;
+
+CREATE OR REPLACE FUNCTION
+vec_to_last_finalfn(internal, anyarray)
+RETURNS anyarray
+AS 'aggs_for_vecs', 'vec_to_last_finalfn'
+LANGUAGE c;
+
+CREATE AGGREGATE vec_to_last(anyarray) (
+  sfunc     = vec_to_last_transfn,
+  stype     = internal,
+  finalfunc = vec_to_last_finalfn,
+  finalfunc_extra
+);
