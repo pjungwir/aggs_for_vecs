@@ -41,11 +41,14 @@ vec_stat_accum(PG_FUNCTION_ARGS)
     PG_RETURN_POINTER(state);
   }
   currentArray = PG_GETARG_ARRAYTYPE_P(1);
+  if (ARR_NDIM(currentArray) == 0) {
+    PG_RETURN_POINTER(state);
+  }
 
   if (state == NULL) {
     elemTypeId = ARR_ELEMTYPE(currentArray);
     if (ARR_NDIM(currentArray) != 1) {
-      ereport(ERROR, (errmsg("One-dimensional arrays are required")));
+      ereport(ERROR, (errmsg("vec_stat_accum: one-dimensional arrays are required, but got %d", ARR_NDIM(currentArray))));
     }
     arrayLength = (ARR_DIMS(currentArray))[0];
     state = initVecAggAccumState(elemTypeId, aggContext, arrayLength);
@@ -97,7 +100,7 @@ vec_stat_accum(PG_FUNCTION_ARGS)
   deconstruct_array(currentArray, elemTypeId, elemTypeWidth, elemTypeByValue, elemTypeAlignmentCode,
       &currentVals, &currentNulls, &currentLength);
   if (currentLength != arrayLength) {
-    ereport(ERROR, (errmsg("All arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
+    ereport(ERROR, (errmsg("vec_stat_accum: all arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
   }
 
   // for each input element, delegate to 
