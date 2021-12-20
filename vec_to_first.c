@@ -37,12 +37,15 @@ vec_to_first_transfn(PG_FUNCTION_ARGS)
     PG_RETURN_POINTER(state);
   }
   currentArray = PG_GETARG_ARRAYTYPE_P(1);
+  if (ARR_NDIM(currentArray) == 0) {
+    PG_RETURN_POINTER(state);
+  }
   done = true;
 
   if (state == NULL) {
     elemTypeId = ARR_ELEMTYPE(currentArray);
     if (ARR_NDIM(currentArray) != 1) {
-      ereport(ERROR, (errmsg("One-dimensional arrays are required")));
+      ereport(ERROR, (errmsg("vec_to_first: one-dimensional arrays are required, but got %d", ARR_NDIM(currentArray))));
     }
     arrayLength = (ARR_DIMS(currentArray))[0];
     state = initArrayResultWithNulls(elemTypeId, aggContext, arrayLength);
@@ -66,7 +69,7 @@ vec_to_first_transfn(PG_FUNCTION_ARGS)
   deconstruct_array(currentArray, elemTypeId, elemTypeWidth, elemTypeByValue, elemTypeAlignmentCode,
       &currentVals, &currentNulls, &currentLength);
   if (currentLength != arrayLength) {
-    ereport(ERROR, (errmsg("All arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
+    ereport(ERROR, (errmsg("vec_to_first: all arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
   }
 
   if (elemTypeId == NUMERICOID) old = MemoryContextSwitchTo(aggContext);
