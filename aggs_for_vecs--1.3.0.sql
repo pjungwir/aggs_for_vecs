@@ -1666,9 +1666,10 @@ AS 'aggs_for_vecs', 'vec_to_first_finalfn'
 LANGUAGE c;
 
 CREATE AGGREGATE vec_to_first(anyarray) (
-  sfunc     = vec_to_first_transfn,
-  stype     = internal,
-  finalfunc = vec_to_first_finalfn,
+  sfunc            = vec_to_first_transfn,
+  stype            = internal,
+  finalfunc        = vec_to_first_finalfn,
+  finalfunc_modify = READ_ONLY,
   finalfunc_extra
 );
 
@@ -1689,8 +1690,9 @@ AS 'aggs_for_vecs', 'vec_to_last_finalfn'
 LANGUAGE c;
 
 CREATE AGGREGATE vec_to_last(anyarray) (
-  sfunc     = vec_to_last_transfn,
-  stype     = internal,
-  finalfunc = vec_to_last_finalfn,
+  sfunc            = vec_to_last_transfn,
+  stype            = internal,
+  finalfunc        = vec_to_last_finalfn,
+  finalfunc_modify = READ_ONLY,
   finalfunc_extra
 );
