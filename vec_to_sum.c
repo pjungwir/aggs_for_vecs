@@ -42,6 +42,9 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
     PG_RETURN_POINTER(state);
   }
   currentArray = PG_GETARG_ARRAYTYPE_P(1);
+  if (ARR_NDIM(currentArray) == 0) {
+    PG_RETURN_POINTER(state);
+  }
 
   if (state == NULL) {
     // Since we have our first not-null argument
@@ -56,7 +59,7 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
       ereport(ERROR, (errmsg("vec_to_sum input must be array of SMALLINT, INTEGER, BIGINT, REAL, DOUBLE PRECISION, or NUMERIC")));
     }
     if (ARR_NDIM(currentArray) != 1) {
-      ereport(ERROR, (errmsg("One-dimensional arrays are required")));
+      ereport(ERROR, (errmsg("vec_to_sum: one-dimensional arrays are required, but got %d", ARR_NDIM(currentArray))));
     }
     arrayLength = (ARR_DIMS(currentArray))[0];
     // Start with all zeros:
@@ -97,7 +100,7 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
   deconstruct_array(currentArray, elemTypeId, elemTypeWidth, elemTypeByValue, elemTypeAlignmentCode,
       &currentVals, &currentNulls, &currentLength);
   if (currentLength != arrayLength) {
-    ereport(ERROR, (errmsg("All arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
+    ereport(ERROR, (errmsg("vec_to_sum: all arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
   }
 
   // Make sure we allocate Numerics in a context that will persist between calls!:
