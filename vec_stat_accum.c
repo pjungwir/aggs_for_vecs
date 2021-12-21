@@ -67,7 +67,6 @@ vec_stat_accum(PG_FUNCTION_ARGS)
     arrayLength = state->nelems;
   }
   switch(elemTypeId) {
-    // TODO: support other number types
     case INT2OID:
       accum_func = int2_avg_accum;
       break;
@@ -149,9 +148,10 @@ vec_stat_accum(PG_FUNCTION_ARGS)
         }
 
         // first non-null element set up as initial min/max values
+        // note we create 2 copies because we pfree mins/maxes individually later as needed
         oldContext = MemoryContextSwitchTo(aggContext); {
           state->vec_mins[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
-          state->vec_maxes[i] = state->vec_mins[i];
+          state->vec_maxes[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
         } MemoryContextSwitchTo(oldContext);
       } else {
         FC_NULL(state->transfn_fcinfo, 0) = false;
@@ -166,6 +166,9 @@ vec_stat_accum(PG_FUNCTION_ARGS)
           ereport(ERROR, (errmsg("The delegate comparison function returned a NULL result on element %d", i)));
         } else if (DatumGetInt32(compareResult) > 0) {
           oldContext = MemoryContextSwitchTo(aggContext); {
+            if (!elemTypeByValue) {
+              pfree(DatumGetPointer(state->vec_mins[i]));
+            }
             state->vec_mins[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
           } MemoryContextSwitchTo(oldContext);
         }
@@ -180,6 +183,9 @@ vec_stat_accum(PG_FUNCTION_ARGS)
           ereport(ERROR, (errmsg("The delegate comparison function returned a NULL result on element %d", i)));
         } else if (DatumGetInt32(compareResult) < 0) {
           oldContext = MemoryContextSwitchTo(aggContext); {
+            if (!elemTypeByValue) {
+              pfree(DatumGetPointer(state->vec_maxes[i]));
+            }
             state->vec_maxes[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
           } MemoryContextSwitchTo(oldContext);
         }
