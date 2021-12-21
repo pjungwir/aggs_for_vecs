@@ -29,3 +29,6 @@ FROM measurements2;
 -- last numeric 3
 SELECT vec_to_last(pad_vec(data_a, 3) ORDER BY ts) AS lasts
 FROM measurements2;
+
+-- last text
+SELECT vec_to_last(vals) FROM (VALUES (ARRAY[NULL,'a','foo']::text[]), (ARRAY['one','b','bar']::text[]), (ARRAY['two','c',NULL]::text[])) t(vals);

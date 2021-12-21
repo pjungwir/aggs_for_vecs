@@ -62,3 +62,10 @@ FROM measurements2;
  {6401488,NULL,61.765}
 (1 row)
 
+-- last text
+SELECT vec_to_last(vals) FROM (VALUES (ARRAY[NULL,'a','foo']::text[]), (ARRAY['one','b','bar']::text[]), (ARRAY['two','c',NULL]::text[])) t(vals);
+ vec_to_last 
+-------------
+ {two,c,bar}
+(1 row)
+
