@@ -4,6 +4,7 @@
 .*.swo
 /.cproject
 /.project
+/.settings
 /.vscode
 /bench-results.txt
 /bench-report.txt
