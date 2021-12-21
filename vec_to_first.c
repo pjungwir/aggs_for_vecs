@@ -72,14 +72,14 @@ vec_to_first_transfn(PG_FUNCTION_ARGS)
     ereport(ERROR, (errmsg("vec_to_first: all arrays must be the same length, but we got %d vs %d", currentLength, arrayLength)));
   }
 
-  if (elemTypeId == NUMERICOID) old = MemoryContextSwitchTo(aggContext);
+  if (!elemTypeByValue) old = MemoryContextSwitchTo(aggContext);
   for (i = 0; i < arrayLength; i++) {
     if (!currentNulls[i] && state->dnulls[i]) {
       state->dnulls[i] = false;
       state->dvalues[i] = datumCopy(currentVals[i], elemTypeByValue, elemTypeWidth);
     }
   }
-  if (elemTypeId == NUMERICOID) MemoryContextSwitchTo(old);
+  if (!elemTypeByValue) MemoryContextSwitchTo(old);
   PG_RETURN_POINTER(state);
 }
 
