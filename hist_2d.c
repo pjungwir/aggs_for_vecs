@@ -137,6 +137,8 @@ hist_2d_transfn(PG_FUNCTION_ARGS)
       xPos = (xVal.f8 - xStart.f8) / xBucketWidth.f8;
       yPos = (yVal.f8 - yStart.f8) / yBucketWidth.f8;
       break;
+    default:
+      elog(ERROR, "Unknown elemTypeId!");
   }
 
   if (xPos >= 0 && xPos < xLength && yPos >= 0 && yPos < yLength) {

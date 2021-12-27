@@ -21,7 +21,7 @@ vec_to_last_transfn(PG_FUNCTION_ARGS)
   Datum *currentVals;
   bool *currentNulls;
   int i;
-  MemoryContext old;
+  MemoryContext old = NULL;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
     elog(ERROR, "vec_to_last_transfn called in non-aggregate context");

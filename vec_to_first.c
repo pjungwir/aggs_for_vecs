@@ -21,7 +21,7 @@ vec_to_first_transfn(PG_FUNCTION_ARGS)
   Datum *currentVals;
   bool *currentNulls;
   int i;
-  MemoryContext old;
+  MemoryContext old = NULL;
   bool done;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
