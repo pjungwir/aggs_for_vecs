@@ -46,7 +46,7 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
   bool *currentNulls;
   int i;
   float8 tmp_f;
-  MemoryContext old;
+  MemoryContext old = NULL;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
     elog(ERROR, "vec_to_var_samp_transfn called in non-aggregate context");

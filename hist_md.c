@@ -148,6 +148,8 @@ hist_md_transfn(PG_FUNCTION_ARGS)
           HIST_MD_BUCKET_START(state, i).f8 = DatumGetFloat8(bucketStartVals[i]);
           HIST_MD_BUCKET_WIDTH(state, i).f8 = DatumGetFloat8(bucketWidthVals[i]);
           break;
+        default:
+          elog(ERROR, "Unknown elemTypeId!");
       }
     }
   } else {
@@ -203,6 +205,8 @@ hist_md_transfn(PG_FUNCTION_ARGS)
       case FLOAT8OID:
         b = (DatumGetFloat8(valVals[idx]) - HIST_MD_BUCKET_START(state, i).f8) / HIST_MD_BUCKET_WIDTH(state, i).f8;
         break;
+      default:
+        elog(ERROR, "Unknown elemTypeId!");
     }
     resultPos += b * skip;
     skip *= HIST_MD_BUCKET_COUNT(state, i);

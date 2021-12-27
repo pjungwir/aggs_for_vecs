@@ -38,8 +38,10 @@ vec_agg_sum_finalfn(PG_FUNCTION_ARGS)
     delegate_func = (state->elementType == INT8OID ? numeric_poly_sum : numeric_sum);
     resultType = NUMERICOID;
   } else if (state->elementType == FLOAT4OID || state->elementType == FLOAT8OID) {
+    delegate_func = NULL;
     resultType = FLOAT8OID;
   } else {
+    delegate_func = NULL;
     resultType = INT8OID;
   }
 
