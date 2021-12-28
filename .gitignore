@@ -12,3 +12,5 @@
 /aggs_for_vecs*.zip
 /regression.*
 /results
+/regression.diffs
+/regression.out
