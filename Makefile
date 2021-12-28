@@ -1,7 +1,9 @@
 MODULES = aggs_for_vecs
 EXTENSION = aggs_for_vecs
 EXTENSION_VERSION = 1.3.0
-DATA = $(EXTENSION)--$(EXTENSION_VERSION).sql
+DATA = $(EXTENSION)--$(EXTENSION_VERSION).sql \
+       $(EXTENSION)--1.2.1--1.3.0.sql \
+			 $(EXTENSION)--1.2.1.sql
 
 REGRESS = setup \
 					hist_2d \
@@ -24,7 +26,8 @@ REGRESS = setup \
 					vec_to_var_samp \
 					vec_to_weighted_mean \
 					vec_trim_scale \
-					vec_without_outliers
+					vec_without_outliers \
+					update_extension
 
 PG_CONFIG = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)
@@ -32,8 +35,8 @@ include $(PGXS)
 REGRESS_OPTS = --dbname=$(EXTENSION)_regression	# This must come *after* the include since we override the build-in --dbname.
 
 test:
-	./test/setup.sh
-	PATH="./test/bats:$$PATH" bats test
+	echo "Run make installcheck to run tests"
+	exit 1
 
 bench:
 	./bench/setup.sh
