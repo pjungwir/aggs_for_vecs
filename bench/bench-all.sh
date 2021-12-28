@@ -47,6 +47,7 @@ source bench/bench_min.sh
 source bench/bench_max.sh
 # source bench/bench_min_max.sh
 source bench/bench_mean.sh
+source bench/bench_mean_numeric.sh
 # source bench/bench_median.sh
 # source bench/bench_mode.sh
 # source bench/bench_percentile.sh
@@ -54,4 +55,5 @@ source bench/bench_mean.sh
 source bench/bench_var_samp.sh
 # source bench/bench_skewness.sh
 # source bench/bench_kurtosis.sh
-
+source bench/bench_agg_stat.sh
+source bench/bench_agg_stats.sh

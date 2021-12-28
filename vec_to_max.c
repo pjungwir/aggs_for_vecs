@@ -42,6 +42,9 @@ vec_to_max_transfn(PG_FUNCTION_ARGS)
     PG_RETURN_POINTER(state);
   }
   currentArray = PG_GETARG_ARRAYTYPE_P(1);
+  if (ARR_NDIM(currentArray) == 0) {
+    PG_RETURN_POINTER(state);
+  }
 
   if (state == NULL) {
     // Since we have our first not-null argument

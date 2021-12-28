@@ -38,7 +38,7 @@ vec_trim_scale(PG_FUNCTION_ARGS)
     PG_RETURN_NULL();
   }
   if (ARR_NDIM(valsArray) > 1) {
-    ereport(ERROR, (errmsg("vec_trim_scale: one-dimensional arrays are required")));
+    ereport(ERROR, (errmsg("vec_trim_scale: one-dimensional arrays are required, but got %d", ARR_NDIM(valsArray))));
   }
 
   get_typlenbyvalalign(NUMERICOID, &elemTypeWidth, &elemTypeByValue, &elemTypeAlignmentCode);

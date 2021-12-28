@@ -51,6 +51,9 @@ vec_to_weighted_mean_transfn(PG_FUNCTION_ARGS)
   }
   currentArray = PG_GETARG_ARRAYTYPE_P(1);
   currentWeightArray = PG_GETARG_ARRAYTYPE_P(2);
+  if (ARR_NDIM(currentArray) == 0) {
+    PG_RETURN_POINTER(state);
+  }
 
   if (state == NULL) {
     // Since we have our first not-null argument

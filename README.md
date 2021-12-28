@@ -114,6 +114,16 @@ Aggregate function to compute an n-dimensional histogram. It takes a vector of v
 
 Since the values in `indexes` should follow Postgres's convention of 1-indexed arrays, so that if `indexes` is `{1,4}`, then we will use `vals[1]` and `vals[4]` as the histogram `x` and `y`.
 
+#### `vec_to_first(ANYARRAY) RETURNS ANYARRAY`
+
+Returns an array containing the first non-null value in each array position. Designed to be used
+as an ordered set aggregate like `vec_to_first(nums ORDER BY ts)`.
+
+#### `vec_to_last(ANYARRAY) RETURNS ANYARRAY`
+
+Returns an array containing the last non-null value in each array position. Designed to be used
+as an ordered set aggregate like `vec_to_last(nums ORDER BY ts)`.
+
 
 Non-aggregate math functions
 ----------------------------
@@ -159,7 +169,7 @@ Return an array with the same elements as the given array, but extended to have 
 argument if necessary. Any added elements will be set to `NULL`. If the given array is already the given
 length, it is returned directly.
 
-### `vec_coalesce(ANYARRAY, ANYELEMENT) RETURNS ANYARRAY`
+#### `vec_coalesce(ANYARRAY, ANYELEMENT) RETURNS ANYARRAY`
 
 Return an array with the same elements as the given array, execept all `NULL` elements are replaced
 by the given second argument.

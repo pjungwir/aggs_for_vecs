@@ -188,7 +188,9 @@ vec_div_with_scalar(PG_FUNCTION_ARGS)
     ereport(ERROR, (errmsg("vec_div array elements and scalar operand must be the same type")));
   }
 
-  if (ARR_NDIM(inputArray) != 1) {
+  if (ARR_NDIM(inputArray) == 0) {
+    PG_RETURN_NULL();
+  } else if (ARR_NDIM(inputArray) != 1) {
     ereport(ERROR, (errmsg("vec_div: one-dimensional arrays are required")));
   }
 

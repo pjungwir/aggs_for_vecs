@@ -1,0 +1,71 @@
+-- last int2
+SELECT vec_to_last(smallints ORDER BY sensor_id) AS lasts
+FROM measurements;
+  lasts  
+---------
+ {1,1,4}
+(1 row)
+
+-- last int4
+SELECT vec_to_last(ints ORDER BY sensor_id) AS lasts
+FROM measurements;
+  lasts  
+---------
+ {1,1,4}
+(1 row)
+
+-- last int8
+SELECT vec_to_last(bigints ORDER BY sensor_id) AS lasts
+FROM measurements;
+  lasts  
+---------
+ {1,1,4}
+(1 row)
+
+-- last float4
+SELECT vec_to_last(reals ORDER BY sensor_id) AS lasts
+FROM measurements;
+  lasts  
+---------
+ {1,1,4}
+(1 row)
+
+-- last float8
+SELECT vec_to_last(floats ORDER BY sensor_id) AS lasts
+FROM measurements;
+  lasts  
+---------
+ {1,1,4}
+(1 row)
+
+-- last numeric
+SELECT vec_to_last(nums ORDER BY sensor_id) AS lasts
+FROM measurements;
+      lasts       
+------------------
+ {1.23,1.23,4.56}
+(1 row)
+
+-- last numeric 2
+SELECT vec_to_last(data_i ORDER BY ts) AS lasts
+FROM measurements2;
+                             lasts                             
+---------------------------------------------------------------
+ {7222,-24.502656,229.46155,50.32881,4376,1,-294.77994,4376,0}
+(1 row)
+
+-- last numeric 3
+SELECT vec_to_last(pad_vec(data_a, 3) ORDER BY ts) AS lasts
+FROM measurements2;
+         lasts         
+-----------------------
+ {6401488,NULL,61.765}
+(1 row)
+
+-- last text
+SELECT vec_to_last(vals) FROM (VALUES (ARRAY[NULL,'a','foo']::text[]), (ARRAY['one','b','bar']::text[]), (ARRAY['two','c',NULL]::text[])) t(vals);
+ vec_to_last 
+-------------
+ {two,c,bar}
+(1 row)
+

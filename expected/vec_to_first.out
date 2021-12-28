@@ -1,0 +1,71 @@
+-- first int2
+SELECT vec_to_first(smallints ORDER BY sensor_id) AS firsts
+FROM measurements;
+ firsts  
+---------
+ {1,2,3}
+(1 row)
+
+-- first int4
+SELECT vec_to_first(ints ORDER BY sensor_id) AS firsts
+FROM measurements;
+ firsts  
+---------
+ {1,2,3}
+(1 row)
+
+-- first int8
+SELECT vec_to_first(bigints ORDER BY sensor_id) AS firsts
+FROM measurements;
+ firsts  
+---------
+ {1,2,3}
+(1 row)
+
+-- first float4
+SELECT vec_to_first(reals ORDER BY sensor_id) AS firsts
+FROM measurements;
+ firsts  
+---------
+ {1,2,3}
+(1 row)
+
+-- first float8
+SELECT vec_to_first(floats ORDER BY sensor_id) AS firsts
+FROM measurements;
+ firsts  
+---------
+ {1,2,3}
+(1 row)
+
+-- first numeric
+SELECT vec_to_first(nums ORDER BY sensor_id) AS firsts
+FROM measurements;
+      firsts      
+------------------
+ {1.23,2.34,3.45}
+(1 row)
+
+-- first numeric 2
+SELECT vec_to_first(data_i ORDER BY ts) AS firsts
+FROM measurements2;
+                                firsts                                
+----------------------------------------------------------------------
+ {31,-1.348291,228.79181,49.664787,3021,0.99999994,-23.358469,3021,1}
+(1 row)
+
+-- first numeric 3
+SELECT vec_to_first(pad_vec(data_a, 3) ORDER BY ts) AS firsts
+FROM measurements2;
+        firsts         
+-----------------------
+ {6255484,NULL,61.765}
+(1 row)
+
+-- first text
+SELECT vec_to_first(vals) FROM (VALUES (ARRAY[NULL,'a','foo']::text[]), (ARRAY['one','b','bar']::text[]), (ARRAY['two','c',NULL]::text[])) t(vals);
+ vec_to_first 
+--------------
+ {one,a,foo}
+(1 row)
+

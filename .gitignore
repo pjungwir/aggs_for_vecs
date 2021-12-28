@@ -2,8 +2,12 @@
 *.so
 .*.swp
 .*.swo
+/.cproject
+/.project
+/.settings
 /.vscode
 /bench-results.txt
 /bench-report.txt
 /aggs_for_vecs*.zip
+/regression.*
 /results
