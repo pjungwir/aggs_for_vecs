@@ -259,15 +259,15 @@ SELECT r, pg_typeof(r) FROM (SELECT vec_div(0::numeric, nums) FROM measurements 
 
 -- numeric div to scalar 0 rhs
 SELECT r, pg_typeof(r) FROM (SELECT vec_div(nums, 0::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
-            r             | pg_typeof 
---------------------------+-----------
- {Infinity,NULL,Infinity} | numeric[]
+       r        | pg_typeof 
+----------------+-----------
+ {NaN,NULL,NaN} | numeric[]
 (1 row)
 
 -- numeric div to array 0
 SELECT r, pg_typeof(r) FROM (SELECT vec_div(nums, ARRAY[0,0,1]::numeric[]) FROM measurements WHERE sensor_id IN (4)) r(r);
-                 r                  | pg_typeof 
-------------------------------------+-----------
- {Infinity,NULL,2.3400000000000000} | numeric[]
+               r               | pg_typeof 
+-------------------------------+-----------
+ {NaN,NULL,2.3400000000000000} | numeric[]
 (1 row)
 
