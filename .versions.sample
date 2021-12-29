@@ -1,0 +1,13 @@
+# This file is used by make install-all and installcheck-all
+# to build & install to lots of Postgres versions at once.
+# It should be in CSV format with two columns: pg version and port.
+# For example:
+9.3,5438
+9.4,5433
+9.5,5434
+9.6,5435
+10,5436
+11,5437
+12,5439
+13,5441
+14,5440

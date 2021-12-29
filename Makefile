@@ -38,6 +38,14 @@ test:
 	echo "Run make installcheck to run tests"
 	exit 1
 
+# Build and install to all versions listed in .versions.
+install-all:
+	./multi.sh install
+
+# Run make installcheck for all versions listed in .versions.
+installcheck-all:
+	./multi.sh installcheck
+
 bench:
 	./bench/setup.sh
 	./bench/bench-all.sh | tee bench-results.txt
