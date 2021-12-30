@@ -3,11 +3,11 @@ Datum vec_to_var_samp_transfn(PG_FUNCTION_ARGS);
 PG_FUNCTION_INFO_V1(vec_to_var_samp_transfn);
 
 /**
- * Returns an of n elements,
+ * Returns an array of n elements,
  * which each element is the sample variance value found in that position
  * from all input arrays.
  *
- * We use the sample approach as the built in VAR_SAMP aggregate.
+ * We use the same approach as the built-in VAR_SAMP aggregate.
  * See float8_var_samp in backend/utils/adt/float.c for details.
  * Our transition function records N, sum(X), and sum(X^2) for each array element,
  * and then the final function uses those to compute the sample variance,
@@ -45,7 +45,7 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
   Datum *currentVals;
   bool *currentNulls;
   int i;
-  float8 tmp_f;
+  float8 tmp_f = 0;
   MemoryContext old = NULL;
 
   if (!AggCheckCallContext(fcinfo, &aggContext)) {
@@ -105,13 +105,13 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
     } else if (state->veccounts[i] == 0) {
       state->veccounts[i] = 1;
       switch (elemTypeId) {
-        case INT2OID:   state->vecvalues[i].f8 = DatumGetInt16(currentVals[i]);  break;
-        case INT4OID:   state->vecvalues[i].f8 = DatumGetInt32(currentVals[i]);  break;
-        case INT8OID:   state->vecvalues[i].f8 = DatumGetInt64(currentVals[i]);  break;
-        case FLOAT4OID: state->vecvalues[i].f8 = DatumGetFloat4(currentVals[i]); break;
-        case FLOAT8OID: state->vecvalues[i].f8 = DatumGetFloat8(currentVals[i]); break;
+        case INT2OID:    state->vecvalues[i].f8 = DatumGetInt16(currentVals[i]);  break;
+        case INT4OID:    state->vecvalues[i].f8 = DatumGetInt32(currentVals[i]);  break;
+        case INT8OID:    state->vecvalues[i].f8 = DatumGetInt64(currentVals[i]);  break;
+        case FLOAT4OID:  state->vecvalues[i].f8 = DatumGetFloat4(currentVals[i]); break;
+        case FLOAT8OID:  state->vecvalues[i].f8 = DatumGetFloat8(currentVals[i]); break;
         case NUMERICOID: state->vecvalues[i].num = DatumGetNumericCopy(currentVals[i]); break;
-        default: elog(ERROR, "Unknown elemTypeId!");
+        default:         elog(ERROR, "Unknown elemTypeId!");
       }
       if (elemTypeId != NUMERICOID) {
         state->vectmpvalues[i].f8 = state->vecvalues[i].f8 * state->vecvalues[i].f8;
@@ -121,13 +121,13 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
     } else {
       state->veccounts[i] += 1;
       switch (elemTypeId) {
-        case INT2OID:   tmp_f = DatumGetInt16(currentVals[i]);  break;
-        case INT4OID:   tmp_f = DatumGetInt32(currentVals[i]);  break;
-        case INT8OID:   tmp_f = DatumGetInt64(currentVals[i]);  break;
-        case FLOAT4OID: tmp_f = DatumGetFloat4(currentVals[i]); break;
-        case FLOAT8OID: tmp_f = DatumGetFloat8(currentVals[i]); break;
+        case INT2OID:    tmp_f = DatumGetInt16(currentVals[i]);  break;
+        case INT4OID:    tmp_f = DatumGetInt32(currentVals[i]);  break;
+        case INT8OID:    tmp_f = DatumGetInt64(currentVals[i]);  break;
+        case FLOAT4OID:  tmp_f = DatumGetFloat4(currentVals[i]); break;
+        case FLOAT8OID:  tmp_f = DatumGetFloat8(currentVals[i]); break;
         case NUMERICOID: break;
-        default: elog(ERROR, "Unknown elemTypeId!");
+        default:         elog(ERROR, "Unknown elemTypeId!");
       }
       if (elemTypeId != NUMERICOID) {
         state->vecvalues[i].f8    += tmp_f;
@@ -135,13 +135,13 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
       } else {
 #if PG_VERSION_NUM < 120000
         state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add, NumericGetDatum(state->vecvalues[i].num), currentVals[i]));
-        state->vectmpvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add, 
-                                                        NumericGetDatum(state->vectmpvalues[i].num), 
+        state->vectmpvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add,
+                                                        NumericGetDatum(state->vectmpvalues[i].num),
                                                         DirectFunctionCall2(numeric_mul, currentVals[i], currentVals[i])
                                                     ));
 #else
           state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
-          state->vectmpvalues[i].num = numeric_add_opt_error(state->vectmpvalues[i].num, 
+          state->vectmpvalues[i].num = numeric_add_opt_error(state->vectmpvalues[i].num,
                                         numeric_mul_opt_error(DatumGetNumeric(currentVals[i]), DatumGetNumeric(currentVals[i]), NULL),
                                         NULL);
 #endif
@@ -181,46 +181,71 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
         numerator = (float8)state->veccounts[i] * state->vectmpvalues[i].f8 - state->vecvalues[i].f8 * state->vecvalues[i].f8;
         CHECKFLOATVAL(numerator, isinf(state->vectmpvalues[i].f8) || isinf(state->vecvalues[i].f8), true);
 
-        /* Watch out for roundoff error producing a negative numerator */
+        // Watch out for roundoff error producing a negative numerator
         if (numerator <= 0.0) {
           state->state.dvalues[i] = Float8GetDatum(0.0);
         } else {
           state->state.dvalues[i] = Float8GetDatum(numerator / (float8)(state->veccounts[i] * (state->veccounts[i] - 1.0)));
         }
       } else {
+        // For NUMERICs, Postgres does some algebra to avoid divisions (I suppose),
+        // and instead of computing this:
+        //
+        //       Σ X^2 - ((Σ X)^2)/N
+        // s^2 = -------------------
+        //              N - 1
+        //
+        // it computes this:
+        //
+        //       N * Σ X^2 - (Σ X)^2
+        // s^2 = -------------------
+        //           N * (N - 1)
+        //
+        // But it can change the last couple digits of the decimal.
+        // We follow their approach so that we get identical results.
+
         count_num = DirectFunctionCall1(int8_numeric, UInt32GetDatum(state->veccounts[i]));
 #if PG_VERSION_NUM < 120000
+        // TODO: Check for numerator less than zero
         state->state.dvalues[i] = DirectFunctionCall2(numeric_div,
+                                    // N * Σ X^2 - (Σ X)^2
                                     DirectFunctionCall2(numeric_sub,
-                                      NumericGetDatum(state->vectmpvalues[i].num),
-                                      DirectFunctionCall2(numeric_div,
-                                        DirectFunctionCall2(numeric_mul, 
-                                          NumericGetDatum(state->vecvalues[i].num),
-                                          NumericGetDatum(state->vecvalues[i].num)
-                                        ),
-                                        count_num
+                                      DirectFunctionCall2(numeric_mul,
+                                        count_num,
+                                        NumericGetDatum(state->vectmpvalues[i].num)
+                                      ),
+                                      DirectFunctionCall2(numeric_mul,
+                                        NumericGetDatum(state->vecvalues[i].num),
+                                        NumericGetDatum(state->vecvalues[i].num)
                                       )
                                     ),
-                                    DirectFunctionCall2(numeric_sub,
+                                    // N * (N - 1)
+                                    DirectFunctionCall2(numeric_mul,
                                       count_num,
-                                      NUMERIC_ONE
+                                      DirectFunctionCall2(numeric_sub,
+                                        count_num,
+                                        NUMERIC_ONE
+                                      )
                                     )
                                   );
 #else
+        // TODO: Check for numerator less than zero
         state->state.dvalues[i] = NumericGetDatum(
                                   numeric_div_opt_error(
+                                    // N * Σ X^2 - (Σ X)^2
                                     numeric_sub_opt_error(
-                                      state->vectmpvalues[i].num,
-                                      numeric_div_opt_error(
-                                        numeric_mul_opt_error(state->vecvalues[i].num, state->vecvalues[i].num, NULL),
-                                        DatumGetNumeric(count_num),
-                                        NULL
-                                      ),
+                                      numeric_mul_opt_error(DatumGetNumeric(count_num), state->vectmpvalues[i].num, NULL),
+                                      numeric_mul_opt_error(state->vecvalues[i].num, state->vecvalues[i].num, NULL),
                                       NULL
                                     ),
-                                    numeric_sub_opt_error(
+                                    // N * (N - 1)
+                                    numeric_mul_opt_error(
                                       DatumGetNumeric(count_num),
-                                      DatumGetNumeric(NUMERIC_ONE),
+                                      numeric_sub_opt_error(
+                                        DatumGetNumeric(count_num),
+                                        DatumGetNumeric(NUMERIC_ONE),
+                                        NULL
+                                      ),
                                       NULL
                                     ),
                                     NULL
