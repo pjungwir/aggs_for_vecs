@@ -165,6 +165,7 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
   int i;
   float8 numerator;
   Datum count_num;
+  int32 cmp;
 
   Assert(AggCheckCallContext(fcinfo, NULL));
 
@@ -205,52 +206,56 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
         // We follow their approach so that we get identical results.
 
         count_num = DirectFunctionCall1(int8_numeric, UInt32GetDatum(state->veccounts[i]));
+        // Watch out for roundoff error producing a negative numerator
+        cmp = DatumGetInt32(DirectFunctionCall2(numeric_cmp, NumericGetDatum(state->vectmpvalues[i].num), NUMERIC_ZERO));
+        if (cmp <= 0) {
+          state->state.dvalues[i] = NumericGetDatum(NUMERIC_ZERO);
+        } else {
 #if PG_VERSION_NUM < 120000
-        // TODO: Check for numerator less than zero
-        state->state.dvalues[i] = DirectFunctionCall2(numeric_div,
-                                    // N * Σ X^2 - (Σ X)^2
-                                    DirectFunctionCall2(numeric_sub,
-                                      DirectFunctionCall2(numeric_mul,
-                                        count_num,
-                                        NumericGetDatum(state->vectmpvalues[i].num)
-                                      ),
-                                      DirectFunctionCall2(numeric_mul,
-                                        NumericGetDatum(state->vecvalues[i].num),
-                                        NumericGetDatum(state->vecvalues[i].num)
-                                      )
-                                    ),
-                                    // N * (N - 1)
-                                    DirectFunctionCall2(numeric_mul,
-                                      count_num,
+          state->state.dvalues[i] = DirectFunctionCall2(numeric_div,
+                                      // N * Σ X^2 - (Σ X)^2
                                       DirectFunctionCall2(numeric_sub,
+                                        DirectFunctionCall2(numeric_mul,
+                                          count_num,
+                                          NumericGetDatum(state->vectmpvalues[i].num)
+                                        ),
+                                        DirectFunctionCall2(numeric_mul,
+                                          NumericGetDatum(state->vecvalues[i].num),
+                                          NumericGetDatum(state->vecvalues[i].num)
+                                        )
+                                      ),
+                                      // N * (N - 1)
+                                      DirectFunctionCall2(numeric_mul,
                                         count_num,
-                                        NUMERIC_ONE
+                                        DirectFunctionCall2(numeric_sub,
+                                          count_num,
+                                          NUMERIC_ONE
+                                        )
                                       )
-                                    )
-                                  );
+                                    );
 #else
-        // TODO: Check for numerator less than zero
-        state->state.dvalues[i] = NumericGetDatum(
-                                  numeric_div_opt_error(
-                                    // N * Σ X^2 - (Σ X)^2
-                                    numeric_sub_opt_error(
-                                      numeric_mul_opt_error(DatumGetNumeric(count_num), state->vectmpvalues[i].num, NULL),
-                                      numeric_mul_opt_error(state->vecvalues[i].num, state->vecvalues[i].num, NULL),
-                                      NULL
-                                    ),
-                                    // N * (N - 1)
-                                    numeric_mul_opt_error(
-                                      DatumGetNumeric(count_num),
+          state->state.dvalues[i] = NumericGetDatum(
+                                    numeric_div_opt_error(
+                                      // N * Σ X^2 - (Σ X)^2
                                       numeric_sub_opt_error(
+                                        numeric_mul_opt_error(DatumGetNumeric(count_num), state->vectmpvalues[i].num, NULL),
+                                        numeric_mul_opt_error(state->vecvalues[i].num, state->vecvalues[i].num, NULL),
+                                        NULL
+                                      ),
+                                      // N * (N - 1)
+                                      numeric_mul_opt_error(
                                         DatumGetNumeric(count_num),
-                                        DatumGetNumeric(NUMERIC_ONE),
+                                        numeric_sub_opt_error(
+                                          DatumGetNumeric(count_num),
+                                          DatumGetNumeric(NUMERIC_ONE),
+                                          NULL
+                                        ),
                                         NULL
                                       ),
                                       NULL
-                                    ),
-                                    NULL
-                                  ));
+                                    ));
 #endif
+        }
       }
     }
   }
