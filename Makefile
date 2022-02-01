@@ -62,7 +62,7 @@ release:
 
 deb:
 	make clean
-	git archive --format tar --prefix=aggs-for-vecs-$(EXTENSION_VERSION)/ feature/debian |gzip >../aggs-for-vecs_$(EXTENSION_VERSION).orig.tar.gz
+	git archive --format tar --prefix=aggs-for-vecs-$(EXTENSION_VERSION)/ master |gzip >../aggs-for-vecs_$(EXTENSION_VERSION).orig.tar.gz
 	pg_buildext updatecontrol
 	make -f debian/rules debian/control
 	dh clean
