@@ -209,7 +209,7 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
         // Watch out for roundoff error producing a negative numerator
         cmp = DatumGetInt32(DirectFunctionCall2(numeric_cmp, NumericGetDatum(state->vectmpvalues[i].num), NUMERIC_ZERO));
         if (cmp <= 0) {
-          state->state.dvalues[i] = NumericGetDatum(NUMERIC_ZERO);
+          state->state.dvalues[i] = NUMERIC_ZERO;
         } else {
 #if PG_VERSION_NUM < 120000
           state->state.dvalues[i] = DirectFunctionCall2(numeric_div,
