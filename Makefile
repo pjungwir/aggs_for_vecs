@@ -1,8 +1,9 @@
 MODULES = aggs_for_vecs
 EXTENSION = aggs_for_vecs
-EXTENSION_VERSION = 1.3.0
+EXTENSION_VERSION = 1.3.1
 DATA = $(EXTENSION)--$(EXTENSION_VERSION).sql \
        $(EXTENSION)--1.2.1--1.3.0.sql \
+       $(EXTENSION)--1.3.0--1.3.1.sql \
 			 $(EXTENSION)--1.2.1.sql
 
 REGRESS = setup \
