@@ -1,3 +1,7 @@
+# 1.3.2
+
+- Fix bad upgrade file.
+
 # 1.3.1
 
 - Support up to Postgres 16.

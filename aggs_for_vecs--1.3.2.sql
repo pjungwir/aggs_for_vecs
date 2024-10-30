@@ -1,4 +1,4 @@
-/* aggs_for_vecs--1.3.1.sql */
+/* aggs_for_vecs--1.3.2.sql */
 
 -- complain if script is sourced in psql, rather than via CREATE EXTENSION
 \echo Use "CREATE EXTENSION aggs_for_vecs" to load this file. \quit
