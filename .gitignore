@@ -9,6 +9,7 @@
 /.vscode
 /bench-results.txt
 /bench-report.txt
+/build-*/
 /aggs_for_vecs*.zip
 /regression.*
 /results
