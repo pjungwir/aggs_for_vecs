@@ -114,6 +114,7 @@ ORDER BY c.relname, depobj
  pg_proc | vec_div(anyarray,anyarray)
  pg_proc | vec_div(anyarray,anyelement)
  pg_proc | vec_div(anyelement,anyarray)
+ pg_proc | vec_elements(anyarray,integer[])
  pg_proc | vec_mul(anyarray,anyarray)
  pg_proc | vec_mul(anyarray,anyelement)
  pg_proc | vec_mul(anyelement,anyarray)
@@ -268,10 +269,10 @@ ORDER BY c.relname, depobj
  pg_proc | vec_without_outliers(numeric[],numeric[],numeric[])
  pg_proc | vec_without_outliers(real[],real[],real[])
  pg_proc | vec_without_outliers(smallint[],smallint[],smallint[])
-(257 rows)
+(258 rows)
 
 DROP EXTENSION aggs_for_vecs;
-CREATE EXTENSION aggs_for_vecs WITH VERSION '1.2.1';
+CREATE EXTENSION aggs_for_vecs WITH VERSION '1.2.0';
 ALTER EXTENSION aggs_for_vecs UPDATE;
 SELECT  c.relname,
         CASE WHEN c.relname = 'pg_proc' THEN objid::regprocedure::text
@@ -388,6 +389,7 @@ ORDER BY c.relname, depobj
  pg_proc | vec_div(anyarray,anyarray)
  pg_proc | vec_div(anyarray,anyelement)
  pg_proc | vec_div(anyelement,anyarray)
+ pg_proc | vec_elements(anyarray,integer[])
  pg_proc | vec_mul(anyarray,anyarray)
  pg_proc | vec_mul(anyarray,anyelement)
  pg_proc | vec_mul(anyelement,anyarray)
@@ -542,5 +544,5 @@ ORDER BY c.relname, depobj
  pg_proc | vec_without_outliers(numeric[],numeric[],numeric[])
  pg_proc | vec_without_outliers(real[],real[],real[])
  pg_proc | vec_without_outliers(smallint[],smallint[],smallint[])
-(257 rows)
+(258 rows)
 

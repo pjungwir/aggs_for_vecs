@@ -1,16 +1,20 @@
 MODULES = aggs_for_vecs
 EXTENSION = aggs_for_vecs
-EXTENSION_VERSION = 1.3.2
+EXTENSION_VERSION = 1.4.0
+# Include $(EXTENSION)--1.2.0.sql so we can test upgrades:
 DATA = $(EXTENSION)--$(EXTENSION_VERSION).sql \
+			 $(EXTENSION)--1.2.0.sql \
+       $(EXTENSION)--1.2.0--1.2.1.sql \
        $(EXTENSION)--1.2.1--1.3.0.sql \
        $(EXTENSION)--1.3.0--1.3.1.sql \
        $(EXTENSION)--1.3.1--1.3.2.sql \
-			 $(EXTENSION)--1.2.1.sql
+       $(EXTENSION)--1.3.2--1.4.0.sql
 
 REGRESS = setup \
 					hist_2d \
 					hist_md \
 					pad_vec \
+					vec_elements \
 					vec_add \
 					vec_coalesce \
 					vec_div \

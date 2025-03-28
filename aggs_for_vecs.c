@@ -58,6 +58,7 @@ _PG_fini(void)
 #include "vec_agg_mean.c"
 #include "vec_agg_min.c"
 #include "vec_agg_sum.c"
+#include "vec_elements.c"
 #include "vec_add.c"
 #include "vec_sub.c"
 #include "vec_mul.c"

@@ -163,7 +163,11 @@ Non-aggregate utility functions
 The following are other non-arrgregate functions that are useful in combination with the other functions
 provided by this extension.
 
-#### `pad_vec(ANYRARRAY, INTEGER) RETURNS ANYARRAY`
+#### `vec_elements(ANYARRAY, INTEGER[]) RETURNS ANYARRAY`
+
+Return an array with just the elements at the 1-based indexes requested.
+
+#### `pad_vec(ANYARRAY, INTEGER) RETURNS ANYARRAY`
 
 Return an array with the same elements as the given array, but extended to have the length of the second
 argument if necessary. Any added elements will be set to `NULL`. If the given array is already the given

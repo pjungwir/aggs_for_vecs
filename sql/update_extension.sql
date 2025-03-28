@@ -11,7 +11,7 @@ ORDER BY c.relname, depobj
 ;
 
 DROP EXTENSION aggs_for_vecs;
-CREATE EXTENSION aggs_for_vecs WITH VERSION '1.2.1';
+CREATE EXTENSION aggs_for_vecs WITH VERSION '1.2.0';
 ALTER EXTENSION aggs_for_vecs UPDATE;
 
 SELECT  c.relname,
