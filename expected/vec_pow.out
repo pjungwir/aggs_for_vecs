@@ -175,9 +175,9 @@ SELECT r, pg_typeof(r) FROM (SELECT vec_pow(5::numeric, nums) FROM measurements 
 
 -- numeric pow to scalar rhs
 SELECT r, pg_typeof(r) FROM (SELECT vec_pow(nums, 5::numeric) FROM measurements WHERE sensor_id IN (4)) r(r);
-                       r                       | pg_typeof 
------------------------------------------------+-----------
- {2.8153056843000000,NULL,70.1583371424000000} | numeric[]
+                      r                       | pg_typeof 
+----------------------------------------------+-----------
+ {2.8153056843000000,NULL,70.158337142400000} | numeric[]
 (1 row)
 
 -- numeric pow to array
