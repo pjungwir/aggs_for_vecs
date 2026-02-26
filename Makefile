@@ -1,6 +1,6 @@
 MODULES = aggs_for_vecs
 EXTENSION = aggs_for_vecs
-EXTENSION_VERSION = 1.4.0
+EXTENSION_VERSION = 1.4.1
 # Include $(EXTENSION)--1.2.0.sql so we can test upgrades:
 DATA = $(EXTENSION)--$(EXTENSION_VERSION).sql \
 			 $(EXTENSION)--1.2.0.sql \
@@ -8,7 +8,8 @@ DATA = $(EXTENSION)--$(EXTENSION_VERSION).sql \
        $(EXTENSION)--1.2.1--1.3.0.sql \
        $(EXTENSION)--1.3.0--1.3.1.sql \
        $(EXTENSION)--1.3.1--1.3.2.sql \
-       $(EXTENSION)--1.3.2--1.4.0.sql
+       $(EXTENSION)--1.3.2--1.4.0.sql \
+       $(EXTENSION)--1.4.0--1.4.1.sql
 
 REGRESS = setup \
 					hist_2d \
