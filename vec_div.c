@@ -100,7 +100,7 @@ vec_div_with_vec(PG_FUNCTION_ARGS)
 #if PG_VERSION_NUM < 120000
           retContent[i] = DirectFunctionCall2(numeric_div, lhsContent[i], rhsContent[i]);
 #else
-          retContent[i] = NumericGetDatum(numeric_div_opt_error(DatumGetNumeric(lhsContent[i]), DatumGetNumeric(rhsContent[i]), NULL));
+          retContent[i] = NumericGetDatum(vec_numeric_div(DatumGetNumeric(lhsContent[i]), DatumGetNumeric(rhsContent[i])));
 #endif
         }
         break;
@@ -258,7 +258,7 @@ vec_div_with_scalar(PG_FUNCTION_ARGS)
 #if PG_VERSION_NUM < 120000
             retContent[i] = DirectFunctionCall2(numeric_div, NumericGetDatum(scalar.num), inputContent[i]);
 #else
-            retContent[i] = NumericGetDatum(numeric_div_opt_error(scalar.num, DatumGetNumeric(inputContent[i]), NULL));
+            retContent[i] = NumericGetDatum(vec_numeric_div(scalar.num, DatumGetNumeric(inputContent[i])));
 #endif
           }
           break;
@@ -291,7 +291,7 @@ vec_div_with_scalar(PG_FUNCTION_ARGS)
 #if PG_VERSION_NUM < 120000
             retContent[i] = DirectFunctionCall2(numeric_div, inputContent[i], NumericGetDatum(scalar.num));
 #else
-            retContent[i] = NumericGetDatum(numeric_div_opt_error(DatumGetNumeric(inputContent[i]), scalar.num, NULL));
+            retContent[i] = NumericGetDatum(vec_numeric_div(DatumGetNumeric(inputContent[i]), scalar.num));
 #endif
           }
           break;

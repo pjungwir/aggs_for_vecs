@@ -93,7 +93,7 @@ vec_mul_with_vec(PG_FUNCTION_ARGS)
 #if PG_VERSION_NUM < 120000
         retContent[i] = DirectFunctionCall2(numeric_mul, lhsContent[i], rhsContent[i]);
 #else
-        retContent[i] = NumericGetDatum(numeric_mul_opt_error(DatumGetNumeric(lhsContent[i]), DatumGetNumeric(rhsContent[i]), NULL));
+        retContent[i] = NumericGetDatum(vec_numeric_mul(DatumGetNumeric(lhsContent[i]), DatumGetNumeric(rhsContent[i])));
 #endif
         break;
     }
@@ -242,7 +242,7 @@ vec_mul_with_scalar(PG_FUNCTION_ARGS)
 #if PG_VERSION_NUM < 120000
         retContent[i] = DirectFunctionCall2(numeric_mul, NumericGetDatum(scalar.num), inputContent[i]);
 #else
-        retContent[i] = NumericGetDatum(numeric_mul_opt_error(scalar.num, DatumGetNumeric(inputContent[i]), NULL));
+        retContent[i] = NumericGetDatum(vec_numeric_mul(scalar.num, DatumGetNumeric(inputContent[i])));
 #endif
         break;
     }

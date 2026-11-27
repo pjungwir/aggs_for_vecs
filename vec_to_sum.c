@@ -132,7 +132,7 @@ vec_to_sum_transfn(PG_FUNCTION_ARGS)
                       NumericGetDatum(state->vecvalues[i].num),
                       currentVals[i]));
 #else
-          state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
+          state->vecvalues[i].num = vec_numeric_add(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]));
 #endif
           break;
         default:

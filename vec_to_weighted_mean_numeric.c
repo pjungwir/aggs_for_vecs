@@ -122,17 +122,14 @@ vec_to_weighted_mean_numeric_transfn(PG_FUNCTION_ARGS)
         NumericGetDatum(state->vectmpvalues[i].num),
         currentWeightVals[i]));
 #else
-      state->vecvalues[i].num = numeric_add_opt_error(
+      state->vecvalues[i].num = vec_numeric_add(
         state->vecvalues[i].num,
-        numeric_mul_opt_error(
+        vec_numeric_mul(
           DatumGetNumeric(currentWeightVals[i]),
-          DatumGetNumeric(currentVals[i]),
-          NULL),
-        NULL);
-    state->vectmpvalues[i].num = numeric_add_opt_error(
+          DatumGetNumeric(currentVals[i])));
+    state->vectmpvalues[i].num = vec_numeric_add(
         state->vectmpvalues[i].num,
-        DatumGetNumeric(currentWeightVals[i]),
-        NULL);
+        DatumGetNumeric(currentWeightVals[i]));
 #endif
     }
   }
@@ -166,7 +163,7 @@ vec_to_weighted_mean_numeric_finalfn(PG_FUNCTION_ARGS)
 #if PG_VERSION_NUM < 120000
     div = DirectFunctionCall2(numeric_div, NumericGetDatum(state->vecvalues[i].num), NumericGetDatum(state->vectmpvalues[i].num));
 #else
-    div = NumericGetDatum(numeric_div_opt_error(state->vecvalues[i].num, state->vectmpvalues[i].num, NULL));
+    div = NumericGetDatum(vec_numeric_div(state->vecvalues[i].num, state->vectmpvalues[i].num));
 #endif
 
     state->state.dvalues[i] = div;

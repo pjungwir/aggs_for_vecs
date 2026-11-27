@@ -17,6 +17,48 @@
 #include <utils/fmgrprotos.h>
 #endif
 
+#if PG_VERSION_NUM >= 120000
+static inline Numeric
+vec_numeric_add(Numeric lhs, Numeric rhs)
+{
+#if PG_VERSION_NUM >= 190000
+  return numeric_add_safe(lhs, rhs, NULL);
+#else
+  return numeric_add_opt_error(lhs, rhs, NULL);
+#endif
+}
+
+static inline Numeric
+vec_numeric_sub(Numeric lhs, Numeric rhs)
+{
+#if PG_VERSION_NUM >= 190000
+  return numeric_sub_safe(lhs, rhs, NULL);
+#else
+  return numeric_sub_opt_error(lhs, rhs, NULL);
+#endif
+}
+
+static inline Numeric
+vec_numeric_mul(Numeric lhs, Numeric rhs)
+{
+#if PG_VERSION_NUM >= 190000
+  return numeric_mul_safe(lhs, rhs, NULL);
+#else
+  return numeric_mul_opt_error(lhs, rhs, NULL);
+#endif
+}
+
+static inline Numeric
+vec_numeric_div(Numeric lhs, Numeric rhs)
+{
+#if PG_VERSION_NUM >= 190000
+  return numeric_div_safe(lhs, rhs, NULL);
+#else
+  return numeric_div_opt_error(lhs, rhs, NULL);
+#endif
+}
+#endif
+
 PG_MODULE_MAGIC;
 
 void
