@@ -140,10 +140,9 @@ vec_to_var_samp_transfn(PG_FUNCTION_ARGS)
                                                         DirectFunctionCall2(numeric_mul, currentVals[i], currentVals[i])
                                                     ));
 #else
-          state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
-          state->vectmpvalues[i].num = numeric_add_opt_error(state->vectmpvalues[i].num,
-                                        numeric_mul_opt_error(DatumGetNumeric(currentVals[i]), DatumGetNumeric(currentVals[i]), NULL),
-                                        NULL);
+          state->vecvalues[i].num = vec_numeric_add(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]));
+          state->vectmpvalues[i].num = vec_numeric_add(state->vectmpvalues[i].num,
+                                        vec_numeric_mul(DatumGetNumeric(currentVals[i]), DatumGetNumeric(currentVals[i])));
 #endif
       }
     }
@@ -235,25 +234,17 @@ vec_to_var_samp_finalfn(PG_FUNCTION_ARGS)
                                     );
 #else
           state->state.dvalues[i] = NumericGetDatum(
-                                    numeric_div_opt_error(
+                                    vec_numeric_div(
                                       // N * Σ X^2 - (Σ X)^2
-                                      numeric_sub_opt_error(
-                                        numeric_mul_opt_error(DatumGetNumeric(count_num), state->vectmpvalues[i].num, NULL),
-                                        numeric_mul_opt_error(state->vecvalues[i].num, state->vecvalues[i].num, NULL),
-                                        NULL
-                                      ),
+                                      vec_numeric_sub(
+                                        vec_numeric_mul(DatumGetNumeric(count_num), state->vectmpvalues[i].num),
+                                        vec_numeric_mul(state->vecvalues[i].num, state->vecvalues[i].num)),
                                       // N * (N - 1)
-                                      numeric_mul_opt_error(
+                                      vec_numeric_mul(
                                         DatumGetNumeric(count_num),
-                                        numeric_sub_opt_error(
+                                        vec_numeric_sub(
                                           DatumGetNumeric(count_num),
-                                          DatumGetNumeric(NUMERIC_ONE),
-                                          NULL
-                                        ),
-                                        NULL
-                                      ),
-                                      NULL
-                                    ));
+                                          DatumGetNumeric(NUMERIC_ONE)))));
 #endif
         }
       }

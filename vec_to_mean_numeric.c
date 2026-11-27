@@ -82,7 +82,7 @@ vec_to_mean_numeric_transfn(PG_FUNCTION_ARGS)
 #if PG_VERSION_NUM < 120000
       state->vecvalues[i].num = DatumGetNumeric(DirectFunctionCall2(numeric_add, NumericGetDatum(state->vecvalues[i].num), currentVals[i]));
 #else
-      state->vecvalues[i].num = numeric_add_opt_error(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]), NULL);
+      state->vecvalues[i].num = vec_numeric_add(state->vecvalues[i].num, DatumGetNumeric(currentVals[i]));
 #endif
     }
   }
@@ -118,7 +118,7 @@ vec_to_mean_numeric_finalfn(PG_FUNCTION_ARGS)
 #if PG_VERSION_NUM < 120000
     div = DirectFunctionCall2(numeric_div, NumericGetDatum(state->vecvalues[i].num), count);
 #else
-    div = NumericGetDatum(numeric_div_opt_error(state->vecvalues[i].num, DatumGetNumeric(count), NULL));
+    div = NumericGetDatum(vec_numeric_div(state->vecvalues[i].num, DatumGetNumeric(count)));
 #endif
 
     state->state.dvalues[i] = div;
